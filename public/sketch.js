@@ -1,8 +1,5 @@
 
-import * as THREE from 'three.js';
-import * as dat from 'https://cdn.jsdelivr.net/npm/dat.gui@0.6.5/build/dat.gui.min.js';
-import { OrbitControls } from 'https://cdn.skypack.dev/three@v0.128.0/examples/jsm/controls/OrbitControls.js';
-
+// Scene
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -12,13 +9,52 @@ document.body.appendChild(renderer.domElement);
 
 const gui = new dat.GUI();
 
-const geometry = new THREE.BoxGeometry();
+// Loading 
+
+const textureLoader = new THREE.TextureLoader();
+const normalTexture = textureLoader.load('/ressources/NormalMap.png');
+
+// Materials
+
+const geometry = new THREE.SphereBufferGeometry(.9,100,100);
 //const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
 const material = new THREE.MeshStandardMaterial({color: 0x00ff00});
+material.metalness = 0.7;
+material.roughness = 0.2;
+material.normalMap = normalTexture;
+material.color = new THREE.Color(0x272727);
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
 camera.position.z = 5;
+
+
+// Lights
+
+const pointLight = new THREE.PointLight(0xffffff, 0.5)
+pointLight.position.x = 2
+pointLight.position.y = 3
+pointLight.position.z = 4
+scene.add(pointLight);
+
+const pointLight2 = new THREE.PointLight(0xff0000, 2)
+pointLight2.position.set(1,1,1);
+pointLight2.intensity = 1; 
+scene.add(pointLight2);
+
+const pointLightHelper2 = new THREE.PointLightHelper(pointLight2, 1);
+scene.add(pointLightHelper2);
+
+const light1 = gui.addFolder('light 1');
+const ball = gui.addFolder('ball');
+
+light1.add(pointLight2.position, 'y').min(-3).max(3).step(0.01);
+light1.add(pointLight2.position, 'x').min(-6).max(6).step(0.01);
+light1.add(pointLight2.position, 'z').min(-3).max(3).step(0.01);
+ball.add(material, 'roughness').min(0).max(2).step(0.01);
+ball.add(material, 'metalness').min(0).max(2).step(0.01);
+light1.add(pointLight2, 'intensity').min(0).max(10).step(0.01);
+
 
 const sizes = {
   width : window.innerWidth,
@@ -37,7 +73,7 @@ window.addEventListener('resize', () =>{
 
 
 function animate() {
-  cube.rotation.x += 0.01;
+  //cube.rotation.x += 0.01;
   cube.rotation.y += 0.01;
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
