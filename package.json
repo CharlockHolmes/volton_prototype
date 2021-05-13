@@ -4,7 +4,7 @@
   "description": "This is the prototype of the heating element display application",
   "main": "index.js",
   "scripts": {
-    "start" : "node index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/CharlockHolmes/volton_prototype#readme",
   "dependencies": {
+    "dat.gui": "^0.6.5",
     "express": "^4.17.1",
-    "nedb": "^1.8.0"
+    "nedb": "^1.8.0",
+    "three": "^0.128.0"
   }
 }

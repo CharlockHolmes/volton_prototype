@@ -1,67 +1,149 @@
 
-var anglex = 0;
-var angley = 0;
-let radius = 200;
-let width = 20; 
-let detailX = 30;
-let detailY = 16;
+import * as THREE from 'three.js';
+import * as dat from 'https://cdn.jsdelivr.net/npm/dat.gui@0.6.5/build/dat.gui.min.js';
+import { OrbitControls } from 'https://cdn.skypack.dev/three@v0.128.0/examples/jsm/controls/OrbitControls.js';
 
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-function setup() {
-  createCanvas(1000, 1000, WEBGL);
-  sliderInit();
+const renderer = new THREE.WebGLRenderer({alpha: true});//alpha true sets the background to invisible
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+const gui = new dat.GUI();
+
+const geometry = new THREE.BoxGeometry();
+//const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+const material = new THREE.MeshStandardMaterial({color: 0x00ff00});
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+
+camera.position.z = 5;
+
+const sizes = {
+  width : window.innerWidth,
+  height : window.innerHeight
 }
+window.addEventListener('resize', () =>{
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
 
-function draw() {
-  //console.log(mouseX);
-  let msx = mouseX-this.width/2;
-  //msx -= ;
-  const msy = (mouseY - this.height / 2);
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
 
-  let v = createVector(msx, msy, 0);
-  //v.div(200);
-  v.normalize();
-  //console.log(width/2);
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
 
-  ambientLight(20,20,20); // light coming from all directions
-  pointLight(255,255,255, 0,500,0);
-  pointLight(255,255,255, 0,0,600);
-  pointLight(255,255,255, 0,200,400);
-  directionalLight(255,255,240,v);
-  background(205, 105, 94);
-  
-  rotateX(anglex +=0.006);
-  rotateY(angley +=0.01);
-  showRing();
 
-  
-  
+function animate() {
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
 }
+animate();
 
-function showRing(){
-  //normalMaterial(); // ranbow color for debug
-  ambientMaterial(255,255,255); // only reacts of there is light
-  cylinder(radius.value(), width.value(), detailX.value(), detailY.value() ,false, false);
-  cylinder(radius.value()-1, width.value(), detailX.value(), detailY.value() ,false, false);
-  ambientMaterial(200,200,200);
-  cylinder(radius.value()-2, width.value(), detailX.value(), detailY.value() ,false, false);
-  cylinder(radius.value()-3, width.value(), detailX.value(), detailY.value() ,false, false);
-}
 
-function sliderInit(){
-  radius = createSlider(1, 500, 250);
-  radius.position(10, height + 35);
-  radius.style('width', '80px');
-  
-  width = createSlider(1, 500, 110);
-  width.position(10, height + 25);
-  width.style('width', '80px');
 
-  detailX = createSlider(1, 60, 24);
-  detailX.position(10, height + 15);
-  detailX.style('width', '80px');
 
-  detailY = createSlider(1, 60, 15);
-  detailY.position(10, height + 5);
-  detailY.style('width', '80px');
-}
+
+
+
+
+
+
+// var plane, vertices = [],
+//   planeShape;
+// var planeMaterial = new THREE.MeshLambertMaterial({
+//   color: 0xC0C0C0
+// });
+
+// vertices.push(
+//   new THREE.Vector3(-150, -150, 0),
+//   new THREE.Vector3(150, -150, 0),
+//   new THREE.Vector3(150, 150, 0),
+//   new THREE.Vector3(-150, 150, 0)
+// );
+
+// planeShape = new THREE.Shape(vertices);
+
+// plane = new THREE.Mesh(new THREE.ShapeGeometry(planeShape), planeMaterial);
+
+// scene.add(plane);
+
+// var holes = [
+//     new THREE.Vector3(-75, -75, 0),
+//     new THREE.Vector3(75, -75, 0),
+//     new THREE.Vector3(75, 75, 0),
+//     new THREE.Vector3(-75, 75, 0)
+//   ],
+
+//   hole = new THREE.Path();
+// hole.fromPoints(holes);
+
+// var shape = new THREE.Shape(plane.geometry.vertices);
+// shape.holes = [hole];
+// var points = shape.extractPoints();
+
+// plane.geometry.faces = [];
+
+// var triangles = THREE.ShapeUtils.triangulateShape(points.shape, points.holes);
+
+// plane.geometry.vertices.push(
+//   new THREE.Vector3(-75, -75, 0),
+//   new THREE.Vector3(75, -75, 0),
+//   new THREE.Vector3(75, 75, 0),
+//   new THREE.Vector3(-75, 75, 0)
+// );
+// for (var i = 0; i < triangles.length; i++) {
+//   plane.geometry.faces.push(new THREE.Face3(triangles[i][0], triangles[i][1], triangles[i][2]));
+// }
+
+
+// var plane, vertices = [],
+//   planeShape;
+// var planeMaterial = new THREE.MeshLambertMaterial({
+//   color: 0xC0C0C0
+// });
+
+// vertices.push(
+//   new THREE.Vector3(-150, -150, 0),
+//   new THREE.Vector3(150, -150, 0),
+//   new THREE.Vector3(150, 150, 0),
+//   new THREE.Vector3(-150, 150, 0)
+// );
+
+// planeShape = new THREE.Shape(vertices);
+
+// plane = new THREE.Mesh(new THREE.ShapeGeometry(planeShape), planeMaterial);
+
+// scene.add(plane);
+
+// var holes = [
+//     new THREE.Vector3(-75, -75, 0),
+//     new THREE.Vector3(75, -75, 0),
+//     new THREE.Vector3(75, 75, 0),
+//     new THREE.Vector3(-75, 75, 0)
+//   ],
+
+//   hole = new THREE.Path();
+// hole.fromPoints(holes);
+
+// var shape = new THREE.Shape(plane.geometry.vertices);
+// shape.holes = [hole];
+// var points = shape.extractPoints();
+
+// plane.geometry.faces = [];
+
+// var triangles = THREE.ShapeUtils.triangulateShape(points.shape, points.holes);
+
+// plane.geometry.vertices.push(
+//   new THREE.Vector3(-75, -75, 0),
+//   new THREE.Vector3(75, -75, 0),
+//   new THREE.Vector3(75, 75, 0),
+//   new THREE.Vector3(-75, 75, 0)
+// );
+// for (var i = 0; i < triangles.length; i++) {
+//   plane.geometry.faces.push(new THREE.Face3(triangles[i][0], triangles[i][1], triangles[i][2]));
+// }
