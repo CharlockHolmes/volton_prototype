@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/CharlockHolmes/volton_prototype#readme",
   "dependencies": {
-    "dat.gui": "^0.6.5",
+    "dat.gui": "^0.7.7",
     "express": "^4.17.1",
     "nedb": "^1.8.0",
     "three": "^0.128.0"
