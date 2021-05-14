@@ -2,14 +2,20 @@
 // Scene
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const canvas = document.querySelector('canvas.webgl');
 
-const renderer = new THREE.WebGLRenderer({alpha: true});//alpha true sets the background to invisible
+// Renderer
+const renderer = new THREE.WebGLRenderer({alpha: true, canvas:canvas});//alpha true sets the background to invisible
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+
+
+
+
+// GUI init
 
 const gui = new dat.GUI();
 
-// Loading 
+// Loading Textures
 
 const textureLoader = new THREE.TextureLoader();
 const normalTexture = textureLoader.load('/ressources/NormalMap.png');
@@ -17,8 +23,7 @@ const normalTexture = textureLoader.load('/ressources/NormalMap.png');
 // Materials
 
 const geometry = new THREE.SphereBufferGeometry(.9,100,100);
-//const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
-const material = new THREE.MeshStandardMaterial({color: 0x00ff00});
+const material = new THREE.MeshStandardMaterial({color: 0x00ff00});//const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
 material.metalness = 0.7;
 material.roughness = 0.2;
 material.normalMap = normalTexture;
@@ -42,20 +47,39 @@ pointLight2.position.set(1,1,1);
 pointLight2.intensity = 1; 
 scene.add(pointLight2);
 
+// Light position preview
+
 const pointLightHelper2 = new THREE.PointLightHelper(pointLight2, 1);
 scene.add(pointLightHelper2);
 
-const light1 = gui.addFolder('light 1');
+// GUI folders
+
+const light = gui.addFolder('light');
 const ball = gui.addFolder('ball');
 
-light1.add(pointLight2.position, 'y').min(-3).max(3).step(0.01);
-light1.add(pointLight2.position, 'x').min(-6).max(6).step(0.01);
-light1.add(pointLight2.position, 'z').min(-3).max(3).step(0.01);
+// Light Modification 
+
+light.add(pointLight2, 'intensity').min(0).max(10).step(0.01);
+light.add(pointLight2.position, 'y').min(-3).max(3).step(0.01);
+light.add(pointLight2.position, 'x').min(-6).max(6).step(0.01);
+light.add(pointLight2.position, 'z').min(-3).max(3).step(0.01);
+
+// Material Modification
+
 ball.add(material, 'roughness').min(0).max(2).step(0.01);
 ball.add(material, 'metalness').min(0).max(2).step(0.01);
-light1.add(pointLight2, 'intensity').min(0).max(10).step(0.01);
 
 
+// Color Changing
+
+const light2Color = {
+  color : 0xff0000
+}
+light.addColor(light2Color, 'color').onChange (()=>{
+  pointLight2.color.set(light2Color.color);
+})
+
+// Window resize
 const sizes = {
   width : window.innerWidth,
   height : window.innerHeight
@@ -71,14 +95,46 @@ window.addEventListener('resize', () =>{
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
 
+// Clock init
+const clock = new THREE.Clock();
 
+
+//Follow mouse
+
+let mouseX = 0;
+let mouseY = 0;
+let targetX = 0;
+let targetY = 0; 
+
+
+document.addEventListener('mousemove', (event)=>{
+  const windowHalfX = window.innerWidth /2;
+  const windowHalfY = window.innerHeight /2;
+  mouseX = event.clientX - windowHalfX;
+  mouseY = event.clientY - windowHalfY;
+
+});
+
+
+// Draw function
 function animate() {
-  //cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-  requestAnimationFrame(animate);
+  const elapsedTime = clock.getElapsedTime();
+  targetX = mouseX * 0.001; 
+  targetY = mouseY * 0.001;
+  
+
+  
+  cube.rotation.y = 0.5 *elapsedTime;
+
+  cube.rotation.y += 0.5 * (targetX - cube.rotation.y); 
+  cube.rotation.x += 0.5 * (targetY - cube.rotation.x);
+  //cube.rotation.z += 0.5 * (targetY - cube.rotation.z);
+  requestAnimationFrame(animate); // animates at framerate speed
   renderer.render(scene, camera);
 }
 animate();
+
+
 
 
 
