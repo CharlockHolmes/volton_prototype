@@ -3,6 +3,7 @@
 
 
 
+let r;
 function main() {
     const textureLoader = new THREE.TextureLoader();
     const normalTexture = textureLoader.load('/ressources/alphamap.png');
@@ -108,16 +109,19 @@ function main() {
     ];
 
     //Ring material
-    let r = new Ring();
-    const segmentsAround = 50;
+    const segmentsAround = 1500;  // This is where you et the precision degree
     const segmentsDown = 16;
+    r = new Ring(1,1,segmentsAround);
+    r.addHole(0, 0.3, 0, 'circle');
+    r.addHole(2, 0.5, 0.3, 'circle');
+    r.addHole(1, 0.3, 0.01, 'circle');
     const {
         positions,
         indices
-    } = r.makeShape(segmentsAround, 0.5);//makeSpherePositions(segmentsAround, segmentsDown);
+    } = r.makeShape(segmentsAround, 1);//makeSpherePositions(segmentsAround, segmentsDown);
 
-    console.log(positions);
-    console.log(indices);
+    //console.log(positions);
+    //console.log(indices);
     const normals = positions.slice();
 
     // Making the geometry 
@@ -166,7 +170,7 @@ function main() {
             camera.aspect = canvas.clientWidth / canvas.clientHeight;
             camera.updateProjectionMatrix();
         }
-
+        /*
         for (let i = 0; i < positions.length; i += 3) {
             const quad = (i / 12 | 0);
             const ringId = quad / segmentsAround | 0;
@@ -178,7 +182,7 @@ function main() {
             temp.toArray(positions, i);
         }
         positionAttribute.needsUpdate = true; //Need to say it to update the thing
-
+        */
         cubes.forEach((cube, ndx) => {
             const speed = -0.2 + ndx * .1;
             const rot = time * speed;
