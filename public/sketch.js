@@ -99,7 +99,7 @@ function addLight(...pos) {
 let r;
 let cubes = [];
 const segmentsAround = 1500;
-
+defaultRing();
 
 function defaultRing(){
     createRing();
