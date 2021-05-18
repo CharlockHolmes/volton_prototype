@@ -102,7 +102,7 @@ const segmentsAround = 1000;
 defaultRing();
 
 function defaultRing(){
-    createRing(1,1,2500);
+    createRing(1,1,5000);
     addRingHole(); 
     addRingHole(0,0.2,0.1);
     addRingHole(2,0.1,-0.2);
@@ -178,6 +178,9 @@ function loadCustomItem() {
     
     //Sets an instance of the whole object 
     function makeInstance(geometry, color, x) {
+        const canvas = renderer.domElement;
+        camera.aspect = canvas.clientWidth / canvas.clientHeight;
+        camera.updateProjectionMatrix();
         const material = new THREE.MeshPhongMaterial({
             color,
             side: THREE.DoubleSide,
