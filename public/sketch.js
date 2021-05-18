@@ -98,13 +98,30 @@ function addLight(...pos) {
 */
 let r;
 let cubes = [];
-const segmentsAround = 1500;
+const segmentsAround = 1000;
 defaultRing();
 
 function defaultRing(){
-    createRing();
+    createRing(1,1,2500);
     addRingHole(); 
+    addRingHole(0,0.2,0.1);
+    addRingHole(2,0.1,-0.2);
+    addRingHole(2,0.1,0.2);
+    addRingHole(-2,0.1,-0.2);
+    addRingHole(-2,0.1,0.2);
+
+    addRingHole(0, 0.02, 0.4);
+    addRingHole(0.1, 0.02, 0.4);
+    addRingHole(-0.1, 0.02, 0.4);
+
+    addRingHole(0, 0.02, -0.4);
+    addRingHole(0.1, 0.02, -0.4);
+    addRingHole(-0.1, 0.02, -0.4);
+
+
+    addRingGap();
     loadCustomItem();
+   
 }
 //loadCustomItem();
 
@@ -113,6 +130,9 @@ function createRing(radius = 1, width = 1, resolution = segmentsAround){
 }
 function clearHoles(){
     r.holes = [];
+}
+function addRingGap(){
+    r.addGap(Math.PI-0.25, Math.PI+0.25);
 }
 function addRingHole(angle = 0, radius = 0.3, offset = 0){
     r.addHole(angle, radius, offset);
@@ -135,7 +155,9 @@ function loadCustomItem() {
         indices
     } = r.makeShape(segmentsAround, 1); //makeSpherePositions(segmentsAround, segmentsDown);
 
-    //console.log(positions);
+
+
+    console.log("ShapeCompleted", positions.length, indices.length);
     //console.log(indices);
     const normals = positions.slice();
 
@@ -143,6 +165,7 @@ function loadCustomItem() {
     const geometry = new THREE.BufferGeometry();
     const positionNumComponents = 3;
     const normalNumComponents = 3;
+   
     
     renderer.renderLists.dispose();
     const positionAttribute = new THREE.BufferAttribute(positions, positionNumComponents);
@@ -150,7 +173,9 @@ function loadCustomItem() {
     geometry.setAttribute('position', positionAttribute); // we use attributes to move around things
     geometry.setAttribute('normal', new THREE.BufferAttribute(normals, normalNumComponents));
     geometry.setIndex(indices);
-
+    console.log(geometry);
+    
+    
     //Sets an instance of the whole object 
     function makeInstance(geometry, color, x) {
         const material = new THREE.MeshPhongMaterial({
@@ -168,6 +193,7 @@ function loadCustomItem() {
     cubes = [
         makeInstance(geometry, 0x999999, 0),
     ];
+    
     requestAnimationFrame(render);
 }
 
