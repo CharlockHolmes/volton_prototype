@@ -96,19 +96,27 @@ function addLight(...pos) {
 //     };
 // }
 */
+let pp;
+let nn;
+let pa; 
 let r;
 let cubes = [];
 const segmentsAround = 1000;
-defaultRing();
-
+strangeRing();
 function defaultRing(){
-    createRing(1,1,5000);
+    createRing();
+    addRingHole();
+    addRingGap();
+    loadCustomItem();
+}
+function strangeRing(){
+    createRing(1,1,2500);
     addRingHole(); 
     addRingHole(0,0.2,0.1);
-    addRingHole(2,0.1,-0.2);
-    addRingHole(2,0.1,0.2);
-    addRingHole(-2,0.1,-0.2);
-    addRingHole(-2,0.1,0.2);
+    addRingHole(2,0.1,-0.2, 'square');
+    addRingHole(2,0.1,0.2, "square");
+    addRingHole(-2,0.1,-0.2, "square");
+    addRingHole(-2,0.1,0.2, "square");
 
     addRingHole(0, 0.02, 0.4);
     addRingHole(0.1, 0.02, 0.4);
@@ -118,10 +126,8 @@ function defaultRing(){
     addRingHole(0.1, 0.02, -0.4);
     addRingHole(-0.1, 0.02, -0.4);
 
-
     addRingGap();
     loadCustomItem();
-   
 }
 //loadCustomItem();
 
@@ -131,11 +137,11 @@ function createRing(radius = 1, width = 1, resolution = segmentsAround){
 function clearHoles(){
     r.holes = [];
 }
-function addRingGap(){
-    r.addGap(Math.PI-0.25, Math.PI+0.25);
+function addRingGap(begin = Math.PI-0.25, end = Math.PI+0.25 ){
+    r.addGap(begin, end);
 }
-function addRingHole(angle = 0, radius = 0.3, offset = 0){
-    r.addHole(angle, radius, offset);
+function addRingHole(angle = 0, radius = 0.3, offset = 0, type = 'circle'){
+    r.addHole(angle, radius, offset, type);
 }
 function loadCustomItem() {
     while(scene.children.length > 0){ 
@@ -155,12 +161,14 @@ function loadCustomItem() {
         indices
     } = r.makeShape(segmentsAround, 1); //makeSpherePositions(segmentsAround, segmentsDown);
 
+    
 
 
     console.log("ShapeCompleted", positions.length, indices.length);
     //console.log(indices);
     const normals = positions.slice();
-
+    pp = positions;
+    nn = normals; 
     // Making the geometry 
     const geometry = new THREE.BufferGeometry();
     const positionNumComponents = 3;
@@ -174,7 +182,7 @@ function loadCustomItem() {
     geometry.setAttribute('normal', new THREE.BufferAttribute(normals, normalNumComponents));
     geometry.setIndex(indices);
     console.log(geometry);
-    
+    pa = positionAttribute;
     
     //Sets an instance of the whole object 
     function makeInstance(geometry, color, x) {
@@ -196,12 +204,14 @@ function loadCustomItem() {
     cubes = [
         makeInstance(geometry, 0x999999, 0),
     ];
-    
     requestAnimationFrame(render);
 }
 
 
 function render(time) {
+    const positions = pp;
+    const normals = nn;
+    const positionAttribute = pa;
     time *= 0.001; // the callback sets the time value
 
     if (resizeRendererToDisplaySize(renderer)) {
@@ -225,7 +235,8 @@ function render(time) {
     cubes.forEach((cube, ndx) => {
         const speed = -0.2 + ndx * .1;
         const rot = time * speed;
-        cube.rotation.y = rot;
+        cube.rotation.y = rot*2;
+        //cube.rotation.x = rot*8.2;
     });
     renderer.render(scene, camera);
     requestAnimationFrame(render);
