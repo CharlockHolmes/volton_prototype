@@ -6,11 +6,21 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.min.js"></script>
+	<!--script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.min.js"></script-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"
 		integrity="sha512-LF8ZB1iTwi4Qvkm4pekHG4a437Y9Af5ZuwbnW4GTbAWQeR2E4KW8WF+xH8b9psevV7wIlDMx1MH9YfPqgKhA/Q=="
 		crossorigin="anonymous"></script>
-	<script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'></script>
+
+	<!--script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.js"
+		integrity="sha512-NLtnLBS9Q2w7GKK9rKxdtgL7rA7CAS85uC/0xd9im4J/yOL4F9ZVlv634NAM7run8hz3wI2GabaA6vv8vJtHiQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script-->
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
+	<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js" ></script>
+
+	<!--script src="https://cdn.jsdelivr.net/npm/three-gltf-loader@1.111.0/index.min.js"></script-->
+	<!--script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'></script-->
 	<link rel='icon' href='https://www.volton.com/gx/favicon/favicon.ico?v=2'>
 	<title>Volton Prototype</title>
 
@@ -28,11 +38,15 @@
 
 
 		<p>Welcome!</p>
+		<!--script type='module'>
+			import { GLTFLoader } from '/three/examples/jsm/loaders/GLTFLoader.js';
+			const loader = new GLTFLoader();
+		</script-->
 		<script src="ring.js"></script>
 		<canvas class='webgl'></canvas>
 		<script src="sketch.js"></script>
 		<script src="p5sketch.js"></script>
-		
+
 	</section>
 </body>
 

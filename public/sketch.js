@@ -1,9 +1,13 @@
 //http://learningthreejs.com/blog/2011/12/10/constructive-solid-geometry-with-csg-js/ 
 // guide how to do csg
+//import { OBJLoader } from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/jsm/loaders/OBJLoader.js';
 
 
 
 
+
+
+let gui = new dat.GUI();
 
 const textureLoader = new THREE.TextureLoader();
 const normalTexture = textureLoader.load('/ressources/alphamap.png');
@@ -17,7 +21,7 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.localClippingEnabled = true;
 
-const group = new THREE.Group();
+
 
 // Camera
 const fov = 75;
@@ -28,6 +32,10 @@ const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 camera.position.z = 3;
 
 const scene = new THREE.Scene();
+
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+
 // Lights
 function addLight(...pos) {
     const color = 0xFFFFFF;
@@ -36,6 +44,7 @@ function addLight(...pos) {
     light.position.set(...pos);
     scene.add(light);
 }
+
 
 
 /*
@@ -98,25 +107,65 @@ function addLight(...pos) {
 */
 let pp;
 let nn;
-let pa; 
+let pa;
 let r;
 let cubes = [];
 const segmentsAround = 1000;
-strangeRing();
-function defaultRing(){
+// Loads an object 
+function loadBox() {
+    const loader = new THREE.GLTFLoader();
+    loader.load('ressources/box.glb',
+        (gltf) => {
+            gui.destroy();
+            gui = new dat.GUI();
+            const gpos = gui.addFolder("Position");
+            const gscale = gui.addFolder("Scale");
+            const grot = gui.addFolder("Rotation");
+
+            gscale.add(gltf.scene.scale, 'x').min(0).max(1).step(0.01);
+            gscale.add(gltf.scene.scale, 'y').min(0).max(1).step(0.01);
+            gscale.add(gltf.scene.scale, 'z').min(0).max(1).step(0.01);
+
+            gpos.add(gltf.scene.position, 'x').min(-5).max(5).step(0.01);
+            gpos.add(gltf.scene.position, 'y').min(-5).max(5).step(0.01);
+            gpos.add(gltf.scene.position, 'z').min(-5).max(5).step(0.01);
+
+            grot.add(gltf.scene.rotation, 'x').min(0).max(5).step(0.01);
+            grot.add(gltf.scene.rotation, 'y').min(0).max(5).step(0.01);
+            grot.add(gltf.scene.rotation, 'z').min(0).max(5).step(0.01);
+
+            gltf.scene.scale.x = 0.1;
+            gltf.scene.scale.y = 0.1;
+            gltf.scene.scale.z = 0.1;
+            console.log(gltf);
+            scene.add(gltf.scene);
+            console.log("Added to scene")
+        },
+        (xhr) => {
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded')
+        },
+        (error) => {
+            console.log('An error happened')
+        });
+}
+
+defaultRing();
+//strangeRing();
+function defaultRing() {
     createRing();
     addRingHole();
     addRingGap();
     loadCustomItem();
 }
-function strangeRing(){
-    createRing(1,1,2500);
-    addRingHole(); 
-    addRingHole(0,0.2,0.1);
-    addRingHole(2,0.1,-0.2, 'square');
-    addRingHole(2,0.1,0.2, "square");
-    addRingHole(-2,0.1,-0.2, "square");
-    addRingHole(-2,0.1,0.2, "square");
+
+function strangeRing() {
+    createRing(1, 1, 2500);
+    addRingHole();
+    addRingHole(0, 0.2, 0.1);
+    addRingHole(2, 0.1, -0.2, 'square');
+    addRingHole(2, 0.1, 0.2, "square");
+    addRingHole(-2, 0.1, -0.2, "square");
+    addRingHole(-2, 0.1, 0.2, "square");
 
     addRingHole(0, 0.02, 0.4);
     addRingHole(0.1, 0.02, 0.4);
@@ -131,21 +180,27 @@ function strangeRing(){
 }
 //loadCustomItem();
 
-function createRing(radius = 1, width = 1, resolution = segmentsAround){
+function createRing(radius = 1, width = 1, resolution = segmentsAround) {
     r = new Ring(radius, width, resolution);
 }
-function clearHoles(){
+
+function clearHoles() {
     r.holes = [];
 }
-function addRingGap(begin = Math.PI-0.25, end = Math.PI+0.25 ){
+
+function addRingGap(begin = Math.PI - 0.25, end = Math.PI + 0.25) {
     r.addGap(begin, end);
 }
-function addRingHole(angle = 0, radius = 0.3, offset = 0, type = 'circle'){
+
+function addRingHole(angle = 0, radius = 0.3, offset = 0, type = 'circle') {
     r.addHole(angle, radius, offset, type);
 }
+
 function loadCustomItem() {
-    while(scene.children.length > 0){ 
-        scene.remove(scene.children[0]); 
+
+    loadBox();
+    while (scene.children.length > 0) {
+        scene.remove(scene.children[0]);
     }
     addLight(-1, 20, 4);
     addLight(2, -20, 3);
@@ -161,20 +216,20 @@ function loadCustomItem() {
         indices
     } = r.makeShape(segmentsAround, 1); //makeSpherePositions(segmentsAround, segmentsDown);
 
-    
+
 
 
     console.log("ShapeCompleted", positions.length, indices.length);
     //console.log(indices);
     const normals = positions.slice();
     pp = positions;
-    nn = normals; 
+    nn = normals;
     // Making the geometry 
     const geometry = new THREE.BufferGeometry();
     const positionNumComponents = 3;
     const normalNumComponents = 3;
-   
-    
+
+
     renderer.renderLists.dispose();
     const positionAttribute = new THREE.BufferAttribute(positions, positionNumComponents);
     positionAttribute.setUsage(THREE.DynamicDrawUsage); // becasue it needs to know the attribute may change
@@ -183,7 +238,7 @@ function loadCustomItem() {
     geometry.setIndex(indices);
     console.log(geometry);
     pa = positionAttribute;
-    
+
     //Sets an instance of the whole object 
     function makeInstance(geometry, color, x) {
         const canvas = renderer.domElement;
@@ -200,6 +255,8 @@ function loadCustomItem() {
         cube.position.x = x;
         return cube;
     }
+
+
 
     cubes = [
         makeInstance(geometry, 0x999999, 0),
@@ -232,13 +289,17 @@ function render(time) {
     }
     positionAttribute.needsUpdate = true; //Need to say it to update the thing
     */
-    cubes.forEach((cube, ndx) => {
-        const speed = -0.2 + ndx * .1;
-        const rot = time * speed;
-        cube.rotation.y = rot*2;
-        //cube.rotation.x = rot*8.2;
-    });
+    // cubes.forEach((cube, ndx) => {
+    //     const speed = -0.2 + ndx * .1;
+    //     const rot = time * speed;
+    //     cube.rotation.y = rot * 2;
+    //     scene.children[scene.children.length-1].rotation.y = rot * 2;
+    //     //cube.rotation.x = rot*8.2;
+    // });
     renderer.render(scene, camera);
+
+    controls.update();
+
     requestAnimationFrame(render);
 }
 

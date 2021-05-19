@@ -5,6 +5,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Starting server at ${port}`));
 app.use(express.static('public'));
+//app.use(express.static('three.js'));
 app.use(express.json({
     limit: '10mb'
 }));
