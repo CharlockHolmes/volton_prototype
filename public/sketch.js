@@ -5,7 +5,7 @@
 
 
 
-
+let loaderCount = 0;
 
 let gui = new dat.GUI();
 
@@ -110,36 +110,46 @@ let nn;
 let pa;
 let r;
 let cubes = [];
-const segmentsAround = 1000;
-// Loads an object 
-function loadBox() {
+const segmentsAround = 1500;
+
+function loadBasicGUI(gltf,num,name) {
+    
+    const f = gui.addFolder(name+' '+num);
+    const gpos = f.addFolder("Position");
+    const gscale = f.addFolder("Scale");
+    const grot = f.addFolder("Rotation");
+
+    gscale.add(gltf.scene.scale, 'x').min(0).max(0.01).step(0.001);
+    gscale.add(gltf.scene.scale, 'y').min(0).max(0.01).step(0.001);
+    gscale.add(gltf.scene.scale, 'z').min(0).max(0.01).step(0.001);
+
+    gpos.add(gltf.scene.position, 'x').min(-5).max(5).step(0.01);
+    gpos.add(gltf.scene.position, 'y').min(-5).max(5).step(0.01);
+    gpos.add(gltf.scene.position, 'z').min(-5).max(5).step(0.01);
+
+    grot.add(gltf.scene.rotation, 'x').min(0).max(Math.PI*2).step(0.01);
+    grot.add(gltf.scene.rotation, 'y').min(0).max(Math.PI*2).step(0.01);
+    grot.add(gltf.scene.rotation, 'z').min(0).max(Math.PI*2).step(0.01);
+}
+// Loads a boenier object;
+function loadBornier(offsetZ, radius, angle = Math.PI/2, num = loaderCount++) {
     const loader = new THREE.GLTFLoader();
-    loader.load('ressources/box.glb',
+    loader.load('ressources/bornier.glb',
         (gltf) => {
-            gui.destroy();
-            gui = new dat.GUI();
-            const gpos = gui.addFolder("Position");
-            const gscale = gui.addFolder("Scale");
-            const grot = gui.addFolder("Rotation");
+            loadBasicGUI(gltf,num,'Bornier');
+            angle-=Math.PI/2;
+            gltf.scene.scale.x = 0.01;
+            gltf.scene.scale.y = 0.01;
+            gltf.scene.scale.z = 0.01;
 
-            gscale.add(gltf.scene.scale, 'x').min(0).max(1).step(0.01);
-            gscale.add(gltf.scene.scale, 'y').min(0).max(1).step(0.01);
-            gscale.add(gltf.scene.scale, 'z').min(0).max(1).step(0.01);
+            gltf.scene.position.x = Math.cos(angle)*radius;
+            gltf.scene.position.y = Math.sin(angle)*radius;
+            gltf.scene.position.z = offsetZ;
 
-            gpos.add(gltf.scene.position, 'x').min(-5).max(5).step(0.01);
-            gpos.add(gltf.scene.position, 'y').min(-5).max(5).step(0.01);
-            gpos.add(gltf.scene.position, 'z').min(-5).max(5).step(0.01);
-
-            grot.add(gltf.scene.rotation, 'x').min(0).max(5).step(0.01);
-            grot.add(gltf.scene.rotation, 'y').min(0).max(5).step(0.01);
-            grot.add(gltf.scene.rotation, 'z').min(0).max(5).step(0.01);
-
-            gltf.scene.scale.x = 0.1;
-            gltf.scene.scale.y = 0.1;
-            gltf.scene.scale.z = 0.1;
-            console.log(gltf);
+            gltf.scene.rotation.z = angle-Math.PI/2;
+            
             scene.add(gltf.scene);
-            console.log("Added to scene")
+            console.log("A Bornier was Added to scene");
         },
         (xhr) => {
             console.log((xhr.loaded / xhr.total * 100) + '% loaded')
@@ -151,11 +161,22 @@ function loadBox() {
 
 defaultRing();
 //strangeRing();
+//Default ring that will appear on first load
 function defaultRing() {
+    
+    //Create default ring
     createRing();
+
+    
+
+    // Adding default hole
     addRingHole();
-    addRingGap();
+    addRingGap(undefined,undefined,'t');
+
+    // Loading the item
     loadCustomItem();
+
+    
 }
 
 function strangeRing() {
@@ -188,20 +209,28 @@ function clearHoles() {
     r.holes = [];
 }
 
-function addRingGap(begin = Math.PI - 0.25, end = Math.PI + 0.25) {
-    r.addGap(begin, end);
+function addRingGap(begin = - 0.25, end = 0.25, type = 'screws') {
+    r.addGap(begin, end, type);
 }
 
-function addRingHole(angle = 0, radius = 0.3, offset = 0, type = 'circle') {
+function addRingHole(angle = Math.PI, radius = 0.2, offset = 0, type = 'circle') {
     r.addHole(angle, radius, offset, type);
 }
 
 function loadCustomItem() {
-
-    loadBox();
+    
+    
     while (scene.children.length > 0) {
         scene.remove(scene.children[0]);
     }
+
+    // Load bornier connectors
+    gui.destroy();
+    gui = new dat.GUI();
+    loadBornier(0.25,r.radius, Math.PI);
+    loadBornier(-0.25,r.radius, 3/4*Math.PI);
+
+
     addLight(-1, 20, 4);
     addLight(2, -20, 3);
     //Ring material

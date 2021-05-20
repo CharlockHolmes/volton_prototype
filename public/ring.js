@@ -100,7 +100,7 @@ class Ring {
                     const c = [];
                     const xyDelta = [];
                     const hz = [];
-
+                    //Here we pass every hole in the section 
                     for (let ii = 0; ii < holeOnPass.length; ii++) {
                         v0.push(new THREE.Vector3(x0, y0, holeOnPass[ii].offset));
                         v1.push(new THREE.Vector3(x1, y1, holeOnPass[ii].offset));
@@ -114,13 +114,14 @@ class Ring {
                         } else hz.push(xyDelta[ii] / Math.tan(alpha));
 
                     }
-
+                    
                     LimitedmakeTriangle(x0, y0, z0, x1, y1, -hz[0] + holeOnPass[0].offset);
                     for (let x = 0; x < holeOnPass.length - 1; x++) {
 
                         LimitedmakeTriangle(x0, y0, hz[x] + holeOnPass[x].offset, x1, y1, -hz[x + 1] + holeOnPass[x + 1].offset); // in between holes
                     }
                     LimitedmakeTriangle(x0, y0, hz[holeOnPass.length - 1] + holeOnPass[holeOnPass.length - 1].offset, x1, y1, z1);
+                   
 
                 } else if (holeOnPass[0] != null) {
                     const hole = holeOnPass[0];
@@ -131,16 +132,15 @@ class Ring {
                     const xyDelta = c.distanceTo(v0);
 
                     if (xyDelta == 0) { // if on the pass line
+                        
                         LimitedmakeTriangle(x0, y0, hole.r + hole.offset, x1, y1, z1); // Make a radius cut
                         LimitedmakeTriangle(x0, y0, z0, x1, y1, -hole.r + hole.offset); //
                     } else {
                         const alpha = Math.asin(xyDelta / hole.r); // Measures the angle 
                         const hz = xyDelta / Math.tan(alpha); // hz : The z value differential from the center point
+                        LimitedmakeTriangle(x0*1.02, y0*1.02, z0, x1*1.02,y1*1.02,z0*0.9);
+                         LimitedmakeTriangle(x0, y0, hz + hole.offset, x1, y1, z1); // Make The positive side cut 
 
-                        //if (hz + hole.offset > z1) makeTriangle(x0, y0, z1, x1, y1, z1); // If cut is outside of the ring, do a line joint
-                        LimitedmakeTriangle(x0, y0, hz + hole.offset, x1, y1, z1); // Make The positive side cut 
-
-                        //if (-hz + hole.offset < z0) makeTriangle(x0, y0, z0, x1, y1, z0); // Outside Check
                         LimitedmakeTriangle(x0, y0, z0, x1, y1, -hz + hole.offset); // Negative cut
                     }
                 } else LimitedmakeTriangle(x0, y0, z0, x1, y1, z1);
@@ -151,10 +151,9 @@ class Ring {
                     if (f < z0) f = z0;
                     if (f > z1) f = z1;
                     makeTriangle(a, b, c, d, e, f); // firstt plane
-
                     makeTriangle(a * t, b * t, c, d * t, e * t, f); // Second plane
                     makeTriangle(a * t, b * t, c, d, e, f); // in between
-                    //makeTriangle(a, b, c, d*t, e*t ,f); // in between
+                    //makeTriangle(a, b, c, d*t, e*t ,c); // in between
                 }
 
                 // This function generates two triangles and makes vertexes for the mesh between four connected points.
@@ -240,6 +239,6 @@ class Ring {
             posNdx += 12 + 12 * holeOnPass.length;
         }
         console.log(posNdx*3 + this.gaps.length * 12 * 4);
-        return posNdx*3 + this.gaps.length * 12 * 4;
+        return posNdx*6 + this.gaps.length * 12 * 4;
     }
 }
