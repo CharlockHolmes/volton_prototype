@@ -4,8 +4,11 @@
 
 
 
+let borniers = [];
+let connectors = [];
+let loaderCount = 0; // Used in the GUI
 
-let loaderCount = 0;
+let inverseConnectors = false;
 
 let gui = new dat.GUI();
 
@@ -45,66 +48,6 @@ function addLight(...pos) {
     scene.add(light);
 }
 
-
-
-/*
-// function makeSpherePositions(segmentsAround, segmentsDown) {
-//     const numVertices = segmentsAround * segmentsDown * 6;
-//     const numComponents = 3;
-//     const positions = new Float32Array(numVertices * numComponents);
-//     const indices = [];
-
-//     const longHelper = new THREE.Object3D();
-//     const latHelper = new THREE.Object3D();
-//     const pointHelper = new THREE.Object3D();
-//     longHelper.add(latHelper);
-//     latHelper.add(pointHelper);
-//     pointHelper.position.z = 1;
-//     const temp = new THREE.Vector3();
-
-//     function getPoint(lat, long) {
-//         latHelper.rotation.x = lat;
-//         longHelper.rotation.y = long;
-//         longHelper.updateMatrixWorld(true);
-//         return pointHelper.getWorldPosition(temp).toArray();
-//     }
-
-//     let posNdx = 0;
-//     let ndx = 0;
-//     for (let down = 0; down < segmentsDown; ++down) {
-//         const v0 = down / segmentsDown;
-//         const v1 = (down + 1) / segmentsDown;
-//         const lat0 = (v0 - 0.5) * Math.PI;
-//         const lat1 = (v1 - 0.5) * Math.PI;
-
-//         for (let across = 0; across < segmentsAround; ++across) {
-//             const u0 = across / segmentsAround;
-//             const u1 = (across + 1) / segmentsAround;
-//             const long0 = u0 * Math.PI * 2;
-//             const long1 = u1 * Math.PI * 2;
-
-//             positions.set(getPoint(lat0, long0), posNdx);
-//             posNdx += numComponents;
-//             positions.set(getPoint(lat1, long0), posNdx);
-//             posNdx += numComponents;
-//             positions.set(getPoint(lat0, long1), posNdx);
-//             posNdx += numComponents;
-//             positions.set(getPoint(lat1, long1), posNdx);
-//             posNdx += numComponents;
-
-//             indices.push(
-//                 ndx, ndx + 1, ndx + 2,
-//                 ndx + 2, ndx + 1, ndx + 3,
-//             );
-//             ndx += 4;
-//         }
-//     }
-//     return {
-//         positions,
-//         indices
-//     };
-// }
-*/
 let pp;
 let nn;
 let pa;
@@ -112,42 +55,42 @@ let r;
 let cubes = [];
 const segmentsAround = 1500;
 
-function loadBasicGUI(gltf,num,name) {
-    
-    const f = gui.addFolder(name+' '+num);
+function loadBasicGUI(gltf, num, name) {
+
+    const f = gui.addFolder(name + ' ' + num);
     const gpos = f.addFolder("Position");
     const gscale = f.addFolder("Scale");
     const grot = f.addFolder("Rotation");
 
-    gscale.add(gltf.scene.scale, 'x').min(0).max(0.01).step(0.001);
-    gscale.add(gltf.scene.scale, 'y').min(0).max(0.01).step(0.001);
-    gscale.add(gltf.scene.scale, 'z').min(0).max(0.01).step(0.001);
+    gscale.add(gltf.scene.scale, 'x').min(-1).max(0.01).step(0.001);
+    gscale.add(gltf.scene.scale, 'y').min(-1).max(0.01).step(0.001);
+    gscale.add(gltf.scene.scale, 'z').min(-1).max(0.01).step(0.001);
 
     gpos.add(gltf.scene.position, 'x').min(-5).max(5).step(0.01);
     gpos.add(gltf.scene.position, 'y').min(-5).max(5).step(0.01);
     gpos.add(gltf.scene.position, 'z').min(-5).max(5).step(0.01);
 
-    grot.add(gltf.scene.rotation, 'x').min(0).max(Math.PI*2).step(0.01);
-    grot.add(gltf.scene.rotation, 'y').min(0).max(Math.PI*2).step(0.01);
-    grot.add(gltf.scene.rotation, 'z').min(0).max(Math.PI*2).step(0.01);
+    grot.add(gltf.scene.rotation, 'x').min(0).max(Math.PI * 2).step(0.01);
+    grot.add(gltf.scene.rotation, 'y').min(0).max(Math.PI * 2).step(0.01);
+    grot.add(gltf.scene.rotation, 'z').min(0).max(Math.PI * 2).step(0.01);
 }
-// Loads a boenier object;
-function loadBornier(offsetZ, radius, angle = Math.PI/2, num = loaderCount++) {
+// Loads a bornier object;
+function loadBornier(offsetZ, radius, angle = Math.PI / 2, num = loaderCount++) {
     const loader = new THREE.GLTFLoader();
-    loader.load('ressources/bornier.glb',
+    loader.load('ressources/bornier.glb', //'ressources/bornier.glb',
         (gltf) => {
-            loadBasicGUI(gltf,num,'Bornier');
-            angle-=Math.PI/2;
+            loadBasicGUI(gltf, num, 'Bornier');
+            //angle-=Math.PI/2;
             gltf.scene.scale.x = 0.01;
             gltf.scene.scale.y = 0.01;
             gltf.scene.scale.z = 0.01;
 
-            gltf.scene.position.x = Math.cos(angle)*radius;
-            gltf.scene.position.y = Math.sin(angle)*radius;
+            gltf.scene.position.x = Math.cos(angle) * radius;
+            gltf.scene.position.y = Math.sin(angle) * radius;
             gltf.scene.position.z = offsetZ;
 
-            gltf.scene.rotation.z = angle-Math.PI/2;
-            
+            gltf.scene.rotation.z = angle - Math.PI / 2;
+
             scene.add(gltf.scene);
             console.log("A Bornier was Added to scene");
         },
@@ -159,24 +102,87 @@ function loadBornier(offsetZ, radius, angle = Math.PI/2, num = loaderCount++) {
         });
 }
 
+
+
+function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = false, num = loaderCount++) {
+    const loader = new THREE.GLTFLoader();
+    loader.load('ressources/' + name + '.glb', //'ressources/bornier.glb',
+        (gltf) => {
+            loadBasicGUI(gltf, num, name);
+            //angle-=Math.PI/2;
+            if (flipped) gltf.scene.scale.x = -0.01;
+            else gltf.scene.scale.x = 0.01;
+            gltf.scene.scale.y = 0.01;
+            gltf.scene.scale.z = 0.01;
+
+            gltf.scene.position.x = Math.cos(angle) * radius;
+            gltf.scene.position.y = Math.sin(angle) * radius;
+            gltf.scene.position.z = offsetZ;
+            if (inverseConnectors) {
+                if (name == "barrel") angle -= 0.1;
+                if (name == 'barrel_screw') angle += 0.1;
+            } else {
+                if (name == "barrel") angle += 0.1;
+                if (name == 'barrel_screw') angle -= 0.1;
+            }
+
+            gltf.scene.rotation.z = angle - Math.PI / 2;
+
+
+            scene.add(gltf.scene);
+            console.log("A " + name + " was Added to scene");
+        },
+        (xhr) => {
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded')
+        },
+        (error) => {
+            console.log('An error happened' + error)
+        });
+}
+
+
 defaultRing();
 //strangeRing();
 //Default ring that will appear on first load
 function defaultRing() {
-    
     //Create default ring
     createRing();
 
-    
-
     // Adding default hole
     addRingHole();
-    addRingGap(undefined,undefined,'t');
+    addRingGap(-Math.PI / 16, Math.PI / 16);
+
+    //Add borniers
+    addBornier(undefined, -0.25);
+    addBornier(undefined, 0.25);
+
+    //Adding the special connectors depending on if they are reeversed or not
+    r.gaps.forEach(gap => {
+        if (gap.type == 'barrel') {
+            if (!inverseConnectors) {
+                addConnector(gap.begin, 0.25, 'barrel_screw');
+                addConnector(gap.begin, 0, 'barrel_screw');
+                addConnector(gap.begin, -0.25, 'barrel_screw');
+                addConnector(gap.end, 0.25, 'barrel', true);
+                addConnector(gap.end, 0, 'barrel', true);
+                addConnector(gap.end, -0.25, 'barrel', true);
+            }
+            if(inverseConnectors){
+                addConnector(gap.end, 0.25, 'barrel_screw', true);
+                addConnector(gap.end, 0, 'barrel_screw', true);
+                addConnector(gap.end, -0.25, 'barrel_screw', true);
+                addConnector(gap.begin, 0.25, 'barrel');
+                addConnector(gap.begin, 0, 'barrel');
+                addConnector(gap.begin, -0.25, 'barrel');
+            }
+
+
+        }
+    });
+
 
     // Loading the item
     loadCustomItem();
-
-    
 }
 
 function strangeRing() {
@@ -199,7 +205,22 @@ function strangeRing() {
     addRingGap();
     loadCustomItem();
 }
-//loadCustomItem();
+
+function addConnector(angle = 0, offset = 0, type = 'barrel', flipped = false) {
+    connectors.push({
+        angle: angle,
+        offset: offset,
+        type: type,
+        flipped: flipped
+    })
+}
+
+function addBornier(angle = Math.PI / 2, offset = 0) {
+    borniers.push({
+        angle: angle,
+        offset: offset
+    });
+}
 
 function createRing(radius = 1, width = 1, resolution = segmentsAround) {
     r = new Ring(radius, width, resolution);
@@ -209,7 +230,7 @@ function clearHoles() {
     r.holes = [];
 }
 
-function addRingGap(begin = - 0.25, end = 0.25, type = 'screws') {
+function addRingGap(begin = -0.25, end = 0.25, type = 'barrel') {
     r.addGap(begin, end, type);
 }
 
@@ -218,8 +239,8 @@ function addRingHole(angle = Math.PI, radius = 0.2, offset = 0, type = 'circle')
 }
 
 function loadCustomItem() {
-    
-    
+
+
     while (scene.children.length > 0) {
         scene.remove(scene.children[0]);
     }
@@ -227,19 +248,22 @@ function loadCustomItem() {
     // Load bornier connectors
     gui.destroy();
     gui = new dat.GUI();
-    loadBornier(0.25,r.radius, Math.PI);
-    loadBornier(-0.25,r.radius, 3/4*Math.PI);
+
+    borniers.forEach(borne => {
+        loadBornier(borne.offset, r.radius, borne.angle);
+    });
+
+    connectors.forEach(connector => {
+        loadConnector(connector.offset, r.radius, connector.angle, connector.type, connector.flipped);
+    });
 
 
-    addLight(-1, 20, 4);
+    addLight(-2, 20, 4);
     addLight(2, -20, 3);
+    //addLight(-3, 10, 0.5);
+
     //Ring material
-    //const segmentsAround = 1500; // This is where you et the precision degree
     const segmentsDown = 16;
-    //r = new Ring(1, 1, segmentsAround);
-    //r.addHole(0, 0.3, 0, 'circle');
-    //r.addHole(2, 0.5, 0.3, 'circle');
-    //r.addHole(1, 0.3, 0.01, 'circle');
     const {
         positions,
         indices
@@ -344,7 +368,6 @@ function resizeRendererToDisplaySize(renderer) {
     return needResize;
 }
 
-const temp = new THREE.Vector3();
 
 
 // Window resize
