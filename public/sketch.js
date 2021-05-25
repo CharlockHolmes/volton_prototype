@@ -53,7 +53,7 @@ let nn;
 let pa;
 let r;
 let cubes = [];
-const segmentsAround = 1500;
+const segmentsAround = 500;
 
 function loadBasicGUI(gltf, num, name) {
 
