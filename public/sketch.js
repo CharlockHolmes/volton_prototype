@@ -3,7 +3,6 @@
 //import { OBJLoader } from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/jsm/loaders/OBJLoader.js';
 
 
-
 let borniers = [];
 let connectors = [];
 let loaderCount = 0; // Used in the GUI
@@ -27,16 +26,18 @@ renderer.localClippingEnabled = true;
 
 
 // Camera
-const fov = 75;
+const fov = 5;
 const aspect = 2; // the canvas default
 const near = 0.1;
 const far = 1000;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-camera.position.z = 3;
+camera.position.z = 30;
 
 const scene = new THREE.Scene();
 
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+
 
 
 // Lights
@@ -47,6 +48,20 @@ function addLight(...pos) {
     light.position.set(...pos);
     scene.add(light);
 }
+const textLoader = new THREE.FontLoader();
+textLoader.load('/ressources/Roboto Black_Regular.json', function (font) {
+    const geoTxt = new THREE.TextGeometry(''+1, {
+        font: font,
+        size:0.05,
+        height:0.002,
+    })
+    const matTxt = new THREE.MeshBasicMaterial({color:0x005555});
+    const txtThing = new THREE.Mesh(geoTxt, matTxt);
+    scene.add(txtThing);
+
+    controls.addEventListener('change', ()=>{if(camera.position.z>0)txtThing.rotation.z = Math.PI; else txtThing.rotation.z =0})
+    //scene.add(geoTxt);
+});
 
 let pp;
 let nn;
@@ -167,7 +182,7 @@ function defaultRing() {
                 addConnector(gap.end, 0, 'barrel', true);
                 addConnector(gap.end, -0.25, 'barrel', true);
             }
-            if(inverseConnectors){
+            if (inverseConnectors) {
                 addConnector(gap.end, 0.25, 'barrel_screw', true);
                 addConnector(gap.end, 0, 'barrel_screw', true);
                 addConnector(gap.end, -0.25, 'barrel_screw', true);
