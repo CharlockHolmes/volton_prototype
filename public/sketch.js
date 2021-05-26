@@ -1,14 +1,24 @@
-//http://learningthreejs.com/blog/2011/12/10/constructive-solid-geometry-with-csg-js/ 
-// guide how to do csg
-//import { OBJLoader } from 'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/jsm/loaders/OBJLoader.js';
+/*
+commands:
+ctrl+l : select line
+shift+alt+arrow: copy down up
+ctrl+k+0: collapse all
+ctrl+k+1: namespace
+ctrl+k+2: class
+ctrl+k+3: methods
+ctrl+k+4: blocks
+ctrl+k+] or [: current cursor
+ctrrl+k+j: uncollapse
+ctrl+k+s : save all
+*/
 
+const inchPerUnit = 3;
+const PI = Math.PI;
 
 let borniers = [];
 let connectors = [];
 let loaderCount = 0; // Used in the GUI
-
 let inverseConnectors = false;
-
 let gui = new dat.GUI();
 
 const textureLoader = new THREE.TextureLoader();
@@ -48,27 +58,21 @@ function addLight(...pos) {
     light.position.set(...pos);
     scene.add(light);
 }
-const textLoader = new THREE.FontLoader();
-textLoader.load('/ressources/Roboto Black_Regular.json', function (font) {
-    const geoTxt = new THREE.TextGeometry(''+1, {
-        font: font,
-        size:0.05,
-        height:0.002,
-    })
-    const matTxt = new THREE.MeshBasicMaterial({color:0x005555});
-    const txtThing = new THREE.Mesh(geoTxt, matTxt);
-    scene.add(txtThing);
 
-    controls.addEventListener('change', ()=>{if(camera.position.z>0)txtThing.rotation.z = Math.PI; else txtThing.rotation.z =0})
-    //scene.add(geoTxt);
-});
-
+// Global variables
+let groupGlobal;
+let groupConnectors;
 let pp;
 let nn;
 let pa;
 let r;
 let cubes = [];
-const segmentsAround = 500;
+let showGroupGlobal = true; 
+const segmentsAround = 1000;
+const defaultWidth = 0.5;
+const defaultRadius = 0.5;
+
+
 
 function loadBasicGUI(gltf, num, name) {
 
@@ -117,8 +121,6 @@ function loadBornier(offsetZ, radius, angle = Math.PI / 2, num = loaderCount++) 
         });
 }
 
-
-
 function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = false, num = loaderCount++) {
     const loader = new THREE.GLTFLoader();
     loader.load('ressources/' + name + '.glb', //'ressources/bornier.glb',
@@ -155,9 +157,8 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
         });
 }
 
-
 defaultRing();
-//strangeRing();
+
 //Default ring that will appear on first load
 function defaultRing() {
     //Create default ring
@@ -252,17 +253,125 @@ function addRingGap(begin = -0.25, end = 0.25, type = 'barrel') {
 function addRingHole(angle = Math.PI, radius = 0.2, offset = 0, type = 'circle') {
     r.addHole(angle, radius, offset, type);
 }
+//Ø°
+
+function addRingClock() {
+    const rad = r.radius;
+    const wide = r.width;
+    const inchWide = wide * inchPerUnit;
+    const inchDiam = rad * inchPerUnit * 2;
+    const txtPosOffset = 0.92;
+    addText('0°', rad * Math.cos(0) * txtPosOffset, rad * Math.sin(0) * txtPosOffset);
+    addText('90°', rad * Math.cos(Math.PI / 2) * txtPosOffset, rad * Math.sin(Math.PI / 2) * txtPosOffset);
+    addText('180°', rad * Math.cos(Math.PI) * txtPosOffset, rad * Math.sin(Math.PI) * txtPosOffset);
+    addText('270°', rad * Math.cos(Math.PI * 3 / 2) * txtPosOffset, rad * Math.sin(Math.PI * 3 / 2) * txtPosOffset);
+
+    addText('Ø ' + inchDiam + ' in', rad * Math.cos(Math.PI * 3 / 4) * txtPosOffset / 2, rad * Math.sin(Math.PI * 3 / 4) * txtPosOffset / 2, Math.PI * 7 / 4, {color: 0x003333});
+    addText('<< ' + inchWide + ' in >>', undefined, undefined, Math.PI * 7 / 4, {color: 0x330033}, false, {
+        px: rad * Math.cos(Math.PI * 3 / 4) * txtPosOffset,
+        py: rad * Math.sin(Math.PI * 3 / 4) * txtPosOffset,
+        pz: 0,
+        rx: 0,
+        ry: -PI * 3 / 2,
+        rz: 0
+    });
+
+    const clock0180Geo = new THREE.BoxGeometry(rad * 1.8, 0.005, 0.005);
+    const clock0180Mesh = new THREE.MeshBasicMaterial({color: 0x333333});
+    const clock0180 = new THREE.Mesh(clock0180Geo, clock0180Mesh);
+
+    const clock90270Geo = new THREE.BoxGeometry(rad * 1.8, 0.005, 0.005);
+    const clock90270Mesh = new THREE.MeshBasicMaterial({color: 0x333333});
+    const clock90270 = new THREE.Mesh(clock90270Geo, clock90270Mesh);
+    clock90270.rotation.z = Math.PI / 2;
+
+    const clockDiameterGeo = new THREE.BoxGeometry(rad * 1.9, 0.003, 0.003);
+    const clockDiameterMesh = new THREE.MeshBasicMaterial({color: 0x003333});
+    const clockDiameter = new THREE.Mesh(clockDiameterGeo, clockDiameterMesh);
+    clockDiameter.rotation.z = Math.PI * 3 / 4;
+
+    const clockWidthGeo = new THREE.BoxGeometry(0.003, 0.003, wide);
+    const clockWidthMesh = new THREE.MeshBasicMaterial({color: 0x003333});
+    const clockWidth = new THREE.Mesh(clockWidthGeo, clockWidthMesh);
+    clockWidth.position.x = rad * .95 * Math.cos(PI * 3 / 4);
+    clockWidth.position.y = rad * .95 * Math.sin(PI * 3 / 4);
+
+    groupGlobal.add(clock0180);
+    groupGlobal.add(clock90270);
+    groupGlobal.add(clockDiameter);
+    groupGlobal.add(clockWidth);
+    scene.add(groupGlobal);
+}
+/**
+ * Adds the Inner Information text and shapes. Ring must be defined. Depends on Global variable : r, groupGlobal, camera
+ * @param {*} msg The text value. 
+ * @param {*} px X coordiinate of the center of the text
+ * @param {*} py Y coordinate of the center of the text
+ * @param {*} rz Set special z axis rotation
+ * @param {*} color Add custom color, red is set by default
+ * @param {*} followCamera makes the text turn around if enabled 
+ * @param {*} options {px, py, pz, rx, ry, rz} if defined, followcamera becomes false. 
+ */
+ function addText(msg, px, py = 0, rz = 0, color = {
+    color: 0x990000
+}, followCamera = true, options = undefined) {
+    const textLoader = new THREE.FontLoader();
+    textLoader.load('/ressources/Roboto Black_Regular.json', function (font) {
+        const geoTxt = new THREE.TextGeometry(msg, {
+            font: font,
+            size: 0.03,
+            height: 0.002,
+        })
+        geoTxt.computeBoundingBox();
+        const centerOffset = -0.5 * (geoTxt.boundingBox.max.x - geoTxt.boundingBox.min.x);
+        const matTxt = new THREE.MeshBasicMaterial(color);
+        const txtThing = new THREE.Mesh(geoTxt, matTxt);
+        if (options === undefined) {
+            txtThing.position.x = centerOffset + px;
+            txtThing.position.y = py;
+            txtThing.rotation.z = rz;
+        } else {
+            txtThing.position.x = options.px ;
+            txtThing.position.y = options.py ;
+            txtThing.position.z = options.pz ;
+            txtThing.rotation.x = options.rx ;
+            txtThing.rotation.y = options.ry ;
+            txtThing.rotation.z = options.rz ;
+            followCamera = false;
+        }
+        groupGlobal.add(txtThing); // add to group 
+        controls.addEventListener('change', () => {
+            if (followCamera) {
+                if (camera.position.z < 0) {
+                    txtThing.rotation.y = Math.PI;
+                    txtThing.rotation.z = -rz;
+                    txtThing.position.x = px - centerOffset;
+                } else {
+                    txtThing.rotation.y = 0;
+                    txtThing.rotation.z = rz;
+                    txtThing.position.x = px + centerOffset;
+                }
+            }
+        })
+    });
+}
+
+function initGlobals(){
+    while (scene.children.length > 0) {
+        scene.remove(scene.children[0]);
+    }
+    gui.destroy();
+    gui = new dat.GUI();
+    groupGlobal = new THREE.Group();
+    groupConnectors = new THREE.Group();
+}
 
 function loadCustomItem() {
 
 
-    while (scene.children.length > 0) {
-        scene.remove(scene.children[0]);
-    }
-
-    // Load bornier connectors
-    gui.destroy();
-    gui = new dat.GUI();
+    initGlobals();
+    addRingClock();
+    
 
     borniers.forEach(borne => {
         loadBornier(borne.offset, r.radius, borne.angle);
@@ -315,8 +424,8 @@ function loadCustomItem() {
         const material = new THREE.MeshPhongMaterial({
             color,
             side: THREE.DoubleSide,
-            shininess: 100,
-            alphaMap: normalTexture
+            shininess: 12,
+            alphaMap: normalTexture,
         });
         const cube = new THREE.Mesh(geometry, material);
         scene.add(cube);
@@ -344,30 +453,8 @@ function render(time) {
         camera.aspect = canvas.clientWidth / canvas.clientHeight;
         camera.updateProjectionMatrix();
     }
-    /*
-    for (let i = 0; i < positions.length; i += 3) {
-        const quad = (i / 12 | 0);
-        const ringId = quad / segmentsAround | 0;
-        const ringQuadId = quad % segmentsAround;
-        const ringU = ringQuadId / segmentsAround;
-        const angle = ringU * Math.PI * 2;
-        temp.fromArray(normals, i);
-        temp.multiplyScalar(THREE.MathUtils.lerp(1, 1.4, Math.sin(time + ringId + angle) * .5 + .5));
-        temp.toArray(positions, i);
-    }
-    positionAttribute.needsUpdate = true; //Need to say it to update the thing
-    */
-    // cubes.forEach((cube, ndx) => {
-    //     const speed = -0.2 + ndx * .1;
-    //     const rot = time * speed;
-    //     cube.rotation.y = rot * 2;
-    //     scene.children[scene.children.length-1].rotation.y = rot * 2;
-    //     //cube.rotation.x = rot*8.2;
-    // });
     renderer.render(scene, camera);
-
     controls.update();
-
     requestAnimationFrame(render);
 }
 
@@ -386,15 +473,24 @@ function resizeRendererToDisplaySize(renderer) {
 
 
 // Window resize
-const sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight
-}
-window.addEventListener('resize', () => {
-    sizes.width = window.innerWidth;
-    sizes.height = window.innerHeight;
-    renderer.setSize(sizes.width, sizes.height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-});
+// const sizes = {
+//     width: window.innerWidth,
+//     height: window.innerHeight
+// }
+// window.addEventListener('resize', () => {
+//     sizes.width = window.innerWidth;
+//     sizes.height = window.innerHeight;
+//     renderer.setSize(sizes.width, sizes.height);
+//     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+// });
 
 //requestAnimationFrame(render); // initiates the first reloop; 
+
+/**
+ * Event Handlers with buttons
+ */
+
+const buttonToggleGroup = document.getElementById('clocktoggle').onclick = () => {
+    showGroupGlobal = !showGroupGlobal;
+    groupGlobal.visible = showGroupGlobal;
+}

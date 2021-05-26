@@ -16,6 +16,8 @@ let pUnitType = 'inch';
 let pRadius = 1; 
 
 let seeAll = false; 
+const STARTHIDDEN = true;
+let hidden = STARTHIDDEN;
 
 shapes = [];
 
@@ -29,13 +31,16 @@ function setup() {
     const circle = new Circle(100, 100);
     shapes.push(circle);
     //Here we toggle the drawing thing
+    if(STARTHIDDEN)p5canvas.hide();
     document.getElementById('drawing').onclick = () => {
-        if (Math.random() < 0.5) {
+        if (!hidden) {
             p5canvas.hide();
             console.log('the canvas got spooked away')
+            hidden = true;
         } else {
             p5canvas.show();
             console.log('guess whoss back baby')
+            hidden = false;
         }
     };
     document.getElementById('selectall').onclick = () => seeAll = !seeAll; 

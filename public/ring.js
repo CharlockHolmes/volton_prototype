@@ -81,7 +81,6 @@ class Ring {
                 const y1 = Math.sin(a + da) * this.radius;
                 const z0 = -width / 2; // Largeur extérieure a ne pas changer
                 const z1 = width / 2;
-                let adjacentCount = 0;
                 const holeOnPass = [];
                 // Here we look 
                 this.holes.forEach(holeSearch => {
@@ -134,28 +133,6 @@ class Ring {
 
 
                 } 
-                // else if (holeOnPass[0] != null) {
-                //     const hole = holeOnPass[0];
-                //     //console.log(hole);
-                //     const v0 = new THREE.Vector3(x0, y0, hole.offset);
-                //     const v1 = new THREE.Vector3(x1, y1, hole.offset);
-                //     const c = new THREE.Vector3(hole.x, hole.y, hole.offset);
-                //     const xyDelta = c.distanceTo(v0);
-
-                //     if (xyDelta == 0) { // if on the pass line
-
-                //         LimitedmakeTriangle(x0, y0, hole.r + hole.offset, x1, y1, z1); // Make a radius cut
-                //         LimitedmakeTriangle(x0, y0, z0, x1, y1, -hole.r + hole.offset); //
-                //     } else {
-                //         const alpha = Math.asin(xyDelta / hole.r); // Measures the angle 
-                //         const hz = xyDelta / Math.tan(alpha); // hz : The z value differential from the center point
-
-                //         makeFoldover();
-
-                //         LimitedmakeTriangle(x0, y0, hz + hole.offset, x1, y1, z1); // Make The positive side cut 
-                //         LimitedmakeTriangle(x0, y0, z0, x1, y1, -hz + hole.offset); // Negative cut
-                //     }
-                // } 
                 else {
                     makeFoldover(z0);
                     makeFoldover(z1);
@@ -165,7 +142,7 @@ class Ring {
                  * This is the part where you create the over ring on both sides. 
                  */
                 function makeFoldover(hz) {
-                    const rw = 0.15; // ring width
+                    const rw = 0.10; // ring width
                     const ro = 0.04; //side offset
                     const rh = 1.015 //elevation
                     makeTriangleSingleZ(x0, y0, x1, y1, hz, hz * (1 - ro), rh); //bottom left to top
@@ -253,9 +230,6 @@ class Ring {
             type: type
         });
     }
-
-
-
     //Only used to count the space needed to construct the ring
     countFloats(res, width) {
         const resolution = res;
