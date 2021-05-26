@@ -469,25 +469,16 @@ function render(time) {
     renderer.render(scene, camera);
     
     if(countMove<=repeatMove){
-        console.log(countMove-1);
-        
         camera.position.x += deltaMove.px;
         camera.position.y += deltaMove.py;
         camera.position.z += deltaMove.pz;
         camera.rotation._x += deltaMove.rx;
         camera.rotation._y += deltaMove.ry;
         camera.rotation._z += deltaMove.rz; 
-        console.log(camera.rotation)
         countMove++
     }
-    else if(countMove<=repeatMove*2&& countMove>repeatMove){
-        // camera.position.z += deltaMove.pz;
-        //camera.position.y += deltaMove.py;
-        // camera.rotation._x += deltaMove.rx;
-        console.log(camera.rotation)
-        countMove++;
-    }
-    controls.update();
+    
+    controls.update(); // Needs to be after the camera movement to update properly
     requestAnimationFrame(render);
 }
 
@@ -528,13 +519,6 @@ document.getElementById('clocktoggle').onclick = () => {
     groupGlobal.visible = showGroupGlobal;
 }
 document.getElementById('resetcamera').onclick = () => {
-    console.log(camera.position)
-    // camera.position.x = camera.position.x;
-    // camera.position.y = camera.position.y.toFixed(5);
-    // camera.position.z = camera.position.z.toFixed(5);
-    // camera.rotation._x = camera.rotation._x.toFixed(5);
-    // camera.rotation._y = camera.rotation._y.toFixed(5);
-    // camera.rotation._z = camera.rotation._z.toFixed(5);
     beginMove = {
         px:camera.position.x.toFixed(10),
         py:camera.position.y.toFixed(10),
