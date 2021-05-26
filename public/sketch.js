@@ -12,8 +12,29 @@ ctrrl+k+j: uncollapse
 ctrl+k+s : save all
 */
 
+// Global variables
+
+let groupGlobal;
+let groupConnectors;
+let pp;
+let nn;
+let pa;
+let r;
+let cubes = [];
+let showGroupGlobal = true; 
+const cameraPositionZ = 30;
+const segmentsAround = 1000;
+const defaultWidth = 1.234;
+const defaultRadius = 1.66;
 const inchPerUnit = 3;
 const PI = Math.PI;
+
+let beginMove;
+let endMove;
+let repeatMove;
+let countMove;
+let deltaMove;
+
 
 let borniers = [];
 let connectors = [];
@@ -41,7 +62,7 @@ const aspect = 2; // the canvas default
 const near = 0.1;
 const far = 1000;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-camera.position.z = 30;
+camera.position.z = cameraPositionZ*defaultRadius;
 
 const scene = new THREE.Scene();
 
@@ -59,18 +80,7 @@ function addLight(...pos) {
     scene.add(light);
 }
 
-// Global variables
-let groupGlobal;
-let groupConnectors;
-let pp;
-let nn;
-let pa;
-let r;
-let cubes = [];
-let showGroupGlobal = true; 
-const segmentsAround = 1000;
-const defaultWidth = 0.5;
-const defaultRadius = 0.5;
+
 
 
 
@@ -104,8 +114,8 @@ function loadBornier(offsetZ, radius, angle = Math.PI / 2, num = loaderCount++) 
             gltf.scene.scale.y = 0.01;
             gltf.scene.scale.z = 0.01;
 
-            gltf.scene.position.x = Math.cos(angle) * radius;
-            gltf.scene.position.y = Math.sin(angle) * radius;
+            gltf.scene.position.x = Math.cos(angle) * radius*1.001;
+            gltf.scene.position.y = Math.sin(angle) * radius*1.001;
             gltf.scene.position.z = offsetZ;
 
             gltf.scene.rotation.z = angle - Math.PI / 2;
@@ -132,8 +142,8 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
             gltf.scene.scale.y = 0.01;
             gltf.scene.scale.z = 0.01;
 
-            gltf.scene.position.x = Math.cos(angle) * radius;
-            gltf.scene.position.y = Math.sin(angle) * radius;
+            gltf.scene.position.x = Math.cos(angle) * radius*1.006;
+            gltf.scene.position.y = Math.sin(angle) * radius*1.006;
             gltf.scene.position.z = offsetZ;
             if (inverseConnectors) {
                 if (name == "barrel") angle -= 0.1;
@@ -238,7 +248,7 @@ function addBornier(angle = Math.PI / 2, offset = 0) {
     });
 }
 
-function createRing(radius = 1, width = 1, resolution = segmentsAround) {
+function createRing(radius = defaultRadius, width = defaultWidth, resolution = segmentsAround) {
     r = new Ring(radius, width, resolution);
 }
 
@@ -266,8 +276,8 @@ function addRingClock() {
     addText('180°', rad * Math.cos(Math.PI) * txtPosOffset, rad * Math.sin(Math.PI) * txtPosOffset);
     addText('270°', rad * Math.cos(Math.PI * 3 / 2) * txtPosOffset, rad * Math.sin(Math.PI * 3 / 2) * txtPosOffset);
 
-    addText('Ø ' + inchDiam + ' in', rad * Math.cos(Math.PI * 3 / 4) * txtPosOffset / 2, rad * Math.sin(Math.PI * 3 / 4) * txtPosOffset / 2, Math.PI * 7 / 4, {color: 0x003333});
-    addText('<< ' + inchWide + ' in >>', undefined, undefined, Math.PI * 7 / 4, {color: 0x330033}, false, {
+    addText('Ø ' + inchDiam.toFixed(2) + ' in', rad * Math.cos(Math.PI * 3 / 4) * txtPosOffset / 2, rad * Math.sin(Math.PI * 3 / 4) * txtPosOffset / 2, Math.PI * 7 / 4, {color: 0x003333});
+    addText('<< ' + inchWide.toFixed(2) + ' in >>', undefined, undefined, Math.PI * 7 / 4, {color: 0x330033}, false, {
         px: rad * Math.cos(Math.PI * 3 / 4) * txtPosOffset,
         py: rad * Math.sin(Math.PI * 3 / 4) * txtPosOffset,
         pz: 0,
@@ -319,7 +329,7 @@ function addRingClock() {
     textLoader.load('/ressources/Roboto Black_Regular.json', function (font) {
         const geoTxt = new THREE.TextGeometry(msg, {
             font: font,
-            size: 0.03,
+            size: 0.03*r.radius,
             height: 0.002,
         })
         geoTxt.computeBoundingBox();
@@ -342,7 +352,7 @@ function addRingClock() {
         groupGlobal.add(txtThing); // add to group 
         controls.addEventListener('change', () => {
             if (followCamera) {
-                if (camera.position.z < 0) {
+                if (camera.position.z <= 0) {
                     txtThing.rotation.y = Math.PI;
                     txtThing.rotation.z = -rz;
                     txtThing.position.x = px - centerOffset;
@@ -446,6 +456,9 @@ function render(time) {
     const positions = pp;
     const normals = nn;
     const positionAttribute = pa;
+
+   
+    
     time *= 0.001; // the callback sets the time value
 
     if (resizeRendererToDisplaySize(renderer)) {
@@ -454,6 +467,26 @@ function render(time) {
         camera.updateProjectionMatrix();
     }
     renderer.render(scene, camera);
+    
+    if(countMove<=repeatMove){
+        console.log(countMove-1);
+        
+        camera.position.x += deltaMove.px;
+        camera.position.y += deltaMove.py;
+        camera.position.z += deltaMove.pz;
+        camera.rotation._x += deltaMove.rx;
+        camera.rotation._y += deltaMove.ry;
+        camera.rotation._z += deltaMove.rz; 
+        console.log(camera.rotation)
+        countMove++
+    }
+    else if(countMove<=repeatMove*2&& countMove>repeatMove){
+        // camera.position.z += deltaMove.pz;
+        //camera.position.y += deltaMove.py;
+        // camera.rotation._x += deltaMove.rx;
+        console.log(camera.rotation)
+        countMove++;
+    }
     controls.update();
     requestAnimationFrame(render);
 }
@@ -490,7 +523,46 @@ function resizeRendererToDisplaySize(renderer) {
  * Event Handlers with buttons
  */
 
-const buttonToggleGroup = document.getElementById('clocktoggle').onclick = () => {
+document.getElementById('clocktoggle').onclick = () => {
     showGroupGlobal = !showGroupGlobal;
     groupGlobal.visible = showGroupGlobal;
+}
+document.getElementById('resetcamera').onclick = () => {
+    console.log(camera.position)
+    // camera.position.x = camera.position.x;
+    // camera.position.y = camera.position.y.toFixed(5);
+    // camera.position.z = camera.position.z.toFixed(5);
+    // camera.rotation._x = camera.rotation._x.toFixed(5);
+    // camera.rotation._y = camera.rotation._y.toFixed(5);
+    // camera.rotation._z = camera.rotation._z.toFixed(5);
+    beginMove = {
+        px:camera.position.x.toFixed(10),
+        py:camera.position.y.toFixed(10),
+        pz:camera.position.z.toFixed(10),
+        rx:camera.rotation.x.toFixed(10),
+        ry:camera.rotation.y.toFixed(10),
+        rz:camera.rotation.z.toFixed(10),
+    }
+    endMove = {
+        px:0,
+        py:0,
+        pz:(cameraPositionZ*defaultRadius).toFixed(10),
+        rx:0,
+        ry:0,
+        rz:0,
+    } 
+    
+    repeatMove = 50;
+    deltaMove = {
+        px: (endMove.px - beginMove.px)/repeatMove,
+        py: (endMove.py - beginMove.py)/(repeatMove),
+        pz: (endMove.pz - beginMove.pz)/(repeatMove),
+        rx: (endMove.rx - beginMove.rx)/(repeatMove),
+        ry: (endMove.ry - beginMove.ry)/repeatMove,
+        rz: (endMove.rz - beginMove.rz)/repeatMove,
+    }
+
+    countMove = 0;
+    
+
 }
