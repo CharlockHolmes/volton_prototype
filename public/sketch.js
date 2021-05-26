@@ -472,10 +472,16 @@ function render(time) {
         camera.position.x += deltaMove.px;
         camera.position.y += deltaMove.py;
         camera.position.z += deltaMove.pz;
+        controls.target.x += deltaMove.tx;
+        controls.target.y += deltaMove.ty;
+        controls.target.z += deltaMove.tz;
+        
         camera.rotation._x += deltaMove.rx;
         camera.rotation._y += deltaMove.ry;
         camera.rotation._z += deltaMove.rz; 
         countMove++
+        camera.updateProjectionMatrix();
+        camera.updateMatrix();
     }
     
     controls.update(); // Needs to be after the camera movement to update properly
@@ -526,6 +532,9 @@ document.getElementById('resetcamera').onclick = () => {
         rx:camera.rotation.x.toFixed(10),
         ry:camera.rotation.y.toFixed(10),
         rz:camera.rotation.z.toFixed(10),
+        tx: controls.target.x,
+        ty: controls.target.y,
+        tz: controls.target.z
     }
     endMove = {
         px:0,
@@ -534,6 +543,9 @@ document.getElementById('resetcamera').onclick = () => {
         rx:0,
         ry:0,
         rz:0,
+        tx:0,
+        ty:0,
+        tz:0
     } 
     
     repeatMove = 50;
@@ -544,9 +556,13 @@ document.getElementById('resetcamera').onclick = () => {
         rx: (endMove.rx - beginMove.rx)/(repeatMove),
         ry: (endMove.ry - beginMove.ry)/repeatMove,
         rz: (endMove.rz - beginMove.rz)/repeatMove,
+        tx: (endMove.tx - beginMove.tx)/repeatMove,
+        ty: (endMove.ty - beginMove.ty)/repeatMove,
+        tz: (endMove.tz - beginMove.tz)/repeatMove,
     }
 
     countMove = 0;
+    
     
 
 }
