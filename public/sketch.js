@@ -110,9 +110,9 @@ function loadBornier(offsetZ, radius, angle = Math.PI / 2, num = loaderCount++) 
         (gltf) => {
             loadBasicGUI(gltf, num, 'Bornier');
             //angle-=Math.PI/2;
-            gltf.scene.scale.x = 0.01;
-            gltf.scene.scale.y = 0.01;
-            gltf.scene.scale.z = 0.01;
+            gltf.scene.scale.x = 0.015;
+            gltf.scene.scale.y = 0.015;
+            gltf.scene.scale.z = 0.015;
 
             gltf.scene.position.x = Math.cos(angle) * radius*1.001;
             gltf.scene.position.y = Math.sin(angle) * radius*1.001;
@@ -137,10 +137,10 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
         (gltf) => {
             loadBasicGUI(gltf, num, name);
             //angle-=Math.PI/2;
-            if (flipped) gltf.scene.scale.x = -0.01;
-            else gltf.scene.scale.x = 0.01;
-            gltf.scene.scale.y = 0.01;
-            gltf.scene.scale.z = 0.01;
+            if (flipped) gltf.scene.scale.x = -0.015;
+            else gltf.scene.scale.x = 0.015;
+            gltf.scene.scale.y = 0.015;
+            gltf.scene.scale.z = 0.015;
 
             gltf.scene.position.x = Math.cos(angle) * radius*1.006;
             gltf.scene.position.y = Math.sin(angle) * radius*1.006;
@@ -172,6 +172,7 @@ defaultRing();
 //Default ring that will appear on first load
 function defaultRing() {
     //Create default ring
+    clearObjectArrays();
     createRing();
 
     // Adding default hole
@@ -179,27 +180,27 @@ function defaultRing() {
     addRingGap(-Math.PI / 16, Math.PI / 16);
 
     //Add borniers
-    addBornier(undefined, -0.25);
-    addBornier(undefined, 0.25);
+    addBornier(undefined, -0.3);
+    addBornier(undefined, 0.3);
 
     //Adding the special connectors depending on if they are reeversed or not
     r.gaps.forEach(gap => {
         if (gap.type == 'barrel') {
             if (!inverseConnectors) {
-                addConnector(gap.begin, 0.25, 'barrel_screw');
+                addConnector(gap.begin, 0.35, 'barrel_screw');
                 addConnector(gap.begin, 0, 'barrel_screw');
-                addConnector(gap.begin, -0.25, 'barrel_screw');
-                addConnector(gap.end, 0.25, 'barrel', true);
+                addConnector(gap.begin, -0.35, 'barrel_screw');
+                addConnector(gap.end, 0.35, 'barrel', true);
                 addConnector(gap.end, 0, 'barrel', true);
-                addConnector(gap.end, -0.25, 'barrel', true);
+                addConnector(gap.end, -0.35, 'barrel', true);
             }
             if (inverseConnectors) {
-                addConnector(gap.end, 0.25, 'barrel_screw', true);
+                addConnector(gap.end, 0.35, 'barrel_screw', true);
                 addConnector(gap.end, 0, 'barrel_screw', true);
-                addConnector(gap.end, -0.25, 'barrel_screw', true);
-                addConnector(gap.begin, 0.25, 'barrel');
+                addConnector(gap.end, -0.35, 'barrel_screw', true);
+                addConnector(gap.begin, 0.35, 'barrel');
                 addConnector(gap.begin, 0, 'barrel');
-                addConnector(gap.begin, -0.25, 'barrel');
+                addConnector(gap.begin, -0.35, 'barrel');
             }
 
 
@@ -374,6 +375,11 @@ function initGlobals(){
     gui = new dat.GUI();
     groupGlobal = new THREE.Group();
     groupConnectors = new THREE.Group();
+}
+
+function clearObjectArrays(){
+    borniers = [];
+    connectors = [];
 }
 
 function loadCustomItem() {

@@ -307,5 +307,5 @@ function drawArrow(x, y, l, w, horizontal = true, txt = '') {
     }
     textSize(12);
     textAlign(CENTER, CENTER);
-    text(txt + '"', x, y);
+    text(txt.toFixed(1) + '"', x, y);
 }
