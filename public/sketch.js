@@ -11,9 +11,8 @@ ctrl+k+] or [: current cursor
 ctrrl+k+j: uncollapse
 ctrl+k+s : save all
 */
-
 // Global variables
-
+let reloadCount=0;
 let groupGlobal;
 let groupConnectors;
 let pp;
@@ -24,8 +23,8 @@ let cubes = [];
 let showGroupGlobal = true; 
 const cameraPositionZ = 30;
 const segmentsAround = 1000;
-const defaultWidth = 1.234;
-const defaultRadius = 1.66;
+let defaultWidth = 1.234;
+let defaultRadius = 1.66;
 const inchPerUnit = 3;
 const PI = Math.PI;
 
@@ -35,38 +34,44 @@ let repeatMove;
 let countMove;
 let deltaMove;
 
-
-let borniers = [];
-let connectors = [];
 let loaderCount = 0; // Used in the GUI
 let inverseConnectors = false;
 let gui = new dat.GUI();
+
+let renderer;
 
 const textureLoader = new THREE.TextureLoader();
 const normalTexture = textureLoader.load('/ressources/alphamap.png');
 // Renderer
 const canvas = document.querySelector('canvas.webgl');
-const renderer = new THREE.WebGLRenderer({
-    canvas: canvas,
-    alpha: true,
-    antialias: true
-});
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.localClippingEnabled = true;
 
+function createRenderer(){
+    renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        alpha: true,
+        antialias: true
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
+}
 
-// Camera
+// Scene and camera
+let scene;
+let camera;
 const fov = 5;
 const aspect = 2; // the canvas default
 const near = 0.1;
-const far = 1000;
-const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-camera.position.z = cameraPositionZ*defaultRadius;
+const far = 1000; 
 
-const scene = new THREE.Scene();
+function createScene(){
+    camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+    camera.position.z = cameraPositionZ*defaultRadius;
+    scene = new THREE.Scene();
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+}
 
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
+createRenderer();
+createScene();
 
 
 
@@ -79,11 +84,6 @@ function addLight(...pos) {
     light.position.set(...pos);
     scene.add(light);
 }
-
-
-
-
-
 function loadBasicGUI(gltf, num, name) {
 
     const f = gui.addFolder(name + ' ' + num);
@@ -166,52 +166,59 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
             console.log('An error happened' + error)
         });
 }
+if(localStorage.getItem('ring')!= null){
+    loadRing();
+    defaultRadius = r.radius;
+    camera.position.z = cameraPositionZ*defaultRadius;
 
-defaultRing();
+    loadCustomItem();
+}
+else defaultRing();
 
 //Default ring that will appear on first load
 function defaultRing() {
     //Create default ring
-    clearObjectArrays();
     createRing();
+    clearObjectArrays();
 
     // Adding default hole
     addRingHole();
     addRingGap(-Math.PI / 16, Math.PI / 16);
 
     //Add borniers
-    addBornier(undefined, -0.3);
-    addBornier(undefined, 0.3);
-
+    
     //Adding the special connectors depending on if they are reeversed or not
-    r.gaps.forEach(gap => {
-        if (gap.type == 'barrel') {
-            if (!inverseConnectors) {
-                addConnector(gap.begin, 0.35, 'barrel_screw');
-                addConnector(gap.begin, 0, 'barrel_screw');
-                addConnector(gap.begin, -0.35, 'barrel_screw');
-                addConnector(gap.end, 0.35, 'barrel', true);
-                addConnector(gap.end, 0, 'barrel', true);
-                addConnector(gap.end, -0.35, 'barrel', true);
-            }
-            if (inverseConnectors) {
-                addConnector(gap.end, 0.35, 'barrel_screw', true);
-                addConnector(gap.end, 0, 'barrel_screw', true);
-                addConnector(gap.end, -0.35, 'barrel_screw', true);
-                addConnector(gap.begin, 0.35, 'barrel');
-                addConnector(gap.begin, 0, 'barrel');
-                addConnector(gap.begin, -0.35, 'barrel');
-            }
-
-
-        }
-    });
-
-
+    
     // Loading the item
     loadCustomItem();
 }
+function loadDefaultConnectorSettings(){
+    connectors = [];
+    r.gaps.forEach(gap => {
+        if (gap.type == 'barrel') {
+            const conNum = Math.floor(r.width);
+            if(conNum%2==1){
+                addConnector(gap.begin, 0, 'barrel_screw'); 
+                addConnector(gap.end, 0, 'barrel', true) 
+            }
+            if(conNum>1){
+                for(let i =0; i<Math.floor(conNum/2); i++){
+                    let offset;
+                    offset = r.width/(3*(i+1));
+                    addConnector(gap.begin,offset , 'barrel_screw');
+                    addConnector(gap.end, offset, 'barrel', true);
+                    addConnector(gap.begin, -offset, 'barrel_screw');
+                    addConnector(gap.end, -offset, 'barrel', true);
+                }
+            } 
+        }
+    });
+}
+function loadDefaultBorniersSettings(){
+    addBornier(undefined, -0.3);
+    addBornier(undefined, 0.3);
 
+}
 function strangeRing() {
     createRing(1, 1, 2500);
     addRingHole();
@@ -234,7 +241,7 @@ function strangeRing() {
 }
 
 function addConnector(angle = 0, offset = 0, type = 'barrel', flipped = false) {
-    connectors.push({
+    r.addConnector({
         angle: angle,
         offset: offset,
         type: type,
@@ -242,10 +249,11 @@ function addConnector(angle = 0, offset = 0, type = 'barrel', flipped = false) {
     })
 }
 
-function addBornier(angle = Math.PI / 2, offset = 0) {
-    borniers.push({
+function addBornier(angle = Math.PI / 2, offset = 0, type='bornier') {
+    r.addTerminal({
         angle: angle,
-        offset: offset
+        offset: offset,
+        type:type,
     });
 }
 
@@ -378,22 +386,24 @@ function initGlobals(){
 }
 
 function clearObjectArrays(){
-    borniers = [];
-    connectors = [];
+    r.terminals = [];
+    r.connectors = [];
 }
 
 function loadCustomItem() {
-
+    loadMenuThings();
+    clearObjectArrays();
 
     initGlobals();
     addRingClock();
-    
+    loadDefaultConnectorSettings();
+    loadDefaultBorniersSettings();
 
-    borniers.forEach(borne => {
+    r.terminals.forEach(borne => {
         loadBornier(borne.offset, r.radius, borne.angle);
     });
 
-    connectors.forEach(connector => {
+    r.connectors.forEach(connector => {
         loadConnector(connector.offset, r.radius, connector.angle, connector.type, connector.flipped);
     });
 
@@ -525,7 +535,16 @@ function resizeRendererToDisplaySize(renderer) {
 /**
  * Event Handlers with buttons
  */
+ window.addEventListener( 'resize', onWindowResize, false );
 
+ function onWindowResize(){
+ 
+     camera.aspect = window.innerWidth / window.innerHeight;
+     camera.updateProjectionMatrix();
+ 
+     renderer.setSize( window.innerWidth, window.innerHeight );
+     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+ }
 document.getElementById('clocktoggle').onclick = () => {
     showGroupGlobal = !showGroupGlobal;
     groupGlobal.visible = showGroupGlobal;
@@ -571,4 +590,65 @@ document.getElementById('resetcamera').onclick = () => {
     
     
 
+}
+
+document.getElementById('submitbutton').onclick = () =>{
+    let twidth = document.getElementById('ringwidth').value;
+    let tdiameter = document.getElementById('ringdiameter').value;
+    document.getElementById('ringgap').value = 'not implemented';
+    let tresolution = document.getElementById('ringresolution').value;
+    console.log(twidth, tdiameter, tresolution);
+    if(!Number.isFinite(twidth))r.width = twidth/inchPerUnit;
+    else console.log('Error: variable width is not a number')
+    if(!Number.isFinite(tdiameter))r.radius = tdiameter/2/inchPerUnit;
+    else console.log('Error: variable height is not a number')
+    if(!Number.isFinite(tresolution))r.resolution = tresolution;
+    else console.log('Error: variable resolution is not a number')
+    
+    defaultRadius = tdiameter/inchPerUnit/2;
+    camera.position.z = cameraPositionZ*defaultRadius;
+    saveRing(); 
+}
+document.getElementById('loadbutton').onclick = () =>{
+    loadMenuThings();
+}
+document.getElementById('submitgapbutton').onclick = () =>{
+    let twidth = document.getElementById('gapwidth').value;
+    let tangle = document.getElementById('gapangle').value;
+    console.log(twidth, tangle)
+    if(!Number.isFinite(twidth)&&!Number.isFinite(tangle)){
+        r.gaps = [];
+        r.addGap(undefined, undefined, 'barrel', {position:tangle*2*PI/360, angle:twidth*2*PI/360});
+        saveRing();
+    }
+    else console.log('angle entries are invalid')
+
+}
+document.getElementById('loadgapbutton').onclick = () =>{
+    loadMenuThings();
+}
+document.getElementById('defaultring').onclick = () =>{
+    defaultRing();
+    saveRing();
+}
+
+function saveRing(){
+    localStorage.setItem('ring', JSON.stringify(r));
+    reloadCount++;
+    if(reloadCount>5)
+    location.reload();
+    else loadCustomItem();
+}
+function loadRing(){
+    const ring = JSON.parse(localStorage.getItem('ring'));
+    r = new Ring(ring.radius, ring.width, ring.resolution,ring.holes, ring.gaps, ring.terminals, ring.connectors, ring.thickness);
+}
+
+function loadMenuThings(){
+    document.getElementById('ringwidth').value = (r.width*inchPerUnit).toFixed(2);
+    document.getElementById('ringdiameter').value = (r.radius*2*inchPerUnit).toFixed(2);
+    document.getElementById('ringgap').value = 'not implemented';
+    document.getElementById('ringresolution').value = r.resolution;
+    document.getElementById('gapwidth').value = (r.gaps[0].begin-r.gaps[0].end)*360/(2*PI);
+    document.getElementById('gapangle').value = (r.gaps[0].begin+r.gaps[0].end)/2*360/(2*PI);
 }

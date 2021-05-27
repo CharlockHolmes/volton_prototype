@@ -35,7 +35,7 @@
 
 <body>
 	<section>
-		<div style="position: absolute; top:100px; left:100px;">
+		<!--div style="position: absolute; top:100px; left:100px;">
 			<div style='float:left'>Radius</div>
 			<input id="input1" style="float:right">
 			<br>
@@ -48,17 +48,64 @@
 			<br>
 			<div style='float:left'>Connector</div>
 			<input id="input4" style="float:right">
+		</div-->
+		<div id = 'optionbuttons'>
+			<div class='menubutton'id='drawing'>Drawing</div>
+			<div class='menubutton'id='selectall'>Select All</div>
+			<div class='menubutton'id='clocktoggle'>Clock</div>
+			<div class='menubutton'id='resetcamera'>Reset Camera</div>
+			<div class='menubutton'id='createring'>Create Ring</div>
+			<div class='menubutton'id='defaultring'>Default Ring</div>
 		</div>
-		<div>
-			<button id='drawing'>Drawing</button>
-			<br>
-			<button id='selectall'>SelectAll</button>
-			<br>
-			<br>
-			<button id='clocktoggle'>Toggle Clock</button>
-			<br>
-			<button id='resetcamera'>resetCamera</button>
+		<div id="p5holder"></div>
+		<div class='table'id='ringInfo'>
+			<div class='tr'>
+				<div class="td" class='label'>Width:</div>
+				<input id='ringwidth' class='td' class='entry'>				
+			</div>
+			<div class='tr'>
+				<div class="td" class='label'>Diameter:</div>
+				<input id='ringdiameter' class='td' class='entry'>				
+			</div>
+			<div class='tr'>
+				<div class="td" class='label'>Gap:</div>
+				<input id='ringgap' class='td' class='entry'>				
+			</div>
+			<div class='tr'>
+				<div class="td" class='label'>Resolution:</div>
+				<input id='ringresolution' class='td' class='entry'>				
+			</div>
+			<div class='tr'>
+				<div class="td" class='label'>2 Sections:</div>
+				<input id='ring2sections' class='td' class='check' type='checkbox'>				
+			</div>
+			<div class='tr'>
+				<button id='loadbutton'class='td'>load</button>
+				<button id='submitbutton' class='td'>submit</button>			
+			</div>
+
+			<!-- This is a second part of the menu -->
+
+			<div class='tr'>
+				<div class="td" class='label'>Gap</div>
+				<div class="td" class='label'>Degrees</div>
+			</div>
+			<div class='tr'>
+				<div class="td" class='label'>Angle:</div>
+				<input id='gapangle' class='td' class='entry'>				
+			</div>
+			<div class='tr'>
+				<div class="td" class='label'>Width:</div>
+				<input id='gapwidth' class='td' class='entry'>				
+			</div>
+			<div class='tr'>
+				<button id='loadgapbutton'class='td'>load</button>
+				<button id='submitgapbutton' class='td'>submit</button>			
+			</div>
+
 		</div>
+
+
 		<!--script type='module'>
 			import { GLTFLoader } from '/three/examples/jsm/loaders/GLTFLoader.js';
 			const loader = new GLTFLoader();

@@ -9,13 +9,15 @@
 
 
 class Ring {
-    constructor(radius, width, resolution) {
-        this.holes = [];
+    constructor(radius, width, resolution,holes = [], gaps = [], terminals = [], connectors = [], thickness = 0.98) {
+        this.holes = holes;
         this.radius = radius;
         this.width = width;
         this.resolution = resolution;
-        this.gaps = [];
-        this.thickness = 0.98;
+        this.gaps = gaps;
+        this.connectors = connectors;
+        this.terminals = terminals;
+        this.thickness = thickness;
     }
 
     makeShape() {
@@ -222,13 +224,38 @@ class Ring {
         console.log(this.holes);
         // type can be either vertical slot, horizontal, circle or rectangle
     }
-
-    addGap(begin, end, type = 'screws') {
-        this.gaps.push({
-            begin: begin,
-            end: end,
-            type: type
-        });
+    /**
+     * To add a custom gap
+     * @param {} begin The start angle, lower value in RAD
+     * @param {*} end  The end angle, higher value in RAD
+     * @param {*} type Screw or barrel
+     * @param {*} options Enter a 'position' for angle begining and a 'angle' for the gap angle
+     */
+    addGap(begin, end, type = 'screws',options) {
+        if(options!==undefined&&options.position!==undefined&&options.angle!==undefined){
+            this.gaps.push({
+                begin: options.position - options.angle/2,
+                end: options.position + options.angle/2,
+                type : type,
+            })
+        }
+        else{
+            this.gaps.push({
+                begin: begin,
+                end: end,
+                type: type
+            });
+        }
+    }
+    /**
+     * Loads a connector into the ring
+     * @param {*} connector Properties : angle ; type; offset; flipped
+     */
+    addConnector(connector){
+        this.connectors.push(connector);
+    }
+    addTerminal(terminal){
+        this.connectors.push(terminal);
     }
     //Only used to count the space needed to construct the ring
     countFloats(res, width) {

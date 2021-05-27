@@ -23,9 +23,8 @@ shapes = [];
 
 function setup() {
     p5canvas = createCanvas(canvasWidth, canvasHeight);
-    p5canvas.style('position', 'fixed');
-    p5canvas.style('left', '100px');
-    p5canvas.style('top', '100px');
+    p5canvas.parent('p5holder');
+
     const rect = new Rectangle(100, 100);
     shapes.push(rect);
     const circle = new Circle(100, 100);
