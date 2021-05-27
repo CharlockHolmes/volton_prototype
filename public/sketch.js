@@ -649,6 +649,6 @@ function loadMenuThings(){
     document.getElementById('ringdiameter').value = (r.radius*2*inchPerUnit).toFixed(2);
     document.getElementById('ringgap').value = 'not implemented';
     document.getElementById('ringresolution').value = r.resolution;
-    document.getElementById('gapwidth').value = (r.gaps[0].begin-r.gaps[0].end)*360/(2*PI);
+    document.getElementById('gapwidth').value = Math.abs(r.gaps[0].begin-r.gaps[0].end)*360/(2*PI);
     document.getElementById('gapangle').value = (r.gaps[0].begin+r.gaps[0].end)/2*360/(2*PI);
 }
