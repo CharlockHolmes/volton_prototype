@@ -212,6 +212,7 @@ class Ring {
         };
     }
     addHole(angle, r, offset, type = 'circle') {
+        console.log('adding a hole at', angle, r,offset,type)
         this.holes.push({
             x: Math.cos(angle) * this.radius,
             y: Math.sin(angle) * this.radius,
@@ -219,6 +220,7 @@ class Ring {
             r: r,
             offset: offset,
             type: type,
+            angle:angle,
 
         });
         console.log(this.holes);

@@ -13,6 +13,7 @@ ctrl+k+s : save all
 */
 // Global variables
 let reloadCount=0;
+const reloadValue = 3
 let groupGlobal;
 let groupConnectors;
 let pp;
@@ -25,8 +26,6 @@ const cameraPositionZ = 30;
 const segmentsAround = 1000;
 let defaultWidth = 1.234;
 let defaultRadius = 1.66;
-const inchPerUnit = 3;
-const PI = Math.PI;
 
 let beginMove;
 let endMove;
@@ -635,7 +634,7 @@ document.getElementById('defaultring').onclick = () =>{
 function saveRing(){
     localStorage.setItem('ring', JSON.stringify(r));
     reloadCount++;
-    if(reloadCount>5)
+    if(reloadCount>reloadValue)
     location.reload();
     else loadCustomItem();
 }
@@ -651,4 +650,13 @@ function loadMenuThings(){
     document.getElementById('ringresolution').value = r.resolution;
     document.getElementById('gapwidth').value = Math.abs(r.gaps[0].begin-r.gaps[0].end)*360/(2*PI);
     document.getElementById('gapangle').value = (r.gaps[0].begin+r.gaps[0].end)/2*360/(2*PI);
+}
+
+function loadRingHoles(){
+    const holes = JSON.parse(localStorage.getItem('holes'));
+    r.holes = [];
+    holes.forEach(h=>{
+        r.addHole(h.angle, h.r, h.offset, h.type);
+    })
+    saveRing();
 }

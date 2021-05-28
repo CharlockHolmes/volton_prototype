@@ -26,13 +26,13 @@
 	<title>Volton Prototype</title>
 
 </head>
-<header>
+<!--header id='headbanner'>
 	<img src="https://www.volton.com/gx/volton-logo.png" alt='volton_logo'>
 	<img src='https://www.volton.com/gx/m/banniereInt_default_768.jpg' alt='volton_banner'>
 	<a href="">home</a>
 	<a href="/logs"> other</a><br>
-</header>
-
+</header-->
+<canvas class='webgl' id='three'></canvas>
 <body>
 	<section>
 		<!--div style="position: absolute; top:100px; left:100px;">
@@ -56,6 +56,8 @@
 			<div class='menubutton'id='resetcamera'>Reset Camera</div>
 			<div class='menubutton'id='createring'>Create Ring</div>
 			<div class='menubutton'id='defaultring'>Default Ring</div>
+			<div class='menubutton'id='exportholes'>Export Holes</div>
+			<div class='menubutton'id='importholes'>Import Holes</div>
 		</div>
 		<div id="p5holder"></div>
 		<div class='table'id='ringInfo'>
@@ -106,12 +108,12 @@
 		</div>
 
 
-		<!--script type='module'>
-			import { GLTFLoader } from '/three/examples/jsm/loaders/GLTFLoader.js';
-			const loader = new GLTFLoader();
-		</script-->
+		<script>
+			const inchPerUnit = 3;
+			const PI = Math.PI;
+		</script>
 		<script src="ring.js"></script>
-		<canvas class='webgl'></canvas>
+		
 		<script src="sketch.js"></script>
 		<script src="p5sketch.js"></script>
 

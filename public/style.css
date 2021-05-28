@@ -1,9 +1,13 @@
 body{
     background-color: rgb(255, 255, 255);
+    position:relative;
+}
+#headbanner{
+    background-color: green;
 }
 
 section{
-    height : 80vh;
+    height : 100vh;
 }
 #optionbuttons{
     position:sticky;
@@ -32,8 +36,11 @@ div.menubutton{
     width:10%;
 }
 #p5holder{
-    position:absolute;
-    background-color:rgb(232, 235, 247)
+    position:sticky;
+    background-color:rgb(232, 235, 247);
+    left: 20%;
+    top:50px;
+    float:right;
 }
 div.table{ 
     position:sticky;
@@ -41,6 +48,7 @@ div.table{
     left:0px;
     width:20%;
     display: table;
+    float:left;
 }
 .tr{ 
     width: 220px;
@@ -61,6 +69,11 @@ div.td{
 }
 button:hover{
     cursor: pointer;
+}
+canvas.webgl{
+    position:fixed;
+    top:50px;
+    left:0px;
 }
 
 
