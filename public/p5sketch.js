@@ -1,13 +1,13 @@
 let mode = '';
 let p5canvas;
-const loadedRing = JSON.parse(localStorage.getItem('ring'));
-const lrwidth = loadedRing.width;
-const lrlength = loadedRing.radius * 2 * Math.PI;
-const aspectRatio = lrwidth / lrlength;
+let loadedRing = JSON.parse(localStorage.getItem('ring'));
+let lrwidth = loadedRing.width;
+let lrlength = loadedRing.radius * 2 * Math.PI;
+let aspectRatio = lrwidth / lrlength;
 
 
-const canvasWidth = window.innerWidth*0.75; 
-const canvasHeight = canvasWidth*aspectRatio+100;
+let canvasWidth = window.innerWidth*0.75; 
+let canvasHeight = canvasWidth*aspectRatio+100;
 let mtop = 20;
 let mleft = 0;
 let mright = 0;
