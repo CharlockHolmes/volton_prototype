@@ -13,7 +13,7 @@ ctrl+k+s : save all
 */
 // Global variables
 let reloadCount=0;
-const reloadValue = 3
+const reloadValue = 0;
 let groupGlobal;
 let groupConnectors;
 let pp;
@@ -186,8 +186,8 @@ function defaultRing() {
 
     //Add borniers
     
-    //Adding the special connectors depending on if they are reeversed or not
-    
+    loadDefaultConnectorSettings();
+    loadDefaultBorniersSettings();
     // Loading the item
     loadCustomItem();
 }
@@ -389,44 +389,31 @@ function clearObjectArrays(){
     r.connectors = [];
 }
 
+/**
+ * Main loading function to setup the ring and all the required elements
+ */
 function loadCustomItem() {
     loadMenuThings();
-    clearObjectArrays();
 
     initGlobals();
     addRingClock();
-    loadDefaultConnectorSettings();
-    loadDefaultBorniersSettings();
 
     r.terminals.forEach(borne => {
         loadBornier(borne.offset, r.radius, borne.angle);
     });
-
     r.connectors.forEach(connector => {
         loadConnector(connector.offset, r.radius, connector.angle, connector.type, connector.flipped);
     });
-
-
     addLight(-2, 20, 4);
     addLight(2, -20, 3);
-    //addLight(-3, 10, 0.5);
-
     //Ring material
-    const segmentsDown = 16;
     const {
         positions,
         indices
-    } = r.makeShape(segmentsAround, 1); //makeSpherePositions(segmentsAround, segmentsDown);
-
-
-
+    } = r.makeShape(segmentsAround, 1);
 
     console.log("ShapeCompleted", positions.length, indices.length);
-    //console.log(indices);
     const normals = positions.slice();
-    pp = positions;
-    nn = normals;
-    // Making the geometry 
     const geometry = new THREE.BufferGeometry();
     const positionNumComponents = 3;
     const normalNumComponents = 3;
@@ -466,14 +453,11 @@ function loadCustomItem() {
     requestAnimationFrame(render);
 }
 
-
+/**
+ * Functions that runs in a loop for each animation frame of the window. 
+ * @param {*} time 
+ */
 function render(time) {
-    const positions = pp;
-    const normals = nn;
-    const positionAttribute = pa;
-
-   
-    
     time *= 0.001; // the callback sets the time value
 
     if (resizeRendererToDisplaySize(renderer)) {
@@ -503,7 +487,9 @@ function render(time) {
     requestAnimationFrame(render);
 }
 
-// Ajusts to the canvas size
+/**
+ *  Ajusts to the canvas size
+ */
 function resizeRendererToDisplaySize(renderer) {
     const canvas = renderer.domElement;
     const width = canvas.clientWidth;
@@ -514,28 +500,13 @@ function resizeRendererToDisplaySize(renderer) {
     }
     return needResize;
 }
+ 
 
-
-
-// Window resize
-// const sizes = {
-//     width: window.innerWidth,
-//     height: window.innerHeight
-// }
-// window.addEventListener('resize', () => {
-//     sizes.width = window.innerWidth;
-//     sizes.height = window.innerHeight;
-//     renderer.setSize(sizes.width, sizes.height);
-//     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-// });
-
-//requestAnimationFrame(render); // initiates the first reloop; 
-
+/* Event Handlers with button*/
 /**
- * Event Handlers with buttons
+ * Triggered whent he window is resized.
  */
- window.addEventListener( 'resize', onWindowResize, false );
-
+window.addEventListener( 'resize', onWindowResize, false );
  function onWindowResize(){
  
      camera.aspect = window.innerWidth / window.innerHeight;
@@ -544,10 +515,16 @@ function resizeRendererToDisplaySize(renderer) {
      renderer.setSize( window.innerWidth, window.innerHeight );
      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
  }
+ /**
+  * Triggered when clock is pressed, toggles the 'clock' view with the angles. 
+  */
 document.getElementById('clocktoggle').onclick = () => {
     showGroupGlobal = !showGroupGlobal;
     groupGlobal.visible = showGroupGlobal;
 }
+/**
+ * Triggered when reeset camera is pressed. Initiates the values to do the resetcamera position.
+ */
 document.getElementById('resetcamera').onclick = () => {
     beginMove = {
         px:camera.position.x.toFixed(10),
@@ -590,7 +567,9 @@ document.getElementById('resetcamera').onclick = () => {
     
 
 }
-
+/**
+ * Functions that is triggered in the submit button in the customization menu.
+ */
 document.getElementById('submitbutton').onclick = () =>{
     let twidth = document.getElementById('ringwidth').value;
     let tdiameter = document.getElementById('ringdiameter').value;
@@ -608,9 +587,15 @@ document.getElementById('submitbutton').onclick = () =>{
     camera.position.z = cameraPositionZ*defaultRadius;
     saveRing(); 
 }
+/**
+ * Triggererd when the load button is pressed, currently loads the values into the menu.
+ */
 document.getElementById('loadbutton').onclick = () =>{
     loadMenuThings();
 }
+/**
+ * Triggered when the gap button submit is pressed.
+ */
 document.getElementById('submitgapbutton').onclick = () =>{
     let twidth = document.getElementById('gapwidth').value;
     let tangle = document.getElementById('gapangle').value;
@@ -623,26 +608,48 @@ document.getElementById('submitgapbutton').onclick = () =>{
     else console.log('angle entries are invalid')
 
 }
+/**
+ * Triggered when load gap is pressed. 
+ */
 document.getElementById('loadgapbutton').onclick = () =>{
     loadMenuThings();
 }
+/**
+ * Triggered when defaultRing is pressed.
+ */
 document.getElementById('defaultring').onclick = () =>{
     defaultRing();
     saveRing();
 }
 
+
+/* Saving functions  */
+
+/**
+ * General ringsaving function, reloads after a number "reloadvalue"counts.
+ * Saves the camera position in 'camera' key.
+ * Saves the ring properties in the 'ring key. 
+ */
 function saveRing(){
+    const position = {position:{x : camera.position.x, y:camera.position.y, z:camera.position.z},rotation:{_x: camera.rotation._x, _y:camera.rotation._y, _z:camera.rotation._z}, target:{x:controls.target.x, y:controls.target.y, z:controls.target.z}}
+    localStorage.setItem('camera', JSON.stringify(position));
     localStorage.setItem('ring', JSON.stringify(r));
     reloadCount++;
     if(reloadCount>reloadValue)
     location.reload();
     else loadCustomItem();
 }
+/**
+ * Loads the camera position then loads the ring.
+ */
 function loadRing(){
+    loadCamera();
     const ring = JSON.parse(localStorage.getItem('ring'));
     r = new Ring(ring.radius, ring.width, ring.resolution,ring.holes, ring.gaps, ring.terminals, ring.connectors, ring.thickness);
 }
-
+/** 
+ * Loads the cursomisation menu information
+ */
 function loadMenuThings(){
     document.getElementById('ringwidth').value = (r.width*inchPerUnit).toFixed(2);
     document.getElementById('ringdiameter').value = (r.radius*2*inchPerUnit).toFixed(2);
@@ -651,12 +658,29 @@ function loadMenuThings(){
     document.getElementById('gapwidth').value = Math.abs(r.gaps[0].begin-r.gaps[0].end)*360/(2*PI);
     document.getElementById('gapangle').value = (r.gaps[0].begin+r.gaps[0].end)/2*360/(2*PI);
 }
-
+/**
+ * Loads ring holes, used to only update the ring holes then to save the item.
+ */
 function loadRingHoles(){
     const holes = JSON.parse(localStorage.getItem('holes'));
     r.holes = [];
     holes.forEach(h=>{
-        r.addHole(h.angle, h.r, h.offset, h.type);
+        r.addHole(h.angle, h.r, h.offset, h.type, h.id);
     })
     saveRing();
+}
+/**
+ * Loads all the camera positioning elements in the camera and controls for the offset. 
+ */
+function loadCamera(){
+    const cameraImport = JSON.parse(localStorage.getItem('camera'));
+    camera.position.x = cameraImport.position.x;
+    camera.position.y = cameraImport.position.y;
+    camera.position.z = cameraImport.position.z;
+    camera.rotation._x = cameraImport.rotation._x;
+    camera.rotation._y = cameraImport.rotation._y;
+    camera.rotation._z = cameraImport.rotation._z;
+    controls.target.x  = cameraImport.target.x;
+    controls.target.y = cameraImport.target.y;
+    controls.target.z = cameraImport.target.z;
 }

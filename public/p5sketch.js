@@ -1,3 +1,8 @@
+/**
+ * Note:
+ * Design decision:
+ */
+
 let mode = '';
 let p5canvas;
 let loadedRing = JSON.parse(localStorage.getItem('ring'));
@@ -23,15 +28,15 @@ const STARTHIDDEN = true;
 let hidden = STARTHIDDEN;
 
 shapes = [];
+demoShapes = [];
 
 function setup() {
     p5canvas = createCanvas(canvasWidth, canvasHeight);
     p5canvas.parent('p5holder');
 
-    const rect = new Rectangle(100, 100);
-    shapes.push(rect);
-    const circle = new Circle(100, 100);
-    shapes.push(circle);
+    demoShapes.push(new DemoRectangle(10, 10, 15,15));
+    demoShapes.push(new DemoCircle(30, 10, 15));
+    demoShapes.push(new DemoVertical_Slot(50, 10, 15,10));
     //Here we toggle the drawing thing
     if(STARTHIDDEN)p5canvas.hide();
     document.getElementById('drawing').onclick = () => {
@@ -61,7 +66,7 @@ function draw() {
     pop();
     noStroke();
     fill(100)
-    rect(0, 0, width, mtop);
+    rect(width/2, mtop/2, width, mtop);
     rect(0, 0, mleft, height);
     let runloop = true;
     shapes.forEach(shape =>{
@@ -79,6 +84,10 @@ function draw() {
         }
     })
     if(runloop)cursor(ARROW);
+
+    demoShapes.forEach(shape =>{
+        shape.draw();
+    })
 }
 
 function keyPressed() {
@@ -123,14 +132,29 @@ function itemKeyOperation(key) {
 }
 
 function doubleClicked() {
-    /* to be implemented */
-    shapes.push(new Circle(width/2, height/2, 50));
 }
 
 function mousePressed() {
     shapes.forEach(shape => {
         shape.unSelect();
     });
+    let makeNew = false;
+    demoShapes.forEach(shape =>{
+        if(shape.isInOuterBoundary(mouseX,mouseY)){
+            if(shape.type=='rect'){
+                console.log('make new rectangle')
+                shapes.push(new Rectangle(50,50, 50,50))
+            }
+            if(shape.type=='circle'){
+                console.log('make new circle')
+                shapes.push(new Circle(50,50, 50))
+            }
+            if(shape.type=='v_slot'){
+                console.log('make new v_slot')
+                shapes.push(new Vertical_Slot(50,50,50,50))
+            }
+        }
+    })
     let oneClicked = false; 
     shapes.some(shape => {
         const mx = mouseX - mleft;
@@ -174,9 +198,8 @@ class Shape {
     }
 
     draw() {
-
+    
     }
-
     rectFill(color) {
         this.color = color;
     }
@@ -235,9 +258,11 @@ class Shape {
 
 }
 class Rectangle extends Shape {
-    constructor(x, y) {
+    constructor(x, y, w, h) {
         super(x, y);
         this.type = 'rect';
+        this.w = w;
+        this.h = h;
     }
     draw() {
         rectMode(CENTER);
@@ -259,11 +284,11 @@ class Rectangle extends Shape {
             line(this.x - (w / 2), this.y, this.x - (w / 2), this.y + h / 2 + 20);
             line(this.x, this.y + (h / 2), this.x + w / 2 + 20, this.y + (h / 2));
             line(this.x, this.y - (h / 2), this.x + w / 2 + 20, this.y - (h / 2));
-            let a = w/pwidth*lrlength*inchPerUnit;
+            let a = w/pheight*lrwidth*inchPerUnit;
             //console.log(a);
             let b = h/pheight*lrwidth*inchPerUnit;
             //console.log(b);
-            drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a );
+            drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a);
             drawArrow(this.x + w / 2 + 15, this.y, h, 10, false, b);
             textSize(16);
             if(this.x>0.7*pwidth)textAlign(RIGHT, TOP);
@@ -309,7 +334,44 @@ class Circle extends Shape {
         }
     }
 }
-
+class Vertical_Slot extends Rectangle{
+    constructor(x,y,w,h){
+        super(x,y,w,h);
+        this.type = 'v_slot';
+    }
+    draw(){
+        push();
+        fill(this.color);
+        arc(this.x, this.y-this.h/2, this.w, this.w, PI, 0);
+        arc(this.x, this.y+this.h/2, this.w, this.w, 0, PI);
+        rectMode(CENTER);
+        fill(this.color);
+        rect(this.x, this.y, this.w, this.h);
+        this.textSelected();
+        pop();
+    }
+}
+class DemoRectangle extends Rectangle{
+    constructor(x,y,w,h){
+        super(x,y,w,h);
+    }
+    dragged(){}
+    textSelected(){}
+}
+class DemoCircle extends Circle{
+    constructor(x,y,r){
+        super(x,y,r);
+    }
+    dragged(){}
+    textSelected(){}
+}
+class DemoVertical_Slot extends Vertical_Slot{
+    constructor(x,y,w,h){
+        super(x,y,w,h);
+    }
+    dragged(){}
+    textSelected(){}
+}
 
 
 function drawArrow(x, y, l, w, horizontal = true, txt = '') {
@@ -344,7 +406,6 @@ function drawArrow(x, y, l, w, horizontal = true, txt = '') {
     text(txt.toFixed(3) + '"', x, y);
     else console.log(txt)
 }
-
 document.getElementById('exportholes').onclick = ()=>{
     let holes = [];
     shapes.forEach(shape => {
@@ -354,6 +415,38 @@ document.getElementById('exportholes').onclick = ()=>{
                 offset:shape.y/pheight*lrwidth- lrwidth/2,
                 angle: shape.x*2*PI/pwidth,
                 type: shape.type,
+            })
+        }
+        if(shape.type === 'rect'){
+            holes.push({
+                r: {w:shape.w/2/(pheight)*(lrwidth), h:shape.h/2/(pheight)*(lrwidth)},
+                offset:shape.y/pheight*lrwidth- lrwidth/2,
+                angle: shape.x*2*PI/pwidth,
+                type: shape.type,
+            })
+        }
+        if(shape.type === 'v_slot'){
+            randID = (Math.random()*10000).toFixed(0);
+            holes.push({
+                r: {w:shape.w/2/(pheight)*(lrwidth), h:shape.h/2/(pheight)*(lrwidth)},
+                offset:shape.y/pheight*lrwidth- lrwidth/2,
+                angle: shape.x*2*PI/pwidth,
+                type: 'rect',
+                id:'v_slot'+randID
+            })
+            holes.push({
+                r: shape.w/2/(pheight)*(lrwidth),
+                offset:(shape.y+shape.h/2)/pheight*lrwidth- lrwidth/2,
+                angle: shape.x*2*PI/pwidth,
+                type: 'circle',
+                id:'v_slot'+randID
+            })
+            holes.push({
+                r: shape.w/2/(pheight)*(lrwidth),
+                offset:(shape.y-shape.h/2)/pheight*lrwidth- lrwidth/2,
+                angle: shape.x*2*PI/pwidth,
+                type: 'circle',
+                id:'v_slot'+randID
             })
         }
     })
@@ -367,10 +460,27 @@ document.getElementById('importholes').onclick = ()=>{
 function holeImport(){
     let holes = loadedRing.holes;
     shapes = [];
+    let ids = [];
     holes.forEach(hole =>{
-        shapes.push(new Circle(hole.angle/(2*PI)*pwidth, 
-        (lrwidth/2+hole.offset)/lrwidth*pheight, 
-        hole.r*2/lrwidth*pheight))
+        if(hole.id==undefined){
+            if(hole.type=='circle'){
+                shapes.push(new Circle(hole.angle/(2*PI)*pwidth, 
+                (lrwidth/2+hole.offset)/lrwidth*pheight, 
+                hole.r*2/lrwidth*pheight))
+            }
+            if(hole.type=='rect'){
+                shapes.push(new Rectangle(hole.angle/(2*PI)*pwidth, 
+                    (lrwidth/2+hole.offset)/lrwidth*pheight, 
+                    hole.r.w*2/lrwidth*pheight,
+                    hole.r.h*2/lrwidth*pheight)); 
+            }
+        }
+        else if(hole.id.charAt(0)=='v'&&hole.type=='rect'){
+            shapes.push(new Vertical_Slot(hole.angle/(2*PI)*pwidth, 
+                (lrwidth/2+hole.offset)/lrwidth*pheight, 
+                hole.r.w*2/lrwidth*pheight,
+                hole.r.h*2/lrwidth*pheight)); 
+        }
     })
 }
 

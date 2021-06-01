@@ -89,10 +89,19 @@ class Ring {
                     const v0 = new THREE.Vector3(x0, y0, holeSearch.offset);
                     const v1 = new THREE.Vector3(x1, y1, holeSearch.offset);
                     const c = new THREE.Vector3(holeSearch.x, holeSearch.y, holeSearch.offset);
-                    if (v0.distanceTo(c) < holeSearch.r)
+                    if(holeSearch.type=='circle'){
+            
+                        if (v0.distanceTo(c) < holeSearch.r)
                         if (v1.distanceTo(c) < holeSearch.r) {
                             holeOnPass.push(holeSearch);
                         }
+                    }
+                    if(holeSearch.type=='rect'){
+                        if (v0.distanceTo(c) < holeSearch.r.w)
+                            if (v1.distanceTo(c) < holeSearch.r.w) {
+                            holeOnPass.push(holeSearch);
+                        }
+                    }
                 });
 
                 if (holeOnPass.length > 0) {
@@ -104,17 +113,29 @@ class Ring {
                     const hz = [];
                     //Here look for every hole in the section
                     for (let ii = 0; ii < holeOnPass.length; ii++) {
-                        v0.push(new THREE.Vector3(x0, y0, holeOnPass[ii].offset));
-                        v1.push(new THREE.Vector3(x1, y1, holeOnPass[ii].offset));
-                        c.push(new THREE.Vector3(holeOnPass[ii].x, holeOnPass[ii].y, holeOnPass[ii].offset));
-                        xyDelta.push(c[ii].distanceTo(v0[ii]));
-                        const alpha = Math.asin(xyDelta[ii] / holeOnPass[ii].r);
-                        if (holeOnPass[ii].type == 'square') hz.push(holeOnPass[ii].r);
-                        else if (xyDelta[ii] == 0) {
-                            hz.push(holeOnPass[ii].r);
-                        } else hz.push(xyDelta[ii] / Math.tan(alpha));
+                        if(holeOnPass[ii].type=='circle')circleHole(holeOnPass[ii],ii);
+                        if(holeOnPass[ii].type=='rect')rectHole(holeOnPass[ii],ii);
 
                     }
+                    function circleHole(s_hole,sel){
+                        v0.push(new THREE.Vector3(x0, y0, s_hole.offset));
+                        v1.push(new THREE.Vector3(x1, y1, s_hole.offset));
+                        c.push(new THREE.Vector3(s_hole.x, s_hole.y, s_hole.offset));
+                        xyDelta.push(c[sel].distanceTo(v0[sel]));
+                        const alpha = Math.asin(xyDelta[sel] / s_hole.r);
+                        if (s_hole.type == 'rect') hz.push(s_hole.r.h);
+                        else if (xyDelta[sel] == 0) {
+                            hz.push(s_hole.r);
+                        } else hz.push(xyDelta[sel] / Math.tan(alpha));
+                    }
+                    function rectHole(s_hole,sel){
+                        v0.push(new THREE.Vector3(x0, y0, s_hole.offset));
+                        v1.push(new THREE.Vector3(x1, y1, s_hole.offset));
+                        c.push(new THREE.Vector3(s_hole.x, s_hole.y, s_hole.offset));
+                        xyDelta.push(c[sel].distanceTo(v0[sel]));
+                        hz.push(s_hole.r.h);
+                    }
+                    
                     // Looking if a hole is in the foldover
                     let leftCheck = true; 
                     let rightCheck = true; 
@@ -211,19 +232,33 @@ class Ring {
             indices
         };
     }
-    addHole(angle, r, offset, type = 'circle') {
-        console.log('adding a hole at', angle, r,offset,type)
-        this.holes.push({
-            x: Math.cos(angle) * this.radius,
-            y: Math.sin(angle) * this.radius,
-            z: offset,
-            r: r,
-            offset: offset,
-            type: type,
-            angle:angle,
-
-        });
-        console.log(this.holes);
+    addHole(angle, r, offset, type = 'circle',id = undefined) {
+        
+        if(type=='rect'){
+            this.holes.push({
+                x: Math.cos(angle) * this.radius,
+                y: Math.sin(angle) * this.radius,
+                z: offset,
+                r: {w:r.w, h:r.h},
+                offset: offset,
+                type: type,
+                angle:angle,
+                id:id,
+                
+            });
+        }
+        else{
+            this.holes.push({
+                x: Math.cos(angle) * this.radius,
+                y: Math.sin(angle) * this.radius,
+                z: offset,
+                r: r,
+                offset: offset,
+                type: type,
+                angle:angle,
+                id:id,
+            });
+        }
         // type can be either vertical slot, horizontal, circle or rectangle
     }
     /**
