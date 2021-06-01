@@ -328,9 +328,10 @@ class Circle extends Shape {
             const offsetVal = this.y/pheight*loadedRing.width*inchPerUnit;
             drawArrow(this.x, this.y / 2, this.y, 10, false, offsetVal)
 
-            line(this.x, this.y + (w / 2), this.x + w / 2 + 20, this.y + (w / 2));
-            line(this.x, this.y - (w / 2), this.x + w / 2 + 20, this.y - (w / 2));
-            drawArrow(this.x + w / 2 + 15, this.y, w, 10, false, w/pheight*loadedRing.width*inchPerUnit);
+            //line(this.x, this.y + (w / 2), this.x + w / 2 + 20, this.y + (w / 2));
+            //line(this.x, this.y - (w / 2), this.x + w / 2 + 20, this.y - (w / 2));
+            //drawArrow(this.x + w / 2 + 15, this.y, w, 10, false, w/pheight*loadedRing.width*inchPerUnit);
+            pointArrow(this.x+Math.cos(PI*3/4)*this.w/2, this.y-Math.sin(PI*3/4)*this.w/2, 'upleft', 'Ø'+(w/pheight*loadedRing.width*inchPerUnit).toFixed(3));
 
             textSize(16);
             if(this.x>0.7*pwidth)textAlign(RIGHT, TOP);
@@ -434,6 +435,41 @@ function drawArrow(x, y, l, w, horizontal = true, txt = '') {
     if(typeof txt == 'number')
     text(txt.toFixed(3) + '"', x, y);
     else console.log(txt)
+}
+const _UPLEFT = {p1:{x:-30, y:-20},p2:{x:-35, y:-20}}
+const _DOWNLEFT = {p1:{x:-30, y:20},p2:{x:-35, y:20}}
+const _UPRIGHT = {p1:{x:30, y:-20},p2:{x:35, y:-20}}
+const _DOWNRIGHT = {p1:{x:30, y:20},p2:{x:35, y:20}}
+function pointArrow(x,y, direction = 'upleft',txt){
+    /* Remove the first zero if in position 0 or 1 */
+    if(txt.charAt(0)==='0')txt = txt.replace('0','');
+    else if(txt.charAt(1)==='0')txt = txt.replace('0','');
+
+    let pts = 0; 
+    switch(direction){
+        case 'upleft':
+            pts = _UPLEFT;
+            break;
+        case 'downleft':
+            pts = _DOWNLEFT;
+            break;
+        case 'upright':
+            pts = _UPRIGHT;
+            break;
+        case 'downright':
+            pts = _DOWNRIGHT
+            break;
+        default: console.log('Wrong type entry, only {upleft, downleft, upright, downright} are accepted')
+    }
+    if(pts!=0){
+        stroke(2);
+        line(x, y, x+pts.p1.x, y+pts.p1.y);
+        line(x+pts.p2.x, y+pts.p2.y, x+pts.p1.x, y+pts.p1.y);
+        textAlign(RIGHT, CENTER);
+        textSize(12);
+        text(txt, pts.p2.x+x, pts.p2.y+y)
+    }
+
 }
 document.getElementById('exportholes').onclick = ()=>{
     let holes = [];
