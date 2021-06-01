@@ -674,13 +674,15 @@ function loadRingHoles(){
  */
 function loadCamera(){
     const cameraImport = JSON.parse(localStorage.getItem('camera'));
-    camera.position.x = cameraImport.position.x;
-    camera.position.y = cameraImport.position.y;
-    camera.position.z = cameraImport.position.z;
-    camera.rotation._x = cameraImport.rotation._x;
-    camera.rotation._y = cameraImport.rotation._y;
-    camera.rotation._z = cameraImport.rotation._z;
-    controls.target.x  = cameraImport.target.x;
-    controls.target.y = cameraImport.target.y;
-    controls.target.z = cameraImport.target.z;
+    if(cameraImport!=null){
+        camera.position.x = cameraImport.position.x;
+        camera.position.y = cameraImport.position.y;
+        camera.position.z = cameraImport.position.z;
+        camera.rotation._x = cameraImport.rotation._x;
+        camera.rotation._y = cameraImport.rotation._y;
+        camera.rotation._z = cameraImport.rotation._z;
+        controls.target.x  = cameraImport.target.x;
+        controls.target.y = cameraImport.target.y;
+        controls.target.z = cameraImport.target.z;
+    }
 }
