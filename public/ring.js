@@ -105,7 +105,6 @@ class Ring {
                 });
 
                 if (holeOnPass.length > 0) {
-                    //console.log("There are adjacent " + holeOnPass.length + " at pass " + i);
                     const v0 = [];
                     const v1 = [];
                     const c = [];
@@ -147,12 +146,20 @@ class Ring {
                     if(rightCheck)makeFoldover(z1)
 
                     //Make the ring
-                    LimitedmakeTriangle(x0, y0, z0, x1, y1, -hz[0] + holeOnPass[0].offset);
+                    let smallerStart = 100;
+                    for (let x = 0; x < holeOnPass.length; x++) {
+                        if(holeOnPass[x].offset-hz[x]<smallerStart)smallerStart =holeOnPass[x].offset-hz[x]; 
+                    }
+                    LimitedmakeTriangle(x0, y0, z0, x1, y1, smallerStart);
                     for (let x = 0; x < holeOnPass.length - 1; x++) {
                         if(hz[x]+holeOnPass[x].offset<-hz[x + 1] +holeOnPass[x+1].offset)
                         LimitedmakeTriangle(x0, y0, hz[x] + holeOnPass[x].offset, x1, y1, -hz[x + 1] + holeOnPass[x + 1].offset); // in between holes
                     }
-                    LimitedmakeTriangle(x0, y0, hz[holeOnPass.length - 1] + holeOnPass[holeOnPass.length - 1].offset, x1, y1, z1);
+                    let biggerEnd = -100;
+                    for (let x = 0; x < holeOnPass.length; x++) {
+                        if(holeOnPass[x].offset+hz[x]>biggerEnd)biggerEnd =holeOnPass[x].offset+hz[x]; 
+                    }
+                    LimitedmakeTriangle(x0, y0, biggerEnd, x1, y1, z1);
 
 
                 } 

@@ -37,6 +37,7 @@ function setup() {
     demoShapes.push(new DemoRectangle(10, 10, 15,15));
     demoShapes.push(new DemoCircle(30, 10, 15));
     demoShapes.push(new DemoVertical_Slot(50, 10, 15,10));
+    demoShapes.push(new DemoHorizontal_Slot(80, 10, 15,10));
     //Here we toggle the drawing thing
     if(STARTHIDDEN)p5canvas.hide();
     document.getElementById('drawing').onclick = () => {
@@ -152,6 +153,10 @@ function mousePressed() {
             if(shape.type=='v_slot'){
                 console.log('make new v_slot')
                 shapes.push(new Vertical_Slot(50,50,50,50))
+            }
+            if(shape.type=='h_slot'){
+                console.log('make new h_slot')
+                shapes.push(new Horizontal_Slot(50,50,50,50))
             }
         }
     })
@@ -351,6 +356,23 @@ class Vertical_Slot extends Rectangle{
         pop();
     }
 }
+class Horizontal_Slot extends Rectangle{
+    constructor(x,y,w,h){
+        super(x,y,w,h);
+        this.type = 'h_slot';
+    }
+    draw(){
+        push();
+        fill(this.color);
+        arc(this.x-this.w/2, this.y, this.h, this.h, PI/2, -PI/2);
+        arc(this.x+this.w/2, this.y, this.h, this.h, -PI/2, PI/2);
+        rectMode(CENTER);
+        fill(this.color);
+        rect(this.x, this.y, this.w, this.h);
+        this.textSelected();
+        pop();
+    }
+}
 class DemoRectangle extends Rectangle{
     constructor(x,y,w,h){
         super(x,y,w,h);
@@ -366,6 +388,13 @@ class DemoCircle extends Circle{
     textSelected(){}
 }
 class DemoVertical_Slot extends Vertical_Slot{
+    constructor(x,y,w,h){
+        super(x,y,w,h);
+    }
+    dragged(){}
+    textSelected(){}
+}
+class DemoHorizontal_Slot extends Horizontal_Slot{
     constructor(x,y,w,h){
         super(x,y,w,h);
     }
@@ -449,6 +478,30 @@ document.getElementById('exportholes').onclick = ()=>{
                 id:'v_slot'+randID
             })
         }
+        if(shape.type === 'h_slot'){
+            randID = (Math.random()*10000).toFixed(0);
+            holes.push({
+                r: {w:shape.w/2/(pheight)*(lrwidth), h:shape.h/2/(pheight)*(lrwidth)},
+                offset:shape.y/pheight*lrwidth- lrwidth/2,
+                angle: shape.x*2*PI/pwidth,
+                type: 'rect',
+                id:'h_slot'+randID
+            })
+            holes.push({
+                r: shape.h/2/(pheight)*(lrwidth),
+                offset:shape.y/pheight*lrwidth- lrwidth/2,
+                angle: (shape.x+shape.w/3)*2*PI/pwidth,
+                type: 'circle',
+                id:'h_slot'+randID
+            })
+            holes.push({
+                r: shape.h/2/(pheight)*(lrwidth),
+                offset:shape.y/pheight*lrwidth- lrwidth/2,
+                angle: (shape.x-shape.w/3)*2*PI/pwidth,
+                type: 'circle',
+                id:'h_slot'+randID
+            })
+        }
     })
     localStorage.setItem('holes', JSON.stringify(holes));
     loadRingHoles();
@@ -460,7 +513,6 @@ document.getElementById('importholes').onclick = ()=>{
 function holeImport(){
     let holes = loadedRing.holes;
     shapes = [];
-    let ids = [];
     holes.forEach(hole =>{
         if(hole.id==undefined){
             if(hole.type=='circle'){
@@ -477,6 +529,12 @@ function holeImport(){
         }
         else if(hole.id.charAt(0)=='v'&&hole.type=='rect'){
             shapes.push(new Vertical_Slot(hole.angle/(2*PI)*pwidth, 
+                (lrwidth/2+hole.offset)/lrwidth*pheight, 
+                hole.r.w*2/lrwidth*pheight,
+                hole.r.h*2/lrwidth*pheight)); 
+        }
+        else if(hole.id.charAt(0)=='h'&&hole.type=='rect'){
+            shapes.push(new Horizontal_Slot(hole.angle/(2*PI)*pwidth, 
                 (lrwidth/2+hole.offset)/lrwidth*pheight, 
                 hole.r.w*2/lrwidth*pheight,
                 hole.r.h*2/lrwidth*pheight)); 
