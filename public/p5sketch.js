@@ -2,14 +2,14 @@
  * Note:
  * Design decision:
  */
-
+const TEXTSIZE = 10;
 let mode = '';
 let p5canvas;
 let loadedRing = JSON.parse(localStorage.getItem('ring'));
 let lrwidth = loadedRing.width;
 let lrlength = loadedRing.radius * 2 * Math.PI;
 let aspectRatio = lrwidth / lrlength;
-
+let centerResize = false; 
 
 let canvasWidth = window.innerWidth*0.75; 
 let canvasHeight = canvasWidth*aspectRatio+100;
@@ -22,6 +22,9 @@ let pheight = canvasHeight - mtop;
 let pHeightConversionUnit = 2;
 let pUnitType = 'inch';
 let pRadius = 1; 
+
+const toInch = 1/pheight*lrwidth*inchPerUnit;
+const toDeg = 360/pwidth;
 
 let seeAll = false; 
 const STARTHIDDEN = true;
@@ -133,58 +136,75 @@ function itemKeyOperation(key) {
 }
 
 function doubleClicked() {
+    if(mouseX > 0 && mouseX < width &&mouseY>0 && mouseY<height){
+
+        const mx = mouseX - mleft;
+        const my = mouseY - mtop;
+        let happened = false; 
+        shapes.forEach(shape =>{
+            if(!happened)
+                if(shape.isInOuterBoundary){
+                    shape.doubleClicked()
+                    happened = true;
+                }       
+        });
+    }
 }
 
 function mousePressed() {
-    shapes.forEach(shape => {
-        shape.unSelect();
-    });
-    let makeNew = false;
-    demoShapes.forEach(shape =>{
-        if(shape.isInOuterBoundary(mouseX,mouseY)){
-            if(shape.type=='rect'){
-                console.log('make new rectangle')
-                shapes.push(new Rectangle(50,50, 50,50))
+    if(mouseX > 0 && mouseX < width &&mouseY>0 && mouseY<height){
+        shapes.forEach(shape => {
+            shape.unSelect();
+        });
+        let makeNew = false;
+        demoShapes.forEach(shape =>{
+            if(shape.isInOuterBoundary(mouseX,mouseY)){
+                if(shape.type=='rect'){
+                    console.log('make new rectangle')
+                    shapes.push(new Rectangle(50,50, 50,50))
+                }
+                if(shape.type=='circle'){
+                    console.log('make new circle')
+                    shapes.push(new Circle(50,50, 50))
+                }
+                if(shape.type=='v_slot'){
+                    console.log('make new v_slot')
+                    shapes.push(new Vertical_Slot(50,50,50,50))
+                }
+                if(shape.type=='h_slot'){
+                    console.log('make new h_slot')
+                    shapes.push(new Horizontal_Slot(50,50,50,50))
+                }
             }
-            if(shape.type=='circle'){
-                console.log('make new circle')
-                shapes.push(new Circle(50,50, 50))
+        })
+        let oneClicked = false; 
+        shapes.some(shape => {
+            const mx = mouseX - mleft;
+            const my = mouseY - mtop;
+            if(!oneClicked&&shape.isInOuterBoundary(mx,my)){
+                shape.select(mx, my);
+                oneClicked = true;
             }
-            if(shape.type=='v_slot'){
-                console.log('make new v_slot')
-                shapes.push(new Vertical_Slot(50,50,50,50))
-            }
-            if(shape.type=='h_slot'){
-                console.log('make new h_slot')
-                shapes.push(new Horizontal_Slot(50,50,50,50))
-            }
-        }
-    })
-    let oneClicked = false; 
-    shapes.some(shape => {
-        const mx = mouseX - mleft;
-        const my = mouseY - mtop;
-        if(!oneClicked&&shape.isInOuterBoundary(mx,my)){
-            shape.select(mx, my);
-            oneClicked = true;
-        }
-    });
-    /* Puts selected shape in front and at the begining of the array */
-    shapes.sort((a,b)=>{
-        if(a.selected)return -1;
-        if(b.selected)return 1;
-        return 0;
-    })
+        });
+        /* Puts selected shape in front and at the begining of the array */
+        shapes.sort((a,b)=>{
+            if(a.selected)return -1;
+            if(b.selected)return 1;
+            return 0;
+        })
+}
 }
 
 function mouseDragged() {
-    shapes.forEach(shape => {
-        const mx = this.mouseX - mleft;
-        const my = this.mouseY - mtop;
-        if (shape.selected) {
-            shape.dragged(mx,my);
-        }
-    });
+    if(mouseX > 0 && mouseX < width &&mouseY>0 && mouseY<height){
+        shapes.forEach(shape => {
+            const mx = this.mouseX - mleft;
+            const my = this.mouseY - mtop;
+            if (shape.selected) {
+                shape.dragged(mx,my);
+            }
+        });
+    }
 }
 
 class Shape {
@@ -200,8 +220,12 @@ class Shape {
         this.SELECTMOVE = 125;
         this.SELECTRESIZE = 200;
         this.SELECTPADDING = 3/ 5;
+        this.arrowIndex = 0; 
     }
-
+    doubleClicked(){
+        this.arrowIndex++;
+        if(this.arrowIndex>3)this.arrowIndex = 0;
+    }
     draw() {
     
     }
@@ -217,6 +241,7 @@ class Shape {
     }
     select(mx, my){
         this.selected = true;
+        selectHole(this);
         if(this.isInInnerBoundary(mx,my)){
             this.selectMode = 'move';
             this.color = this.SELECTMOVE;
@@ -245,16 +270,45 @@ class Shape {
         }
         if(this.selectMode==='resize'){
             cursor('pointer');
+            let sl = this.x - this.w/2, sr = this.x+this.w/2,su = this.y-this.h/2,sd = this.y +this.h/2; 
             const dx = Math.abs(this.x - mx);
             const dy = Math.abs(this.y - my); 
-            if(dx>dy)
-                this.w = 2*dx;
-            else
-                this.h = 2*dy;
-            if(dx>this.w/2)this.w = 2*dx;
-            if(dy>this.h/2)this.h = 2*dy
-            if(this.type ==='circle')this.h = this.w;
-        }
+            if (this.type === 'circle'||centerResize==true){
+                if(dx>dy){
+                    
+                    this.w = 2*dx;
+                }
+                else{
+                    this.h = 2*dy;
+                }
+                if(dx>this.w/2)this.w = 2*dx;
+                if(dy>this.h/2)this.h = 2*dy;
+                if(this.type ==='circle')this.h = this.w;
+            }
+            else{
+                if(dx>dy){
+                    if(mx>this.x){
+                        this.x = (sl+(this.x+dx))/2;
+                        this.w = mx - sl;
+                    }
+                    else{
+                        this.x = (sr+(this.x-dx))/2;
+                        this.w = sr - mx;
+                    }
+                }
+                else{
+                    if(my>this.y){
+                        this.y = (su+(this.y+dy))/2;
+                        this.h = my - su;
+                    }
+                    else{
+                        this.y = (sd+(this.y-dy))/2;
+                        this.h = sd - my;
+                    }
+                }
+            }
+            
+        }selectHole(this);
     }
     unSelect(){
         this.selected = false; 
@@ -295,7 +349,7 @@ class Rectangle extends Shape {
             //console.log(b);
             drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a);
             drawArrow(this.x + w / 2 + 15, this.y, h, 10, false, b);
-            textSize(16);
+            textSize(TEXTSIZE);
             if(this.x>0.7*pwidth)textAlign(RIGHT, TOP);
             else textAlign(LEFT, TOP);
             text((this.x*360/pwidth).toFixed(1) + '°', this.x + 5, 0);
@@ -313,7 +367,6 @@ class Circle extends Shape {
         this.h = d;
     }
     draw() {
-
         fill(this.color);
         ellipse(this.x, this.y, this.w, this.w);
         this.textSelected();
@@ -331,9 +384,9 @@ class Circle extends Shape {
             //line(this.x, this.y + (w / 2), this.x + w / 2 + 20, this.y + (w / 2));
             //line(this.x, this.y - (w / 2), this.x + w / 2 + 20, this.y - (w / 2));
             //drawArrow(this.x + w / 2 + 15, this.y, w, 10, false, w/pheight*loadedRing.width*inchPerUnit);
-            pointArrow(this.x+Math.cos(PI*3/4)*this.w/2, this.y-Math.sin(PI*3/4)*this.w/2, 'upleft', 'Ø'+(w/pheight*loadedRing.width*inchPerUnit).toFixed(3));
+            pointArrow(this, 'Ø'+(w*toInch).toFixed(3));
 
-            textSize(16);
+            textSize(TEXTSIZE);
             if(this.x>0.7*pwidth)textAlign(RIGHT, TOP);
             else textAlign(LEFT, TOP);
             text((this.x*360/pwidth).toFixed(1) + '°', this.x + 5, 0);
@@ -356,6 +409,28 @@ class Vertical_Slot extends Rectangle{
         this.textSelected();
         pop();
     }
+    textSelected() {
+        if (this.selected||seeAll) {
+            fill(0);
+            textSize(16);
+            textAlign(LEFT, BOTTOM);
+            const w = abs(this.w);
+            const h = abs(this.h);
+            const offsetVal = this.y/pheight*loadedRing.width*inchPerUnit;
+            drawArrow(this.x, this.y / 2, this.y, 10, false, offsetVal)
+            line(this.x, this.y + (h / 2), this.x + w / 2 + 20, this.y + (h / 2));
+            line(this.x, this.y - (h / 2), this.x + w / 2 + 20, this.y - (h / 2));
+            let a = w/pheight*lrwidth*inchPerUnit;
+            let b = h/pheight*lrwidth*inchPerUnit;
+            //drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a);
+            pointArrow(this, 'R'+(w/2/pheight*loadedRing.width*inchPerUnit).toFixed(3))
+            drawArrow(this.x + w / 2 + 15, this.y, h, 10, false, b);
+            textSize(TEXTSIZE);
+            if(this.x>0.7*pwidth)textAlign(RIGHT, TOP);
+            else textAlign(LEFT, TOP);
+            text((this.x*360/pwidth).toFixed(1) + '°', this.x + 5, 0);
+        }
+    }
 }
 class Horizontal_Slot extends Rectangle{
     constructor(x,y,w,h){
@@ -372,6 +447,28 @@ class Horizontal_Slot extends Rectangle{
         rect(this.x, this.y, this.w, this.h);
         this.textSelected();
         pop();
+    }
+    textSelected() {
+        if (this.selected||seeAll) {
+            fill(0);
+            textSize(16);
+            textAlign(LEFT, BOTTOM);
+            const w = abs(this.w);
+            const h = abs(this.h);
+            const offsetVal = this.y/pheight*loadedRing.width*inchPerUnit;
+            drawArrow(this.x, this.y / 2, this.y, 10, false, offsetVal)
+            line(this.x + (w / 2), this.y, this.x + (w / 2), this.y + h / 2 + 20);
+            line(this.x - (w / 2), this.y, this.x - (w / 2), this.y + h / 2 + 20);
+            let a = w/pheight*lrwidth*inchPerUnit;
+            //let b = h/pheight*lrwidth*inchPerUnit;
+            //drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a);
+            pointArrow(this, 'R'+(w/2/pheight*loadedRing.width*inchPerUnit).toFixed(3))
+            drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a);
+            textSize(TEXTSIZE);
+            if(this.x>0.7*pwidth)textAlign(RIGHT, TOP);
+            else textAlign(LEFT, TOP);
+            text((this.x*360/pwidth).toFixed(1) + '°', this.x + 5, 0);
+        }
     }
 }
 class DemoRectangle extends Rectangle{
@@ -430,34 +527,80 @@ function drawArrow(x, y, l, w, horizontal = true, txt = '') {
         line(x, y + l / 2, x + w / 2, y + l / 2 - w / 2)
         line(x, y + l / 2, x - w / 2, y + l / 2 - w / 2)
     }
-    textSize(12);
+    textSize(TEXTSIZE);
     textAlign(CENTER, CENTER);
     if(typeof txt == 'number')
     text(txt.toFixed(3) + '"', x, y);
     else console.log(txt)
 }
-const _UPLEFT = {p1:{x:-30, y:-20},p2:{x:-35, y:-20}}
-const _DOWNLEFT = {p1:{x:-30, y:20},p2:{x:-35, y:20}}
-const _UPRIGHT = {p1:{x:30, y:-20},p2:{x:35, y:-20}}
-const _DOWNRIGHT = {p1:{x:30, y:20},p2:{x:35, y:20}}
-function pointArrow(x,y, direction = 'upleft',txt){
+const _UPLEFT = {p1:{x:-30, y:-20},p2:{x:-35, y:-20},align:'right'}
+const _DOWNLEFT = {p1:{x:-30, y:20},p2:{x:-35, y:20},align:'right'}
+const _UPRIGHT = {p1:{x:30, y:-20},p2:{x:35, y:-20}, align:'left'}
+const _DOWNRIGHT = {p1:{x:30, y:20},p2:{x:35, y:20}, align:'left'}
+const _POSITIONING = [_UPLEFT,_DOWNLEFT,_DOWNRIGHT,_UPRIGHT]
+function pointArrow(hole,txt){
     /* Remove the first zero if in position 0 or 1 */
     if(txt.charAt(0)==='0')txt = txt.replace('0','');
     else if(txt.charAt(1)==='0')txt = txt.replace('0','');
 
-    let pts = 0; 
-    switch(direction){
-        case 'upleft':
-            pts = _UPLEFT;
+    let pts = _POSITIONING[hole.arrowIndex]; 
+    let x, y; 
+    switch(hole.type){
+         case 'rect':
             break;
-        case 'downleft':
-            pts = _DOWNLEFT;
+        case 'circle':
+            if(hole.arrowIndex==0){
+                x = hole.x + Math.cos(PI*3/4)*hole.w/2;
+                y = hole.y - Math.sin(PI*3/4)*hole.w/2;
+            }
+            if(hole.arrowIndex==1){
+                x = hole.x + Math.cos(PI*5/4)*hole.w/2;
+                y = hole.y - Math.sin(PI*5/4)*hole.w/2;
+            }
+            if(hole.arrowIndex==2){
+                x = hole.x + Math.cos(PI*7/4)*hole.w/2;
+                y = hole.y - Math.sin(PI*7/4)*hole.w/2;
+            }
+            if(hole.arrowIndex==3){
+                x = hole.x + Math.cos(PI*1/4)*hole.w/2;
+                y = hole.y - Math.sin(PI*1/4)*hole.w/2;
+            }
             break;
-        case 'upright':
-            pts = _UPRIGHT;
+        case 'v_slot':
+            if(hole.arrowIndex==0){
+                x = hole.x + Math.cos(PI*3/4)*hole.w/2;
+                y = hole.y -hole.h/2- Math.sin(PI*3/4)*hole.w/2;
+            }
+            if(hole.arrowIndex==1){
+                x = hole.x + Math.cos(PI*5/4)*hole.w/2;
+                y = hole.y +hole.h/2- Math.sin(PI*5/4)*hole.w/2;
+            }
+            if(hole.arrowIndex==2){
+                x = hole.x + Math.cos(PI*7/4)*hole.w/2;
+                y = hole.y +hole.h/2- Math.sin(PI*7/4)*hole.w/2;
+            }
+            if(hole.arrowIndex==3){
+                x = hole.x + Math.cos(PI*1/4)*hole.w/2;
+                y = hole.y -hole.h/2- Math.sin(PI*1/4)*hole.w/2;
+            }
             break;
-        case 'downright':
-            pts = _DOWNRIGHT
+        case 'h_slot':
+            if(hole.arrowIndex==0){
+                x = hole.x - hole.w/2+ Math.cos(PI*3/4)*hole.h/2;
+                y = hole.y - Math.sin(PI*3/4)*hole.h/2;
+            }
+            if(hole.arrowIndex==1){
+                x = hole.x - hole.w/2+ Math.cos(PI*5/4)*hole.h/2;
+                y = hole.y - Math.sin(PI*5/4)*hole.h/2;
+            }
+            if(hole.arrowIndex==2){
+                x = hole.x + hole.w/2+ Math.cos(PI*7/4)*hole.h/2;
+                y = hole.y - Math.sin(PI*7/4)*hole.h/2;
+            }
+            if(hole.arrowIndex==3){
+                x = hole.x + hole.w/2+ Math.cos(PI*1/4)*hole.h/2;
+                y = hole.y - Math.sin(PI*1/4)*hole.h/2;
+            }
             break;
         default: console.log('Wrong type entry, only {upleft, downleft, upright, downright} are accepted')
     }
@@ -465,8 +608,8 @@ function pointArrow(x,y, direction = 'upleft',txt){
         stroke(2);
         line(x, y, x+pts.p1.x, y+pts.p1.y);
         line(x+pts.p2.x, y+pts.p2.y, x+pts.p1.x, y+pts.p1.y);
-        textAlign(RIGHT, CENTER);
-        textSize(12);
+        textAlign(pts.align, CENTER);
+        textSize(TEXTSIZE);
         text(txt, pts.p2.x+x, pts.p2.y+y)
     }
 
@@ -578,4 +721,19 @@ function holeImport(){
     })
 }
 
-    
+function selectHole(hole){
+    document.getElementById('h_angle').value = (hole.x*toDeg).toFixed(1);    
+    document.getElementById('h_height').value = (hole.h*toInch).toFixed(3);    
+    document.getElementById('h_width').value = (hole.w*toInch).toFixed(3);    
+    document.getElementById('h_offset').value = (hole.y*toInch).toFixed(3);    
+}  
+document.getElementById('submitholebutton').onclick = ()=>{
+    shapes.forEach(hole=>{
+        if(hole.selected){
+            hole.x = 1/toDeg* document.getElementById('h_angle').value;
+            hole.h = 1/toInch* document.getElementById('h_height').value;
+            hole.w = 1/toInch*document.getElementById('h_width').value;
+            hole.y = 1/toInch* document.getElementById('h_offset').value;
+        }
+    })
+}
