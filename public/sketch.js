@@ -74,7 +74,6 @@ createScene();
 
 
 
-
 // Lights
 function addLight(...pos) {
     const color = 0xFFFFFF;

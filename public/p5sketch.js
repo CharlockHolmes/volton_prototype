@@ -462,7 +462,7 @@ class Horizontal_Slot extends Rectangle{
             let a = w/pheight*lrwidth*inchPerUnit;
             //let b = h/pheight*lrwidth*inchPerUnit;
             //drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a);
-            pointArrow(this, 'R'+(w/2/pheight*loadedRing.width*inchPerUnit).toFixed(3))
+            pointArrow(this, 'R'+(h/2*toInch).toFixed(3))
             drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a);
             textSize(TEXTSIZE);
             if(this.x>0.7*pwidth)textAlign(RIGHT, TOP);
