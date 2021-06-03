@@ -6,6 +6,7 @@ const TEXTSIZE = 10;
 let mode = '';
 let p5canvas;
 let loadedRing = JSON.parse(localStorage.getItem('ring'));
+const lr = loadedRing;
 let lrwidth = loadedRing.width;
 let lrlength = loadedRing.radius * 2 * Math.PI;
 let aspectRatio = lrwidth / lrlength;
@@ -92,6 +93,37 @@ function draw() {
     demoShapes.forEach(shape =>{
         shape.draw();
     })
+    calculatePower();
+    
+}
+
+function calculatePower(){
+    let arcLength = lrlength*INCH_PER_UNIT*(lr.gaps[0].end-lr.gaps[0].begin)/(2*PI);
+    let u = (lrlength*INCH_PER_UNIT)-arcLength;
+    let k;
+    if(lr.width*INCH_PER_UNIT < 2)k = (u - 0.8) * (lr.width*INCH_PER_UNIT- 0.36)
+    if(lr.width*INCH_PER_UNIT >= 2)k = (u - 0.8) * (lr.width*INCH_PER_UNIT- 0.72)
+    let holeArea = 0; 
+    shapes.forEach((shape)=>{
+        holeArea += shape.getArea() + (1*0.5);
+    })
+    const area = k - holeArea; 
+    const powerAsked = document.getElementById('powerasked').value||0;
+    // console.log('u', u);
+    // console.log('arcLength', arcLength);
+    // console.log('k', k);
+    // console.log('holeArea', holeArea);
+    const ppsi = powerAsked/area;
+    document.getElementById('powerpersqrinch').value = ppsi.toFixed(2);
+    if(ppsi<42)document.getElementById('powerpersqrinch').style = 'color:black';
+    else if(ppsi<52)document.getElementById('powerpersqrinch').style = 'color:orange';
+    else document.getElementById('powerpersqrinch').style = 'color:red';
+    
+    const voltage = document.getElementById('voltage').value;
+    const current = (powerAsked/voltage).toFixed(2);
+    document.getElementById('current').value = current;
+    if(current<25)document.getElementById('current').style = 'color:black';
+    else document.getElementById('current').style = 'color:red';
 }
 
 function keyPressed() {
@@ -314,7 +346,9 @@ class Shape {
         this.selected = false; 
         this.color = 255;
     }
-
+    getArea(){
+        return (this.w*toInch)*(this.h*toInch);   
+    }
 }
 class Rectangle extends Shape {
     constructor(x, y, w, h) {
@@ -431,6 +465,9 @@ class Vertical_Slot extends Rectangle{
             text((this.x*360/pwidth).toFixed(1) + '°', this.x + 5, 0);
         }
     }
+    getArea(){
+        return (this.w*toInch)*((this.h+this.w)*toInch);   
+    }
 }
 class Horizontal_Slot extends Rectangle{
     constructor(x,y,w,h){
@@ -470,6 +507,10 @@ class Horizontal_Slot extends Rectangle{
             text((this.x*360/pwidth).toFixed(1) + '°', this.x + 5, 0);
         }
     }
+    getArea(){
+        return (this.h*toInch)*((this.h+this.w)*toInch);   
+    }
+    
 }
 class DemoRectangle extends Rectangle{
     constructor(x,y,w,h){
