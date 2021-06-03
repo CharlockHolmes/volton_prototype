@@ -176,7 +176,7 @@ else defaultRing();
 //Default ring that will appear on first load
 function defaultRing() {
     //Create default ring
-    createRing();
+    createRing(1,1,1000);
     clearObjectArrays();
 
     // Adding default hole
@@ -213,8 +213,9 @@ function loadDefaultConnectorSettings(){
     });
 }
 function loadDefaultBorniersSettings(){
-    addBornier(undefined, -0.3);
-    addBornier(undefined, 0.3);
+    r.terminals = [];
+    addBornier(undefined, r.width/4)
+    addBornier(undefined, -r.width/4)
 
 }
 function strangeRing() {
@@ -277,7 +278,7 @@ function addRingClock() {
     const wide = r.width;
     const inchWide = wide * inchPerUnit;
     const inchDiam = rad * inchPerUnit * 2;
-    const txtPosOffset = 0.92;
+    const txtPosOffset = (rad-(1/12))/rad ;
     addText('0°', rad * Math.cos(0) * txtPosOffset, rad * Math.sin(0) * txtPosOffset);
     addText('90°', rad * Math.cos(Math.PI / 2) * txtPosOffset, rad * Math.sin(Math.PI / 2) * txtPosOffset);
     addText('180°', rad * Math.cos(Math.PI) * txtPosOffset, rad * Math.sin(Math.PI) * txtPosOffset);
@@ -293,16 +294,16 @@ function addRingClock() {
         rz: 0
     });
 
-    const clock0180Geo = new THREE.BoxGeometry(rad * 1.8, 0.005, 0.005);
+    const clock0180Geo = new THREE.BoxGeometry(rad * 2*(rad-(1/9))/rad, 0.005, 0.005);
     const clock0180Mesh = new THREE.MeshBasicMaterial({color: 0x333333});
     const clock0180 = new THREE.Mesh(clock0180Geo, clock0180Mesh);
 
-    const clock90270Geo = new THREE.BoxGeometry(rad * 1.8, 0.005, 0.005);
+    const clock90270Geo = new THREE.BoxGeometry(rad * 2*(rad-(1/9))/rad, 0.005, 0.005);
     const clock90270Mesh = new THREE.MeshBasicMaterial({color: 0x333333});
     const clock90270 = new THREE.Mesh(clock90270Geo, clock90270Mesh);
     clock90270.rotation.z = Math.PI / 2;
 
-    const clockDiameterGeo = new THREE.BoxGeometry(rad * 1.9, 0.003, 0.003);
+    const clockDiameterGeo = new THREE.BoxGeometry(rad * 2*(rad-(1/12))/rad, 0.003, 0.003);
     const clockDiameterMesh = new THREE.MeshBasicMaterial({color: 0x003333});
     const clockDiameter = new THREE.Mesh(clockDiameterGeo, clockDiameterMesh);
     clockDiameter.rotation.z = Math.PI * 3 / 4;
@@ -310,8 +311,8 @@ function addRingClock() {
     const clockWidthGeo = new THREE.BoxGeometry(0.003, 0.003, wide);
     const clockWidthMesh = new THREE.MeshBasicMaterial({color: 0x003333});
     const clockWidth = new THREE.Mesh(clockWidthGeo, clockWidthMesh);
-    clockWidth.position.x = rad * .95 * Math.cos(PI * 3 / 4);
-    clockWidth.position.y = rad * .95 * Math.sin(PI * 3 / 4);
+    clockWidth.position.x = rad * (rad-(1/12))/rad * Math.cos(PI * 3 / 4);
+    clockWidth.position.y = rad * (rad-(1/12))/rad * Math.sin(PI * 3 / 4);
 
     groupGlobal.add(clock0180);
     groupGlobal.add(clock90270);
@@ -393,7 +394,7 @@ function clearObjectArrays(){
  */
 function loadCustomItem() {
     loadMenuThings();
-
+    loadDefaultBorniersSettings();
     initGlobals();
     addRingClock();
 
@@ -443,9 +444,6 @@ function loadCustomItem() {
         cube.position.x = x;
         return cube;
     }
-
-
-
     cubes = [
         makeInstance(geometry, 0x999999, 0),
     ];
@@ -570,21 +568,39 @@ document.getElementById('resetcamera').onclick = () => {
  * Functions that is triggered in the submit button in the customization menu.
  */
 document.getElementById('submitbutton').onclick = () =>{
+    let proceed = true; 
     let twidth = document.getElementById('ringwidth').value;
     let tdiameter = document.getElementById('ringdiameter').value;
     document.getElementById('ringgap').value = 'not implemented';
     let tresolution = document.getElementById('ringresolution').value;
     console.log(twidth, tdiameter, tresolution);
-    if(!Number.isFinite(twidth))r.width = twidth/inchPerUnit;
-    else console.log('Error: variable width is not a number')
-    if(!Number.isFinite(tdiameter))r.radius = tdiameter/2/inchPerUnit;
-    else console.log('Error: variable height is not a number')
-    if(!Number.isFinite(tresolution))r.resolution = tresolution;
-    else console.log('Error: variable resolution is not a number')
-    
-    defaultRadius = tdiameter/inchPerUnit/2;
-    camera.position.z = cameraPositionZ*defaultRadius;
-    saveRing(); 
+
+    if(!Number.isFinite(twidth)){
+        if(!r.setWidth(twidth/inchPerUnit))proceed=false;
+    }
+    else {
+        proceed = false;
+        console.log('Error: variable width is not a number')
+    }
+    if(!Number.isFinite(tdiameter)){
+        if(!r.setRadius(tdiameter/2/inchPerUnit))proceed = false;
+    }
+    else {
+        console.log('Error: variable height is not a number')
+        proceed = false;
+    }
+    if(!Number.isFinite(tresolution)){
+        r.resolution = tresolution;
+    }
+    else {
+        console.log('Error: variable resolution is not a number')
+        proceed = false; 
+    }
+    if(proceed){
+        defaultRadius = tdiameter/inchPerUnit/2;
+        camera.position.z = cameraPositionZ*defaultRadius;
+        saveRing(); 
+    }
 }
 /**
  * Triggererd when the load button is pressed, currently loads the values into the menu.

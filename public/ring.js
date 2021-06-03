@@ -9,7 +9,7 @@
 
 
 class Ring {
-    constructor(radius, width, resolution,holes = [], gaps = [], terminals = [], connectors = [], thickness = 0.98) {
+    constructor(radius, width, resolution,holes = [], gaps = [], terminals = [], connectors = [], thickness = 0.98, sections = 1) {
         this.holes = holes;
         this.radius = radius;
         this.width = width;
@@ -17,7 +17,8 @@ class Ring {
         this.gaps = gaps;
         this.connectors = connectors;
         this.terminals = terminals;
-        this.thickness = thickness;
+        this.thickness = (radius-(1/24))/radius;
+        this.sections = sections; 
     }
 
     makeShape() {
@@ -90,11 +91,10 @@ class Ring {
                     const v1 = new THREE.Vector3(x1, y1, holeSearch.offset);
                     const c = new THREE.Vector3(holeSearch.x, holeSearch.y, holeSearch.offset);
                     if(holeSearch.type=='circle'){
-            
                         if (v0.distanceTo(c) < holeSearch.r)
-                        if (v1.distanceTo(c) < holeSearch.r) {
-                            holeOnPass.push(holeSearch);
-                        }
+                            if (v1.distanceTo(c) < holeSearch.r) {
+                                holeOnPass.push(holeSearch);
+                            }
                     }
                     if(holeSearch.type=='rect'){
                         if (v0.distanceTo(c) < holeSearch.r.w)
@@ -172,7 +172,7 @@ class Ring {
                  * This is the part where you create the over ring on both sides. 
                  */
                 function makeFoldover(hz) {
-                    const rw = 0.10; // ring width
+                    const rw = FOLDOVER_WIDTH / INCH_PER_UNIT /width; // ring width
                     const ro = 0.04; //side offset
                     const rh = 1.015 //elevation
                     makeTriangleSingleZ(x0, y0, x1, y1, hz, hz * (1 - ro), rh); //bottom left to top
@@ -182,14 +182,17 @@ class Ring {
 
                 function LimitedmakeTriangle(a, b, c, d, e, f) {
                     let singleZ = true;
-                    if (c <= z0) {c = z0;singleZ = false;}
-                    if (c >= z1){c = z1;singleZ = false;}
-                    if (f <= z0) {f = z0;singleZ = false;}
-                    if (f >= z1) {f = z1;singleZ = false;}
+                    if (c < z0) {c = z0;singleZ = false;}
+                    if (c > z1){c = z1;singleZ = false;}
+                    if (f < z0) {f = z0;singleZ = false;}
+                    if (f > z1) {f = z1;singleZ = false;}
                     makeTriangle(a, b, c, d, e, f); // firstt plane
                     makeTriangle(a * t, b * t, c, d * t, e * t, f); // Second plane
-                    if(singleZ)makeTriangleSingleZ(a * t, b * t, d * t, e * t, c, c, 1 / t); // in between
-
+                    if(singleZ){
+                        makeTriangleSingleZ(a * t, b * t, d * t, e * t, c, c, 1 / t); // in between
+                        makeTriangleSingleZ(a * t, b * t, d * t, e * t, f, f, 1 / t); // in between
+                        
+                    }
                     makeTriangle(a, b, c, d * t, e * t, f); // in between
                 }
 
@@ -299,9 +302,9 @@ class Ring {
         this.connectors.push(connector);
     }
     addTerminal(terminal){
-        this.connectors.push(terminal);
+        this.terminals.push(terminal);
     }
-    //Only used to count the space needed to construct the ring
+    /** USed to count for the space needed for the ring, goes through a simulation of all vertexes needed. */
     countFloats(res, width) {
         const resolution = res;
 
@@ -333,6 +336,29 @@ class Ring {
             posNdx += 12 + 12 * holeOnPass.length;
         }
         console.log(posNdx * 3 + this.gaps.length * 12 * 4);
-        return posNdx * 9 + this.gaps.length * 12 * 4;
+        return posNdx * 11 + this.gaps.length * 12 * 4;
     }
+    /** Modifies the width of the ring with respect to the minimum and maximal values */
+    setWidth(width){
+        if(width <= MAX_WIDTH/INCH_PER_UNIT && width >= MIN_WIDTH/INCH_PER_UNIT){
+            this.width = width;
+            return true;
+        }
+        else{
+            console.log("Invalid width entry:", width);
+            return false;
+        }
+    }
+    /** Modifies the radius of the ring with respect to the minimum and maximal values */
+    setRadius(radius){
+        if(radius>= MIN_DIAMETER/2/INCH_PER_UNIT && radius <= MAX_DIAMETER_PER_SECTION*this.sections){
+            this.radius = radius;
+            return true;
+        }
+        else {
+            console.log("Invalid radius entry:", radius);
+            return false;
+        }
+    }
+
 }
