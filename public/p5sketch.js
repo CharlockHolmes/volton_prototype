@@ -13,13 +13,13 @@ let aspectRatio = lrwidth / lrlength;
 let centerResize = false; 
 
 let canvasWidth = window.innerWidth*0.75; 
-let canvasHeight = canvasWidth*aspectRatio+100;
-let mtop = 20;
-let mleft = 0;
-let mright = 0;
-let mbot = 0;
-let pwidth = canvasWidth-mleft; 
-let pheight = canvasHeight - mtop;
+let canvasHeight = canvasWidth*aspectRatio+200;
+let mtop = 75;
+let mleft = 25;
+let mright = 25;
+let mbot = 25;
+let pwidth = canvasWidth - mleft - mright; 
+let pheight = canvasHeight - mtop - mbot;
 let pHeightConversionUnit = 2;
 let pUnitType = 'inch';
 let pRadius = 1; 
@@ -63,6 +63,7 @@ function draw() {
     push();
     translate(mleft, mtop);
     background(220);
+    drawGaps();
     fill(255);
     stroke(1);
     for (let i = shapes.length - 1; i >= 0; i--) {
@@ -71,8 +72,12 @@ function draw() {
     pop();
     noStroke();
     fill(100)
-    rect(width/2, mtop/2, width, mtop);
+    rectMode(CORNER);
+    rect(0, 0, width, mtop);
     rect(0, 0, mleft, height);
+    rect(width - mright, 0, mright, height);
+    rect(0, height - mbot, width, mbot);
+    rectMode(CENTER);
     let runloop = true;
     shapes.forEach(shape =>{
         if(runloop){
@@ -94,20 +99,47 @@ function draw() {
         shape.draw();
     })
     calculatePower();
+    push();
+    translate(mleft, mtop);
+    shapes.forEach(shape=>{
+        shape.textSelected();
+    })
+    pop();
     
 }
-
+function drawGaps(){
+    push();
+    rectMode(CORNER);
+    lr.gaps.forEach(gap=>{
+        let gb = gap.begin/(2*PI)*pwidth;
+        let ge = gap.end/(2*PI)*pwidth; 
+        fill(255,10,10);
+        if(gb>=0&&ge>=0){  
+            rect(gb, 0, ge-gb,pheight);
+        }
+        else if(gb<0&&ge>=0){
+            gb += pwidth;
+            rect(gb,0, pwidth-gb, pheight);
+            rect(0,0, ge, pheight);
+        }
+    })
+    pop();
+}
 function calculatePower(){
-    let arcLength = lrlength*INCH_PER_UNIT*(lr.gaps[0].end-lr.gaps[0].begin)/(2*PI);
+
+    let arcLength=0;
+    lr.gaps.forEach(gap=>{
+        arcLength += lrlength*INCH_PER_UNIT*(gap.end - gap.begin)/(2*PI);
+    })
     let u = (lrlength*INCH_PER_UNIT)-arcLength;
     let k;
     if(lr.width*INCH_PER_UNIT < 2)k = (u - 0.8) * (lr.width*INCH_PER_UNIT- 0.36)
     if(lr.width*INCH_PER_UNIT >= 2)k = (u - 0.8) * (lr.width*INCH_PER_UNIT- 0.72)
     let holeArea = 0; 
     shapes.forEach((shape)=>{
-        holeArea += shape.getArea() + (1*0.5);
+        holeArea += shape.getArea() + (1*0.5); // Calculate hole area with an added 0.5 inch^2 per hole for the surrounding area
     })
-    const area = k - holeArea; 
+    const area = k - holeArea - lr.terminals.length*0.75; // roughly 0.75 inch sqr per terminal 
     const powerAsked = document.getElementById('powerasked').value||0;
     // console.log('u', u);
     // console.log('arcLength', arcLength);
@@ -239,313 +271,12 @@ function mouseDragged() {
     }
 }
 
-class Shape {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.w = 50;
-        this.h = 50;
-        this.color = 255;
-        this.selected = false;
-        this.selectMode = '';
-        this.type = '';
-        this.SELECTMOVE = 125;
-        this.SELECTRESIZE = 200;
-        this.SELECTPADDING = 3/ 5;
-        this.arrowIndex = 0; 
-    }
-    doubleClicked(){
-        this.arrowIndex++;
-        if(this.arrowIndex>3)this.arrowIndex = 0;
-    }
-    draw() {
-    
-    }
-    rectFill(color) {
-        this.color = color;
-    }
-    textSelected() {
-    }
-    isInOuterBoundary(mx, my){
-        if(mx<this.x+this.w/2&&mx>this.x-this.w/2&&
-            my<this.y+this.h/2&&my>this.y-this.h/2)return true;
-        else return false;
-    }
-    select(mx, my){
-        this.selected = true;
-        selectHole(this);
-        if(this.isInInnerBoundary(mx,my)){
-            this.selectMode = 'move';
-            this.color = this.SELECTMOVE;
-        }
-        else {
-            this.selectMode = 'resize';
-            this.color = this.SELECTRESIZE;
-        }
-    }
-    isInInnerBoundary(mx, my){
-        const xr = this.x+((this.w/2)*this.SELECTPADDING);
-        const xl = this.x-((this.w/2)*this.SELECTPADDING);
-        const yb = this.y+((this.h/2)*this.SELECTPADDING);
-        const yt = this.y-((this.h/2)*this.SELECTPADDING);
-        if((mx<xr&& mx>xl)&& (my<yb&& my>yt)){
-                return true;
-        }
-        else {
-            return false;
-        }
-    }
-    dragged(mx, my){
-        if(this.selectMode==='move'){
-            this.x = mx;
-            this.y = my;
-        }
-        if(this.selectMode==='resize'){
-            cursor('pointer');
-            let sl = this.x - this.w/2, sr = this.x+this.w/2,su = this.y-this.h/2,sd = this.y +this.h/2; 
-            const dx = Math.abs(this.x - mx);
-            const dy = Math.abs(this.y - my); 
-            if (this.type === 'circle'||centerResize==true){
-                if(dx>dy){
-                    
-                    this.w = 2*dx;
-                }
-                else{
-                    this.h = 2*dy;
-                }
-                if(dx>this.w/2)this.w = 2*dx;
-                if(dy>this.h/2)this.h = 2*dy;
-                if(this.type ==='circle')this.h = this.w;
-            }
-            else{
-                if(dx>dy){
-                    if(mx>this.x){
-                        this.x = (sl+(this.x+dx))/2;
-                        this.w = mx - sl;
-                    }
-                    else{
-                        this.x = (sr+(this.x-dx))/2;
-                        this.w = sr - mx;
-                    }
-                }
-                else{
-                    if(my>this.y){
-                        this.y = (su+(this.y+dy))/2;
-                        this.h = my - su;
-                    }
-                    else{
-                        this.y = (sd+(this.y-dy))/2;
-                        this.h = sd - my;
-                    }
-                }
-            }
-            
-        }selectHole(this);
-    }
-    unSelect(){
-        this.selected = false; 
-        this.color = 255;
-    }
-    getArea(){
-        return (this.w*toInch)*(this.h*toInch);   
-    }
-}
-class Rectangle extends Shape {
-    constructor(x, y, w, h) {
-        super(x, y);
-        this.type = 'rect';
-        this.w = w;
-        this.h = h;
-    }
-    draw() {
-        rectMode(CENTER);
-        fill(this.color);
-        rect(this.x, this.y, this.w, this.h);
-        this.textSelected();
-    }
-    textSelected() {
-        if (this.selected||seeAll) {
-            fill(0);
-            textSize(16);
-            textAlign(LEFT, BOTTOM);
-            const w = abs(this.w);
-            const h = abs(this.h);
-            const offsetVal = this.y/pheight*loadedRing.width*inchPerUnit;
-            drawArrow(this.x, this.y / 2, this.y, 10, false, offsetVal)
-            //text('x = ' + this.x + '\ny = ' + this.y, this.x, this.y)
-            line(this.x + (w / 2), this.y, this.x + (w / 2), this.y + h / 2 + 20);
-            line(this.x - (w / 2), this.y, this.x - (w / 2), this.y + h / 2 + 20);
-            line(this.x, this.y + (h / 2), this.x + w / 2 + 20, this.y + (h / 2));
-            line(this.x, this.y - (h / 2), this.x + w / 2 + 20, this.y - (h / 2));
-            let a = w/pheight*lrwidth*inchPerUnit;
-            //console.log(a);
-            let b = h/pheight*lrwidth*inchPerUnit;
-            //console.log(b);
-            drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a);
-            drawArrow(this.x + w / 2 + 15, this.y, h, 10, false, b);
-            textSize(TEXTSIZE);
-            if(this.x>0.7*pwidth)textAlign(RIGHT, TOP);
-            else textAlign(LEFT, TOP);
-            text((this.x*360/pwidth).toFixed(1) + '°', this.x + 5, 0);
-        }
-    }
-
-    
-}
-
-class Circle extends Shape {
-    constructor(x, y, d = 50) {
-        super(x, y);
-        this.type = 'circle';
-        this.w = d;
-        this.h = d;
-    }
-    draw() {
-        fill(this.color);
-        ellipse(this.x, this.y, this.w, this.w);
-        this.textSelected();
-    }
-
-    textSelected() {
-        if (this.selected||seeAll) {
-            fill(0);
-            const w = abs(this.w);
-
-            /* Top down arrow, insert the inch offset here */
-            const offsetVal = this.y/pheight*loadedRing.width*inchPerUnit;
-            drawArrow(this.x, this.y / 2, this.y, 10, false, offsetVal)
-
-            //line(this.x, this.y + (w / 2), this.x + w / 2 + 20, this.y + (w / 2));
-            //line(this.x, this.y - (w / 2), this.x + w / 2 + 20, this.y - (w / 2));
-            //drawArrow(this.x + w / 2 + 15, this.y, w, 10, false, w/pheight*loadedRing.width*inchPerUnit);
-            pointArrow(this, 'Ø'+(w*toInch).toFixed(3));
-
-            textSize(TEXTSIZE);
-            if(this.x>0.7*pwidth)textAlign(RIGHT, TOP);
-            else textAlign(LEFT, TOP);
-            text((this.x*360/pwidth).toFixed(1) + '°', this.x + 5, 0);
-        }
-    }
-}
-class Vertical_Slot extends Rectangle{
-    constructor(x,y,w,h){
-        super(x,y,w,h);
-        this.type = 'v_slot';
-    }
-    draw(){
-        push();
-        fill(this.color);
-        arc(this.x, this.y-this.h/2, this.w, this.w, PI, 0);
-        arc(this.x, this.y+this.h/2, this.w, this.w, 0, PI);
-        rectMode(CENTER);
-        fill(this.color);
-        rect(this.x, this.y, this.w, this.h);
-        this.textSelected();
-        pop();
-    }
-    textSelected() {
-        if (this.selected||seeAll) {
-            fill(0);
-            textSize(16);
-            textAlign(LEFT, BOTTOM);
-            const w = abs(this.w);
-            const h = abs(this.h);
-            const offsetVal = this.y/pheight*loadedRing.width*inchPerUnit;
-            drawArrow(this.x, this.y / 2, this.y, 10, false, offsetVal)
-            line(this.x, this.y + (h / 2), this.x + w / 2 + 20, this.y + (h / 2));
-            line(this.x, this.y - (h / 2), this.x + w / 2 + 20, this.y - (h / 2));
-            let a = w/pheight*lrwidth*inchPerUnit;
-            let b = h/pheight*lrwidth*inchPerUnit;
-            //drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a);
-            pointArrow(this, 'R'+(w/2/pheight*loadedRing.width*inchPerUnit).toFixed(3))
-            drawArrow(this.x + w / 2 + 15, this.y, h, 10, false, b);
-            textSize(TEXTSIZE);
-            if(this.x>0.7*pwidth)textAlign(RIGHT, TOP);
-            else textAlign(LEFT, TOP);
-            text((this.x*360/pwidth).toFixed(1) + '°', this.x + 5, 0);
-        }
-    }
-    getArea(){
-        return (this.w*toInch)*((this.h+this.w)*toInch);   
-    }
-}
-class Horizontal_Slot extends Rectangle{
-    constructor(x,y,w,h){
-        super(x,y,w,h);
-        this.type = 'h_slot';
-    }
-    draw(){
-        push();
-        fill(this.color);
-        arc(this.x-this.w/2, this.y, this.h, this.h, PI/2, -PI/2);
-        arc(this.x+this.w/2, this.y, this.h, this.h, -PI/2, PI/2);
-        rectMode(CENTER);
-        fill(this.color);
-        rect(this.x, this.y, this.w, this.h);
-        this.textSelected();
-        pop();
-    }
-    textSelected() {
-        if (this.selected||seeAll) {
-            fill(0);
-            textSize(16);
-            textAlign(LEFT, BOTTOM);
-            const w = abs(this.w);
-            const h = abs(this.h);
-            const offsetVal = this.y/pheight*loadedRing.width*inchPerUnit;
-            drawArrow(this.x, this.y / 2, this.y, 10, false, offsetVal)
-            line(this.x + (w / 2), this.y, this.x + (w / 2), this.y + h / 2 + 20);
-            line(this.x - (w / 2), this.y, this.x - (w / 2), this.y + h / 2 + 20);
-            let a = w/pheight*lrwidth*inchPerUnit;
-            //let b = h/pheight*lrwidth*inchPerUnit;
-            //drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a);
-            pointArrow(this, 'R'+(h/2*toInch).toFixed(3))
-            drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a);
-            textSize(TEXTSIZE);
-            if(this.x>0.7*pwidth)textAlign(RIGHT, TOP);
-            else textAlign(LEFT, TOP);
-            text((this.x*360/pwidth).toFixed(1) + '°', this.x + 5, 0);
-        }
-    }
-    getArea(){
-        return (this.h*toInch)*((this.h+this.w)*toInch);   
-    }
-    
-}
-class DemoRectangle extends Rectangle{
-    constructor(x,y,w,h){
-        super(x,y,w,h);
-    }
-    dragged(){}
-    textSelected(){}
-}
-class DemoCircle extends Circle{
-    constructor(x,y,r){
-        super(x,y,r);
-    }
-    dragged(){}
-    textSelected(){}
-}
-class DemoVertical_Slot extends Vertical_Slot{
-    constructor(x,y,w,h){
-        super(x,y,w,h);
-    }
-    dragged(){}
-    textSelected(){}
-}
-class DemoHorizontal_Slot extends Horizontal_Slot{
-    constructor(x,y,w,h){
-        super(x,y,w,h);
-    }
-    dragged(){}
-    textSelected(){}
-}
-
 
 function drawArrow(x, y, l, w, horizontal = true, txt = '') {
+    
     if (l < 0) l = l * -1;
     if (w < 0) w = w * -1;
-    const spacing = txt.toFixed(3).toString().length * 5;
+    const spacing = txt.toFixed(3).toString().length * 3;
 
     //console.log(spacing);
     if (horizontal) {
@@ -571,13 +302,19 @@ function drawArrow(x, y, l, w, horizontal = true, txt = '') {
     textSize(TEXTSIZE);
     textAlign(CENTER, CENTER);
     if(typeof txt == 'number')
-    text(txt.toFixed(3) + '"', x, y);
-    else console.log(txt)
+    txt = txt.toFixed(3);
+    
+    if(txt.charAt(0)==='0')txt = txt.replace('0','');
+    else if(txt.charAt(1)==='0')txt = txt.replace('0','');
+
+    text(txt, x, y);
 }
-const _UPLEFT = {p1:{x:-30, y:-20},p2:{x:-35, y:-20},align:'right'}
-const _DOWNLEFT = {p1:{x:-30, y:20},p2:{x:-35, y:20},align:'right'}
-const _UPRIGHT = {p1:{x:30, y:-20},p2:{x:35, y:-20}, align:'left'}
-const _DOWNRIGHT = {p1:{x:30, y:20},p2:{x:35, y:20}, align:'left'}
+const xoff = [20,22]
+const yoff = [15,15]
+const _UPLEFT = {p1:{x:-xoff[0], y:-yoff[0]},p2:{x:-xoff[1], y:-yoff[1]},align:'right'}
+const _DOWNLEFT = {p1:{x:-xoff[0], y:yoff[0]},p2:{x:-xoff[1], y:yoff[1]},align:'right'}
+const _UPRIGHT = {p1:{x:xoff[0], y:-yoff[0]},p2:{x:xoff[1], y:-yoff[1]}, align:'left'}
+const _DOWNRIGHT = {p1:{x:xoff[0], y:yoff[0]},p2:{x:xoff[1], y:yoff[1]}, align:'left'}
 const _POSITIONING = [_UPLEFT,_DOWNLEFT,_DOWNRIGHT,_UPRIGHT]
 function pointArrow(hole,txt){
     /* Remove the first zero if in position 0 or 1 */
@@ -710,14 +447,14 @@ document.getElementById('exportholes').onclick = ()=>{
             holes.push({
                 r: shape.h/2/(pheight)*(lrwidth),
                 offset:shape.y/pheight*lrwidth- lrwidth/2,
-                angle: (shape.x+shape.w/3)*2*PI/pwidth,
+                angle: (shape.x+shape.w/4)*2*PI/pwidth,
                 type: 'circle',
                 id:'h_slot'+randID
             })
             holes.push({
                 r: shape.h/2/(pheight)*(lrwidth),
                 offset:shape.y/pheight*lrwidth- lrwidth/2,
-                angle: (shape.x-shape.w/3)*2*PI/pwidth,
+                angle: (shape.x-shape.w/4)*2*PI/pwidth,
                 type: 'circle',
                 id:'h_slot'+randID
             })

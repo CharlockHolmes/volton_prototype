@@ -173,8 +173,8 @@ class Ring {
                  */
                 function makeFoldover(hz) {
                     const rw = FOLDOVER_WIDTH / INCH_PER_UNIT /width; // ring width
-                    const ro = 0.04; //side offset
-                    const rh = 1.015 //elevation
+                    const ro = rw/6; //side offset
+                    const rh = 1.01 //elevation
                     makeTriangleSingleZ(x0, y0, x1, y1, hz, hz * (1 - ro), rh); //bottom left to top
                     makeTriangle(x0 * rh, y0 * rh, hz * (1 - ro), x1 * rh, y1 * rh, hz * (1 - rw + ro));
                     makeTriangleSingleZ(x0, y0, x1, y1, hz * (1 - rw), hz * (1 - rw + ro), rh);

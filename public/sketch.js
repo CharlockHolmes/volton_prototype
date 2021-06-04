@@ -81,6 +81,11 @@ function addLight(...pos) {
     const light = new THREE.DirectionalLight(color, intensity);
     light.position.set(...pos);
     scene.add(light);
+
+    const tl = gui.addFolder('Light'+Math.random());
+    tl.add(light.position, 'x').min(-5).max(5).step(0.01);
+    tl.add(light.position, 'y').min(-5).max(5).step(0.01);
+    tl.add(light.position, 'z').min(-5).max(5).step(0.01);
 }
 function loadBasicGUI(gltf, num, name) {
 
@@ -150,10 +155,7 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
                 if (name == "barrel") angle += 0.1;
                 if (name == 'barrel_screw') angle -= 0.1;
             }
-
             gltf.scene.rotation.z = angle - Math.PI / 2;
-
-
             scene.add(gltf.scene);
             console.log("A " + name + " was Added to scene");
         },
@@ -218,26 +220,6 @@ function loadDefaultBorniersSettings(){
     addBornier(undefined, -r.width/4)
 
 }
-function strangeRing() {
-    createRing(1, 1, 2500);
-    addRingHole();
-    addRingHole(0, 0.2, 0.1);
-    addRingHole(2, 0.1, -0.2, 'square');
-    addRingHole(2, 0.1, 0.2, "square");
-    addRingHole(-2, 0.1, -0.2, "square");
-    addRingHole(-2, 0.1, 0.2, "square");
-
-    addRingHole(0, 0.02, 0.4);
-    addRingHole(0.1, 0.02, 0.4);
-    addRingHole(-0.1, 0.02, 0.4);
-
-    addRingHole(0, 0.02, -0.4);
-    addRingHole(0.1, 0.02, -0.4);
-    addRingHole(-0.1, 0.02, -0.4);
-
-    addRingGap();
-    loadCustomItem();
-}
 
 function addConnector(angle = 0, offset = 0, type = 'barrel', flipped = false) {
     r.addConnector({
@@ -278,7 +260,7 @@ function addRingClock() {
     const wide = r.width;
     const inchWide = wide * inchPerUnit;
     const inchDiam = rad * inchPerUnit * 2;
-    const txtPosOffset = (rad-(1/12))/rad ;
+    const txtPosOffset = (rad-(1/10))/rad ;
     addText('0°', rad * Math.cos(0) * txtPosOffset, rad * Math.sin(0) * txtPosOffset);
     addText('90°', rad * Math.cos(Math.PI / 2) * txtPosOffset, rad * Math.sin(Math.PI / 2) * txtPosOffset);
     addText('180°', rad * Math.cos(Math.PI) * txtPosOffset, rad * Math.sin(Math.PI) * txtPosOffset);
@@ -421,12 +403,12 @@ function loadCustomItem() {
 
     renderer.renderLists.dispose();
     const positionAttribute = new THREE.BufferAttribute(positions, positionNumComponents);
-    positionAttribute.setUsage(THREE.DynamicDrawUsage); // becasue it needs to know the attribute may change
+    //positionAttribute.setUsage(THREE.DynamicDrawUsage); // becasue it needs to know the attribute may change
     geometry.setAttribute('position', positionAttribute); // we use attributes to move around things
     geometry.setAttribute('normal', new THREE.BufferAttribute(normals, normalNumComponents));
     geometry.setIndex(indices);
     console.log(geometry);
-    pa = positionAttribute;
+    //pa = positionAttribute;
 
     //Sets an instance of the whole object 
     function makeInstance(geometry, color, x) {
@@ -701,3 +683,5 @@ function loadCamera(){
         controls.target.z = cameraImport.target.z;
     }
 }
+
+
