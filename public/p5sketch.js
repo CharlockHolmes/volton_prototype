@@ -187,7 +187,7 @@ function calculatePower(){
 }
 
 function keyPressed() {
-    if (keyCode === BACKSPACE || keyCode === DELETE) shapes.forEach((shape) => {
+    if (keyCode === DELETE) shapes.forEach((shape) => {
         if (shape.selected) {
             const ind = shapes.indexOf(shape);
             shapes.splice(ind, 1);
