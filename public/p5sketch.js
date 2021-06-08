@@ -18,11 +18,14 @@ let mtop = 75;
 let mleft = 25;
 let mright = 25;
 let mbot = 25;
-let pwidth = canvasWidth - mleft - mright; 
+//let pwidth = canvasWidth - mleft - mright; 
 let pheight = canvasHeight - mtop - mbot;
+let pwidth = pheight/aspectRatio; 
 let pHeightConversionUnit = 2;
 let pUnitType = 'inch';
 let pRadius = 1; 
+
+let xtrans = 0;
 
 const toInch = 1/pheight*lrwidth*inchPerUnit;
 const toDeg = 360/pwidth;
@@ -34,6 +37,8 @@ let hidden = STARTHIDDEN;
 shapes = [];
 demoShapes = [];
 
+let scrollbar;
+
 function setup() {
     p5canvas = createCanvas(canvasWidth, canvasHeight);
     p5canvas.parent('p5holder');
@@ -42,6 +47,10 @@ function setup() {
     demoShapes.push(new DemoCircle(30, 10, 15));
     demoShapes.push(new DemoVertical_Slot(50, 10, 15,10));
     demoShapes.push(new DemoHorizontal_Slot(80, 10, 15,10));
+
+    /* Scrollbar init */
+    scrollbar = new ScrollBar(canvasWidth/2, canvasHeight-mbot/2);
+    scrollbar.w = (canvasWidth-mleft-mright)/pwidth*canvasWidth;
     //Here we toggle the drawing thing
     if(STARTHIDDEN)p5canvas.hide();
     document.getElementById('drawing').onclick = () => {
@@ -61,6 +70,9 @@ function setup() {
 
 function draw() {
     push();
+    xtrans = scrollbar.mapTo(scrollbar.x);
+    translate(xtrans,0)
+    push();
     translate(mleft, mtop);
     background(220);
     drawGaps();
@@ -70,19 +82,13 @@ function draw() {
         shapes[i].draw();
     }
     pop();
-    noStroke();
-    fill(100)
-    rectMode(CORNER);
-    rect(0, 0, width, mtop);
-    rect(0, 0, mleft, height);
-    rect(width - mright, 0, mright, height);
-    rect(0, height - mbot, width, mbot);
+
     rectMode(CENTER);
     let runloop = true;
     shapes.forEach(shape =>{
         if(runloop){
-            if(shape.isInOuterBoundary(mouseX-mleft, mouseY-mtop))
-                if(shape.isInInnerBoundary(mouseX-mleft, mouseY-mtop)){
+            if(shape.isInOuterBoundary(mouseX-mleft-xtrans, mouseY-mtop))
+                if(shape.isInInnerBoundary(mouseX-mleft-xtrans, mouseY-mtop)){
                     runloop = false; 
                     cursor('grab');
                 }
@@ -95,21 +101,43 @@ function draw() {
     })
     if(runloop)cursor(ARROW);
 
+    
+    
+    pop();
+    /* Draw The rounded shapes and the demoShapes */
+    drawContour();
     demoShapes.forEach(shape =>{
         shape.draw();
     })
     calculatePower();
+
     push();
     translate(mleft, mtop);
+    translate(xtrans,0)
     shapes.forEach(shape=>{
         shape.textSelected();
     })
     pop();
     
+    scrollbar.draw();
+    
+}
+
+function drawContour(){
+    push();
+    noStroke();
+    fill(100)
+    rectMode(CORNER);
+    rect(0, 0, width, mtop);
+    rect(0, 0, mleft, height);
+    rect(width - mright, 0, mright, height);
+    rect(0, height - mbot, width, mbot);
+    pop();
 }
 function drawGaps(){
     push();
     rectMode(CORNER);
+    noStroke();
     lr.gaps.forEach(gap=>{
         let gb = gap.begin/(2*PI)*pwidth;
         let ge = gap.end/(2*PI)*pwidth; 
@@ -220,6 +248,7 @@ function mousePressed() {
         shapes.forEach(shape => {
             shape.unSelect();
         });
+        scrollbar.selected =false;
         let makeNew = false;
         demoShapes.forEach(shape =>{
             if(shape.isInOuterBoundary(mouseX,mouseY)){
@@ -243,7 +272,7 @@ function mousePressed() {
         })
         let oneClicked = false; 
         shapes.some(shape => {
-            const mx = mouseX - mleft;
+            const mx = mouseX - mleft-xtrans;
             const my = mouseY - mtop;
             if(!oneClicked&&shape.isInOuterBoundary(mx,my)){
                 shape.select(mx, my);
@@ -256,19 +285,29 @@ function mousePressed() {
             if(b.selected)return 1;
             return 0;
         })
+        if(mouseY>height-mbot){
+            if(scrollbar.isInOuterBoundary(mouseX,mouseY))scrollbar.selected = true;
+        }
 }
 }
 
 function mouseDragged() {
     if(mouseX > 0 && mouseX < width &&mouseY>0 && mouseY<height){
         shapes.forEach(shape => {
-            const mx = this.mouseX - mleft;
-            const my = this.mouseY - mtop;
+            const mx = this.mouseX - mleft-xtrans;
+            const my = this.mouseY - mtop ;
             if (shape.selected) {
                 shape.dragged(mx,my);
             }
         });
+        
     }
+    if(scrollbar.selected){
+        scrollbar.dragged(mouseX);
+        //scrollbar.x = mouseX;
+        //xtrans = pwidth-(mouseX/width*(pwidth-(canvasWidth-mleft-mright)/2))-pwidth+(canvasWidth-mleft-mright)/2;
+     }
+
 }
 
 

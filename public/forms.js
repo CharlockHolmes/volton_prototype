@@ -362,4 +362,34 @@ class DemoHorizontal_Slot extends Horizontal_Slot{
     dragged(){}
     textSelected(){}
 }
+class ScrollBar extends Shape{
+    constructor(x,y){
+        super();
+        this.x = x;
+        this.y = y;
+        this.w = 50;
+        this.h = 20;
+        this.color = 255;
+        this.selected = false;
+        this.selectMode = '';
+        this.type = 'scrollbar';
+        this.SELECTMOVE = 125;
+        this.SELECTRESIZE = 200;
+        this.SELECTPADDING = 3/ 5;
+        this.arrowIndex = 0; 
+    }
+    draw(){
+        rectMode(CENTER);
+        rect(this.x, this.y, this.w, this.h)
+    }
+    dragged(mx){
+        const w = this.w;
+        this.x = mx;
+        if(mx - w/2 < 0)this.x = w/2;
+        if(mx + w/2 > width)this.x = width-w/2;
+    }
+    mapTo(value, low1 = this.w/2, high1 = width-this.w/2, low2 = 0, high2 = -pwidth+canvasWidth-mright-mleft) {
+        return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+    }
+}
 
