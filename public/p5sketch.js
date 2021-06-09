@@ -133,11 +133,16 @@ function drawTextSelected(){
 }
 function drawDegrees(){
     push();
+    fill(0);
     translate(mleft, mtop);
     translate(xtrans,0);
     textAlign(CENTER,BOTTOM);
     for(let i =0; i<=pwidth; i+=pwidth/12){
+        fill(0);
         text((i/pwidth*360).toFixed(0)+'°', i, pheight);
+        fill('rgba(0,0,0,0.1)')
+        line(i, pheight-15, i, pheight-20);
+        line(i, 5, i, 10);
     }
     pop();
 }
