@@ -235,6 +235,9 @@ function loadDefaultConnectorSettings(){
 function loadDefaultBorniersSettings(){
     r.terminals = [];
     addWire(undefined, r.width/4,'armaturebx_h')
+    addWire(Math.PI / 4*3, r.width/4,'boitier')
+    addWire(Math.PI / 4*3, -r.width/4,'wire_tress')
+    addWire(Math.PI / 5*3, -r.width/4,'wire_spring')
     addWire(undefined, -r.width/4)
     addBornier(Math.PI / 3, -r.width/4)
 

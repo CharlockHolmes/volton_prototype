@@ -362,7 +362,7 @@ class DemoHorizontal_Slot extends Horizontal_Slot{
     dragged(){}
     textSelected(){}
 }
-class ScrollBar extends Shape{
+class ScrollBar extends Shape{r
     constructor(x,y){
         super();
         this.x = x;
@@ -394,3 +394,11 @@ class ScrollBar extends Shape{
     }
 }
 
+class Terminal extends Shape{
+    constructor(x,y){
+        super(x,y);
+        this.connectors = ['borne', 'armature_bx_vertical', 'armature_bx_horizontal']
+        this.rotation = 0; 
+    }
+
+}

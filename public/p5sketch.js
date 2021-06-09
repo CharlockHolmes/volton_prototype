@@ -221,7 +221,7 @@ function keyPressed() {
 }
 
 function itemKeyOperation(key) {
-    if (key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'e' || key == 'q') {
+    if (key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'e' || key == 'q' || key=='r' || key =='f') {
         shapes.forEach((shape) => {
             if (shape.selected) {
                 switch (key) {
@@ -243,6 +243,11 @@ function itemKeyOperation(key) {
                     case 'q':
                         shape.w -= 1;
                         break;
+                    case'r':
+                        shape.h +=1;
+                        break;
+                    case 'f':
+                        shape.h-=1;
                     default:
                         break;
                 }
