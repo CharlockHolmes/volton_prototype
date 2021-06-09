@@ -381,6 +381,7 @@ class ScrollBar extends Shape{
     draw(){
         rectMode(CENTER);
         rect(this.x, this.y, this.w, this.h)
+        
     }
     dragged(mx){
         const w = this.w;

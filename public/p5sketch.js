@@ -69,10 +69,22 @@ function setup() {
 }
 
 function draw() {
-    push();
     xtrans = scrollbar.mapTo(scrollbar.x);
-    translate(xtrans,0)
+    drawBand();
+    drawCursor();
+    /* Draw The rounded shapes and the demoShapes */
+    drawContour();
+    drawDemoShapes();
+    calculatePower();
+
+    drawTextSelected();
+    drawDegrees();
+    scrollbar.draw();
+    
+}
+function drawBand(){
     push();
+    translate(xtrans,0)
     translate(mleft, mtop);
     background(220);
     drawGaps();
@@ -82,8 +94,10 @@ function draw() {
         shapes[i].draw();
     }
     pop();
-
-    rectMode(CENTER);
+}
+function drawCursor(){
+    push();
+    translate(xtrans,0);
     let runloop = true;
     shapes.forEach(shape =>{
         if(runloop){
@@ -100,27 +114,32 @@ function draw() {
         }
     })
     if(runloop)cursor(ARROW);
-
-    
-    
+    if(scrollbar.isInOuterBoundary(mouseX, mouseY)||scrollbar.selected)cursor('ew-resize');
     pop();
-    /* Draw The rounded shapes and the demoShapes */
-    drawContour();
+}
+function drawDemoShapes(){
     demoShapes.forEach(shape =>{
         shape.draw();
     })
-    calculatePower();
-
+}
+function drawTextSelected(){
     push();
     translate(mleft, mtop);
-    translate(xtrans,0)
+    translate(xtrans,0);
     shapes.forEach(shape=>{
         shape.textSelected();
     })
     pop();
-    
-    scrollbar.draw();
-    
+}
+function drawDegrees(){
+    push();
+    translate(mleft, mtop);
+    translate(xtrans,0);
+    textAlign(CENTER,BOTTOM);
+    for(let i =0; i<=pwidth; i+=pwidth/12){
+        text((i/pwidth*360).toFixed(0)+'°', i, pheight);
+    }
+    pop();
 }
 
 function drawContour(){
@@ -290,7 +309,9 @@ function mousePressed() {
         }
 }
 }
-
+function mouseReleased(){
+    scrollbar.selected = false;
+}
 function mouseDragged() {
     if(mouseX > 0 && mouseX < width &&mouseY>0 && mouseY<height){
         shapes.forEach(shape => {
