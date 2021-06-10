@@ -38,6 +38,7 @@ let shapes = [];
 let connectors = [];
 let terminals = [];
 let demoShapes = [];
+let lastClick = {x:0,y:0, show:false}
 
 let scrollbar;
 
@@ -79,11 +80,20 @@ function draw() {
     drawContour();
     drawDemoShapes();
     calculatePower();
-
+    drawLastClick();
     drawTextSelected();
     drawDegrees();
     scrollbar.draw();
     
+}
+function drawLastClick(){
+    push();
+    translate(xtrans,0);
+    translate(mleft, mtop);
+    fill(255,100,100);
+    if(lastClick.show)
+        ellipse(lastClick.x, lastClick.y,5)
+    pop();
 }
 function drawBand(){
     push();
@@ -277,32 +287,47 @@ function doubleClicked() {
 
 function mousePressed() {
     if(mouseX > 0 && mouseX < width &&mouseY>0 && mouseY<height){
+        
         shapes.forEach(shape => {
             shape.unSelect();
         });
         scrollbar.selected =false;
         let makeNew = false;
+        let oneClicked = false; 
         demoShapes.forEach(shape =>{
             if(shape.isInOuterBoundary(mouseX,mouseY)){
                 if(shape.type=='rect'){
-                    console.log('make new rectangle')
-                    shapes.push(new Rectangle(50,50, 50,50))
+                    //console.log('make new rectangle')
+                    if(lastClick.show){
+                        shapes.push(new Rectangle(lastClick.x,lastClick.y, 50,50))
+                    }
+                    else shapes.push(new Rectangle(50,50, 50,50))
                 }
                 if(shape.type=='circle'){
-                    console.log('make new circle')
-                    shapes.push(new Circle(50,50, 50))
+                    //console.log('make new circle')
+                    if(lastClick.show){
+                        shapes.push(new Circle(lastClick.x,lastClick.y, 50))
+                    }
+                    else shapes.push(new Circle(50,50, 50))
                 }
                 if(shape.type=='v_slot'){
-                    console.log('make new v_slot')
-                    shapes.push(new Vertical_Slot(50,50,50,50))
+                    //console.log('make new v_slot')
+                    if(lastClick.show){
+                        shapes.push(new Vertical_Slot(lastClick.x,lastClick.y, 50,50))
+                    }
+                    else shapes.push(new Vertical_Slot(50,50,50,50))
                 }
                 if(shape.type=='h_slot'){
-                    console.log('make new h_slot')
-                    shapes.push(new Horizontal_Slot(50,50,50,50))
+                    //console.log('make new h_slot')
+                    if(lastClick.show){
+                        shapes.push(new Horizontal_Slot(lastClick.x,lastClick.y, 50,50))
+                    }
+                    else shapes.push(new Horizontal_Slot(50,50,50,50))
                 }
+                oneClicked = true;
             }
         })
-        let oneClicked = false; 
+        lastClick.show = false;
         shapes.some(shape => {
             const mx = mouseX - mleft-xtrans;
             const my = mouseY - mtop;
@@ -318,7 +343,15 @@ function mousePressed() {
             return 0;
         })
         if(mouseY>height-mbot){
-            if(scrollbar.isInOuterBoundary(mouseX,mouseY))scrollbar.selected = true;
+            if(scrollbar.isInOuterBoundary(mouseX,mouseY)){
+                scrollbar.selected = true;
+                oneClicked = true; 
+            }
+        }
+        else if(!oneClicked){
+            lastClick.x = mouseX - mleft - xtrans;
+            lastClick.y = mouseY - mtop;
+            lastClick.show = true
         }
 }
 }

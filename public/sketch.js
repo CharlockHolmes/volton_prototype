@@ -114,7 +114,8 @@ function loadTerminal(offsetZ, radius, angle = Math.PI / 2,name = 'bornier', rot
             loadBasicGUI(gltf, num, name);
             //angle-=Math.PI/2;
     
-            gltf.scene.scale.x = 0.0125;
+            if(name=='wire_tress')gltf.scene.scale.x = 0.008;
+            else gltf.scene.scale.x = 0.0125;
             gltf.scene.scale.y = 0.0125;
             gltf.scene.scale.z = 0.0125;
 
@@ -151,7 +152,8 @@ function loadTerminal(offsetZ, radius, angle = Math.PI / 2,name = 'bornier', rot
 
             gltf.scene.traverse(o=>{
                 if(o.material!=null){
-                    o.material.color = {r:0.5, g:0.5,b:1};
+                    //o.material.color = {r:0.5, g:0.5,b:1};
+                    o.material.color = {r:0.8, g:0.8,b:0.85};
                 }
             })
             scene.add(gltf.scene);
@@ -191,7 +193,8 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
 
             gltf.scene.traverse(o=>{
                 if(o.material!=null){
-                    o.material.color = {r:0.25, g:0.84,b:0.68};
+                    //o.material.color = {r:0.25, g:0.84,b:0.68};
+                    o.material.color = {r:0.8, g:0.8,b:0.88};
                 }
             })
             scene.add(gltf.scene);
@@ -493,7 +496,7 @@ function loadCustomItem() {
         return cube;
     }
     cubes = [
-        makeInstance(geometry, 0x999999, 0),
+        makeInstance(geometry, 0x81878c, 0),
     ];
     requestAnimationFrame(render);
 }
