@@ -107,28 +107,59 @@ function loadBasicGUI(gltf, num, name) {
     grot.add(gltf.scene.rotation, 'z').min(0).max(Math.PI * 2).step(0.01);
 }
 // Loads a bornier object;
-function loadBornier(offsetZ, radius, angle = Math.PI / 2,name = 'bornier', num = loaderCount++) {
+function loadTerminal(offsetZ, radius, angle = Math.PI / 2,name = 'bornier', rotation = 0,num = loaderCount++) {
     const loader = new THREE.GLTFLoader();
     loader.load('ressources/'+name+'.glb', //'ressources/bornier.glb',
         (gltf) => {
             loadBasicGUI(gltf, num, name);
             //angle-=Math.PI/2;
     
-            gltf.scene.scale.x = 0.01;
-            gltf.scene.scale.y = 0.01;
-            gltf.scene.scale.z = 0.01;
+            gltf.scene.scale.x = 0.0125;
+            gltf.scene.scale.y = 0.0125;
+            gltf.scene.scale.z = 0.0125;
 
-            gltf.scene.position.x = Math.cos(angle) * radius*1.001;
-            gltf.scene.position.y = Math.sin(angle) * radius*1.001;
-            gltf.scene.position.z = offsetZ;
+            const pos = {
+                x:Math.cos(angle) * radius*1.001,
+                y:Math.sin(angle) * radius*1.001,
+                z:offsetZ,
+            }
+            gltf.scene.position.x = pos.x;
+            gltf.scene.position.y = pos.y;
+            gltf.scene.position.z = pos.z;
 
-            gltf.scene.rotation.z = angle - Math.PI / 2;
+            const sideAxis = {
+                x: Math.cos(angle),
+                y: Math.sin(angle),
+                z: 0,
+            }
+            const upAxis = {
+                x: 0,
+                y: 0,
+                z: 1,
+            }
+            let upVector = new THREE.Vector3(upAxis.x, upAxis.y,upAxis.z);
+            let sideVector =new THREE.Vector3(sideAxis.x,sideAxis.y,sideAxis.z);
 
+            gltf.scene.rotateOnWorldAxis(upVector,angle - Math.PI / 2)
+            gltf.scene.rotateOnWorldAxis(sideVector,rotation)
+            
+            //gltf.scene.lookAt(targetPt.x, targetPt.y, targetPt.z)
+
+            //gltf.scene.rotation.z = angle - Math.PI / 2;
+
+            //rotateAboutPoint(gltf.scene, gltf.scene.position, )
+
+            gltf.scene.traverse(o=>{
+                if(o.material!=null){
+                    o.material.color = {r:0.5, g:0.5,b:1};
+                }
+            })
             scene.add(gltf.scene);
-            console.log("A Bornier was Added to scene");
+            //console.log(name,gltf.scene)///////////////////////////////////////////////////////
+            //console.log("A Bornier was Added to scene");
         },
         (xhr) => {
-            console.log((xhr.loaded / xhr.total * 100) + '% loaded')
+            //console.log((xhr.loaded / xhr.total * 100) + '% loaded')
         },
         (error) => {
             console.log('An error happened')
@@ -157,14 +188,21 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
 
 
             gltf.scene.rotation.z = angle - Math.PI / 2;
+
+            gltf.scene.traverse(o=>{
+                if(o.material!=null){
+                    o.material.color = {r:0.25, g:0.84,b:0.68};
+                }
+            })
             scene.add(gltf.scene);
-            console.log("A " + name + " was Added to scene");
+            //console.log(name,gltf.scene)/////////////////////////////////
+            //console.log("A " + name + " was Added to scene");
         },
         (xhr) => {
-            console.log((xhr.loaded / xhr.total * 100) + '% loaded')
+            //console.log((xhr.loaded / xhr.total * 100) + '% loaded')
         },
         (error) => {
-            console.log('An error happened' + error)
+            //console.log('An error happened' + error)
         });
 }
 if(localStorage.getItem('ring')!= null){
@@ -198,16 +236,18 @@ function loadDefaultConnectorSettings(){
     connectors = [];
     let gapcnt = 0;
     r.gaps.forEach(gap => {
+        const randId0 = (Math.random()*10000000).toFixed();
+        const randId1 = (Math.random()*10000000).toFixed();
         if (gap.type == 'barrel') {
             const conNum = Math.floor(r.width);
             if(conNum%2==1){
                 if(gapcnt%2==0){
-                    addConnector(gap.begin, 0, 'barrel_screw'); 
-                    addConnector(gap.end, 0, 'barrel', true) 
+                    addConnector(gap.begin, 0, 'barrel_screw',false,randId0); 
+                    addConnector(gap.end, 0, 'barrel', true,randId0) 
                 }
                 if(gapcnt%2==1){
-                    addConnector(gap.begin, 0, 'barrel'); 
-                    addConnector(gap.end, 0, 'barrel_screw', true ) 
+                    addConnector(gap.begin, 0, 'barrel',false,randId0); 
+                    addConnector(gap.end, 0, 'barrel_screw', true,randId0 ) 
                 }
             }
             if(conNum>1){
@@ -215,16 +255,16 @@ function loadDefaultConnectorSettings(){
                     let offset;
                     offset = r.width/(3*(i+1));
                     if(gapcnt%2==0){
-                        addConnector(gap.begin,offset , 'barrel_screw');
-                        addConnector(gap.end, offset, 'barrel', true);
-                        addConnector(gap.begin, -offset, 'barrel_screw');
-                        addConnector(gap.end, -offset, 'barrel', true);
+                        addConnector(gap.begin,offset , 'barrel_screw',false,randId0);
+                        addConnector(gap.end, offset, 'barrel', true,randId0);
+                        addConnector(gap.begin, -offset, 'barrel_screw',false,randId1);
+                        addConnector(gap.end, -offset, 'barrel', true,randId1);
                     }
                     if(gapcnt%2==1){
-                        addConnector(gap.begin,offset , 'barrel');
-                        addConnector(gap.end, offset, 'barrel_screw',true);
-                        addConnector(gap.begin, -offset, 'barrel');
-                        addConnector(gap.end, -offset, 'barrel_screw',true);
+                        addConnector(gap.begin,offset , 'barrel',false,randId0);
+                        addConnector(gap.end, offset, 'barrel_screw',true,randId0);
+                        addConnector(gap.begin, -offset, 'barrel',false,randId1);
+                        addConnector(gap.end, -offset, 'barrel_screw',true,randId1);
                     }
                 }
             } 
@@ -234,37 +274,31 @@ function loadDefaultConnectorSettings(){
 }
 function loadDefaultBorniersSettings(){
     r.terminals = [];
-    addWire(undefined, r.width/4,'armaturebx_h')
-    addWire(Math.PI / 4*3, r.width/4,'boitier')
-    addWire(Math.PI / 4*3, -r.width/4,'wire_tress')
-    addWire(Math.PI / 5*3, -r.width/4,'wire_spring')
-    addWire(undefined, -r.width/4)
-    addBornier(Math.PI / 3, -r.width/4)
-
-
+    addTerminal(undefined, r.width/4,'armaturebx_h',3*PI/2)
+    addTerminal(Math.PI / 4*3, r.width/4,'boitier',PI/2)
+    addTerminal(Math.PI / 4*3, -r.width/4,'wire_tress')
+    addTerminal(Math.PI / 5*3, -r.width/4,'wire_spring')
+    addTerminal(undefined, -r.width/4, 'armaturebx_v',3*PI/2)
+    addTerminal(Math.PI / 3, -r.width/4)
 }
 
-function addConnector(angle = 0, offset = 0, type = 'barrel', flipped = false) {
+function addConnector(angle = 0, offset = 0, type = 'barrel', flipped = false,id=10) {
     r.addConnector({
         angle: angle,
         offset: offset,
         type: type,
-        flipped: flipped
+        flipped: flipped,
+        id:id
     })
 }
 
-function addWire(angle = Math.PI / 2, offset = 0, type='armaturebx_v') {
+
+function addTerminal(angle = Math.PI / 2, offset = 0, type='bornier',rotation = 0) {
     r.addTerminal({
         angle: angle,
         offset: offset,
         type:type,
-    });
-}
-function addBornier(angle = Math.PI / 2, offset = 0, type='bornier') {
-    r.addTerminal({
-        angle: angle,
-        offset: offset,
-        type:type,
+        rotation:rotation
     });
 }
 
@@ -406,18 +440,20 @@ function clearObjectArrays(){
  */
 function loadCustomItem() {
     loadMenuThings();
-    loadDefaultBorniersSettings();
+    //loadDefaultBorniersSettings();
     initGlobals();
     addRingClock();
 
     r.terminals.forEach(borne => {
-        loadBornier(borne.offset, r.radius, borne.angle,borne.type);
+        loadTerminal(borne.offset, r.radius, borne.angle,borne.type,borne.rotation);
     });
     r.connectors.forEach(connector => {
         loadConnector(connector.offset, r.radius, connector.angle, connector.type, connector.flipped);
     });
-    addLight(-2, 20, 4);
-    addLight(2, -20, 3);
+    addLight(-2, 20, 10);
+    //addLight(2, -20, 3);
+    addLight(10, -40, -10)
+    gui.hide();
     //Ring material
     const {
         positions,
@@ -657,10 +693,10 @@ document.getElementById('defaultring').onclick = () =>{
  * Saves the camera position in 'camera' key.
  * Saves the ring properties in the 'ring key. 
  */
-function saveRing(){
+function saveRing(ring=r){
     const position = {position:{x : camera.position.x, y:camera.position.y, z:camera.position.z},rotation:{_x: camera.rotation._x, _y:camera.rotation._y, _z:camera.rotation._z}, target:{x:controls.target.x, y:controls.target.y, z:controls.target.z}}
     localStorage.setItem('camera', JSON.stringify(position));
-    localStorage.setItem('ring', JSON.stringify(r));
+    localStorage.setItem('ring', JSON.stringify(ring));
     reloadCount++;
     if(reloadCount>reloadValue)
     location.reload();
@@ -688,13 +724,15 @@ function loadMenuThings(){
 /**
  * Loads ring holes, used to only update the ring holes then to save the item.
  */
-function loadRingHoles(){
+function loadRingFromDrawing(){
     const holes = JSON.parse(localStorage.getItem('holes'));
+    let tr = JSON.parse(localStorage.getItem('ring'));
     r.holes = [];
     holes.forEach(h=>{
         r.addHole(h.angle, h.r, h.offset, h.type, h.id);
     })
-    saveRing();
+    tr.holes = r.holes;
+    saveRing(tr);
 }
 /**
  * Loads all the camera positioning elements in the camera and controls for the offset. 

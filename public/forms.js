@@ -121,6 +121,13 @@ class Shape {
         if(x>this.x-this.w/2&& x< this.x+this.w/2+35&&this.y-this.h/2>y&&(this.selected||seeAll))return this.y-this.h/2; 
         return false; 
     }
+    updateValues(x,y,w,h,rotation){
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.rotation = rotation;
+    }
 }
 class Rectangle extends Shape {
     constructor(x, y, w, h) {
@@ -395,10 +402,107 @@ class ScrollBar extends Shape{r
 }
 
 class Terminal extends Shape{
-    constructor(x,y){
+    constructor(x,y,flipped,type='Object',rotation = 0){
         super(x,y);
         this.connectors = ['borne', 'armature_bx_vertical', 'armature_bx_horizontal']
         this.rotation = 0; 
+        this.type = type;
+        if(type=='barrel'||type=='barrel_screw'){
+            this.flipped = flipped;
+            this.h = 0.75 / (lrwidth*inchPerUnit)*pheight;
+            this.w = 0.75 / (lrlength*inchPerUnit)*pwidth;
+            if(this.flipped)this.tx=this.x+this.w/2;
+            if(!this.flipped)this.tx=this.x-this.w/2;
+        }
+        else if(type=='wire_tress'){
+            this.tx = x;
+            this.h = 0.31 / (lrwidth*inchPerUnit)*pheight;
+            this.w = 0.31 / (lrlength*inchPerUnit)*pwidth;
+        }
+        else if(type=='boitier'){
+            this.tx = x;
+            this.h = 1.5 / (lrwidth*inchPerUnit)*pheight;
+            this.w = 1.5 / (lrlength*inchPerUnit)*pwidth;
+        }
+        else{
+            this.tx = x;
+            this.h = 0.66 / (lrwidth*inchPerUnit)*pheight;
+            this.w = 0.66 / (lrlength*inchPerUnit)*pwidth;
+        }
+        this.rotation = rotation;
     }
 
+    draw(){
+        push()
+        if(this.type=='barrel'||this.type=='barrel_screw') {
+        }
+        else this.tx = this.x;
+        fill(100,100,255);
+        rectMode(CENTER);
+        if(this.type=='barrel'||this.type=='barrel_screw'){
+            rect(this.tx,this.y,this.w,this.h);
+        }
+        else if(this.type=='boitier'){
+            rect(this.x, this.y, this.w, this.h)
+        }
+        else{
+            ellipse(this.x,this.y,this.w,this.h);
+        }
+        pop()
+    }
+    
+    isInOuterBoundary(mx, my){
+        if(mx<this.tx+this.w/2&&mx>this.tx-this.w/2&&
+            my<this.y+this.h/2&&my>this.y-this.h/2)return true;
+        else return false;
+    }
+    isInInnerBoundary(){
+        return true;
+    }
+   
+    textSelected(){
+        if(this.selected||seeAll){
+            push()
+            fill(0)
+            pointArrow(this, this.type);
+            pop()
+        }
+    }
+
+    dragged(mx, my){
+        if(this.selectMode==='move'){
+            if(!(this.type=='barrel'||this.type=='barrel_screw'))this.x = mx;
+            this.y = my;
+        }
+        selectHole(this);
+    }
+}
+
+/** Connectors are paired with an id and that id is used to attach them together so that if one is changed,
+ * the other may also be affected by the same change. 
+ */
+class Connector extends Terminal{
+    constructor(x,y,flipped,type='Object',rotation = 0,id){
+        super(x,y,flipped,type,rotation);
+        this.con;
+        this.id = id;
+    }
+    appendCon(con){
+        this.con = con;
+    }
+
+    draw(){
+        push();
+        fill(50,168,135)
+        rectMode(CENTER);
+        rect(this.tx,this.y,this.w,this.h);
+        pop();
+    }
+    dragged(mx, my){
+        if(this.selectMode==='move'){
+            this.y = my;
+            if(this.con!=null)this.con.y = my;
+        }
+        selectHole(this);
+    }
 }
