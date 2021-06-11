@@ -21,6 +21,7 @@ let nn;
 let pa;
 let r;
 let cubes = [];
+let enableLinkModification = true;
 let showGroupGlobal = true; 
 const cameraPositionZ = 30;
 const segmentsAround = 1000;
@@ -724,8 +725,10 @@ function saveRing(ring=r){
     localStorage.setItem('camera', JSON.stringify(position));
     localStorage.setItem('ring', JSON.stringify(ring));
     reloadCount++;
-    if(reloadCount>reloadValue)
-    location.reload();
+    if(reloadCount>reloadValue){
+        if(enableLinkModification&&window.location.search.length>10)window.location.search = ''
+        else location.reload();
+    }
     else loadCustomItem();
 }
 /**
