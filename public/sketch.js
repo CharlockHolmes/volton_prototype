@@ -208,14 +208,33 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
             //console.log('An error happened' + error)
         });
 }
-if(localStorage.getItem('ring')!= null){
-    loadRing();
-    defaultRadius = r.radius;
-    camera.position.z = cameraPositionZ*defaultRadius;
-
-    loadCustomItem();
+/** This is where we check if preexisting values exist and load them if they do. */
+loadSavedValues();
+function loadSavedValues(){
+    const tr = getParameter('ring');
+    if(tr!=null){
+        const ring = JSON.parse(tr);
+        r = new Ring(ring.radius, ring.width, ring.resolution,ring.holes, ring.gaps, ring.terminals, ring.connectors, ring.thickness);
+        const tc = getParameter('camera')
+        if(tc!=null){
+            loadCamera(tc)
+            const position = {position:{x : camera.position.x, y:camera.position.y, z:camera.position.z},rotation:{_x: camera.rotation._x, _y:camera.rotation._y, _z:camera.rotation._z}, target:{x:controls.target.x, y:controls.target.y, z:controls.target.z}}
+            localStorage.setItem('camera', JSON.stringify(position));
+        }
+        localStorage.setItem('ring', JSON.stringify(r));
+        loadCustomItem();
+    }
+    else if(localStorage.getItem('ring')!= null){
+        loadCamera(localStorage.getItem('camera'));
+        loadRing(localStorage.getItem('ring'));
+        defaultRadius = r.radius;
+        camera.position.z = cameraPositionZ*defaultRadius;
+        loadCustomItem();
+    }
+    else {
+        defaultRing();
+    }
 }
-else defaultRing();
 
 //Default ring that will appear on first load
 function defaultRing() {
@@ -687,6 +706,10 @@ document.getElementById('defaultring').onclick = () =>{
     defaultRing();
     saveRing();
 }
+document.getElementById('save').onclick = () =>{
+    console.log('save pressed')
+    generateURL();
+}
 
 
 /* Saving functions  */
@@ -708,9 +731,8 @@ function saveRing(ring=r){
 /**
  * Loads the camera position then loads the ring.
  */
-function loadRing(){
-    loadCamera();
-    const ring = JSON.parse(localStorage.getItem('ring'));
+function loadRing(ringImport){
+    const ring = JSON.parse(ringImport);
     r = new Ring(ring.radius, ring.width, ring.resolution,ring.holes, ring.gaps, ring.terminals, ring.connectors, ring.thickness);
 }
 /** 
@@ -740,8 +762,8 @@ function loadRingFromDrawing(){
 /**
  * Loads all the camera positioning elements in the camera and controls for the offset. 
  */
-function loadCamera(){
-    const cameraImport = JSON.parse(localStorage.getItem('camera'));
+function loadCamera(cameraImports){
+    const cameraImport = JSON.parse(cameraImports);
     if(cameraImport!=null){
         camera.position.x = cameraImport.position.x;
         camera.position.y = cameraImport.position.y;
@@ -754,5 +776,16 @@ function loadCamera(){
         controls.target.z = cameraImport.target.z;
     }
 }
+function generateURL(ring = r){
+    const position = {position:{x : camera.position.x, y:camera.position.y, z:camera.position.z},rotation:{_x: camera.rotation._x, _y:camera.rotation._y, _z:camera.rotation._z}, target:{x:controls.target.x, y:controls.target.y, z:controls.target.z}}
+    const camt = JSON.stringify(position);
+    const ringt = JSON.stringify(ring);
+    let str = '?';
+    str+= 'ring=' + ringt;
+    str+= '&camera='+camt;
 
+    const hostname = window.location.host;
+    navigator.clipboard.writeText(hostname+'/'+str);
+    window.location.search = str;
+}
 

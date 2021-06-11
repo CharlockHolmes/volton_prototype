@@ -357,6 +357,7 @@ function mousePressed() {
 }
 function mouseReleased(){
     scrollbar.selected = false;
+    shapes.forEach(s=>s.snapToGrid())
 }
 function mouseDragged() {
     if(mouseX > 0 && mouseX < width &&mouseY>0 && mouseY<height){
@@ -633,11 +634,11 @@ document.getElementById('importholes').onclick = ()=>{
 
 
 function selectHole(hole){
-    document.getElementById('h_angle').value = (hole.x*toDeg).toFixed(1);    
+    document.getElementById('h_angle').value = (hole.x*toDeg).toFixed();    
     document.getElementById('h_height').value = (hole.h*toInch).toFixed(3);    
     document.getElementById('h_width').value = (hole.w*toInch).toFixed(3);    
     document.getElementById('h_offset').value = (hole.y*toInch).toFixed(3); 
-    if(hole.rotation!=null)document.getElementById('h_rotation').value  =(hole.rotation);
+    if(hole.rotation!=null)document.getElementById('h_rotation').value =(hole.rotation*360/(2*PI));
 }  
 document.getElementById('submitholebutton').onclick = ()=>{
     shapes.forEach(hole=>{
@@ -646,7 +647,7 @@ document.getElementById('submitholebutton').onclick = ()=>{
             let h = 1/toInch* document.getElementById('h_height').value;
             let w = 1/toInch*document.getElementById('h_width').value;
             let y = 1/toInch* document.getElementById('h_offset').value;
-            let rotation = document.getElementById('h_rotation').value;
+            let rotation = document.getElementById('h_rotation').value *2*PI/360;
             hole.updateValues(x,y,w,h,rotation);
         }
     })

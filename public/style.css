@@ -1,3 +1,7 @@
+
+
+    
+
 body{
     background-color: rgb(255, 255, 255);
     position:relative;
@@ -19,6 +23,8 @@ section{
     padding:5px;
     height:40px;
     border-radius: 10px;
+
+    user-select: none; /* supported by Chrome and Opera */
 }
 div.menubutton:hover{
     cursor:pointer;
@@ -63,6 +69,7 @@ div.table{
     padding: 4px;
     width: 100px;
     display: inline-table;
+    user-select: none; /* supported by Chrome and Opera */
 }
 div.td{
     background-color: lightseagreen;

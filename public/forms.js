@@ -11,117 +11,132 @@ class Shape {
         this.type = '';
         this.SELECTMOVE = 125;
         this.SELECTRESIZE = 200;
-        this.SELECTPADDING = 3/ 5;
-        this.arrowIndex = 0; 
+        this.SELECTPADDING = 3 / 5;
+        this.arrowIndex = 0;
     }
-    doubleClicked(){
+    doubleClicked() {
         this.arrowIndex++;
-        if(this.arrowIndex>3)this.arrowIndex = 0;
+        if (this.arrowIndex > 3) this.arrowIndex = 0;
     }
     draw() {
-    
+
     }
     rectFill(color) {
         this.color = color;
     }
     textSelected() {
+        if (this.selected || seeAll) {
+            push()
+            fill(0)
+            const x = this.x
+            const y = this.y
+            const w = this.w
+            line(x,-10, x, pheight+10)
+            line(x-w/2-10, y, x+w/2+10, y)
+            pointArrow(this, this.type);
+            textSize(TEXTSIZE);
+            textAlign(CENTER, BOTTOM);
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);
+            pop()
+        }
     }
-    isInOuterBoundary(mx, my){
-        if(mx<this.x+this.w/2&&mx>this.x-this.w/2&&
-            my<this.y+this.h/2&&my>this.y-this.h/2)return true;
+    isInOuterBoundary(mx, my) {
+        if (mx < this.x + this.w / 2 && mx > this.x - this.w / 2 &&
+            my < this.y + this.h / 2 && my > this.y - this.h / 2) return true;
         else return false;
     }
-    select(mx, my){
+    select(mx, my) {
         this.selected = true;
         selectHole(this);
-        if(this.isInInnerBoundary(mx,my)){
+        if (this.isInInnerBoundary(mx, my)) {
             this.selectMode = 'move';
             this.color = this.SELECTMOVE;
-        }
-        else {
+        } else {
             this.selectMode = 'resize';
             this.color = this.SELECTRESIZE;
         }
     }
-    isInInnerBoundary(mx, my){
-        const xr = this.x+((this.w/2)*this.SELECTPADDING);
-        const xl = this.x-((this.w/2)*this.SELECTPADDING);
-        const yb = this.y+((this.h/2)*this.SELECTPADDING);
-        const yt = this.y-((this.h/2)*this.SELECTPADDING);
-        if((mx<xr&& mx>xl)&& (my<yb&& my>yt)){
-                return true;
-        }
-        else {
+    isInInnerBoundary(mx, my) {
+        const xr = this.x + ((this.w / 2) * this.SELECTPADDING);
+        const xl = this.x - ((this.w / 2) * this.SELECTPADDING);
+        const yb = this.y + ((this.h / 2) * this.SELECTPADDING);
+        const yt = this.y - ((this.h / 2) * this.SELECTPADDING);
+        if ((mx < xr && mx > xl) && (my < yb && my > yt)) {
+            return true;
+        } else {
             return false;
         }
     }
-    dragged(mx, my){
-        if(this.selectMode==='move'){
+    dragged(mx, my) {
+        if (this.selectMode === 'move') {
             this.x = mx;
             this.y = my;
         }
-        if(this.selectMode==='resize'){
+        if (this.selectMode === 'resize') {
             cursor('pointer');
-            let sl = this.x - this.w/2, sr = this.x+this.w/2,su = this.y-this.h/2,sd = this.y +this.h/2; 
+            let sl = this.x - this.w / 2,
+                sr = this.x + this.w / 2,
+                su = this.y - this.h / 2,
+                sd = this.y + this.h / 2;
             const dx = Math.abs(this.x - mx);
-            const dy = Math.abs(this.y - my); 
-            if (this.type === 'circle'||centerResize==true){
-                if(dx>dy){
+            const dy = Math.abs(this.y - my);
+            if (this.type === 'circle' || centerResize == true) {
+                if (dx > dy) {
+                    this.w = 2 * dx;
+                    this.h = this.w;
+                } else {
+                    this.h = 2 * dy;
+                    this.w = this.h;
+                }
+                if (dx > this.w / 2) {
+                    this.w = 2 * dx;
+                    this.h = this.w;
+                }
+                if (dy > this.h / 2) {
+                    this.h = 2 * dy;
+                    this.w = this.h;
+                }
 
-                    this.w = 2*dx;
-                    this.h = this.w;
-                }
-                else{
-                    this.h = 2*dy;
-                    this.w = this.h;
-                }
-                if(dx>this.w/2){
-                    this.w = 2*dx;
-                    this.h = this.w;
-                }
-                if(dy>this.h/2){
-                    this.h = 2*dy;
-                    this.w = this.h;
-                }
-                
-            }
-            else{
-                if(dx>dy){
-                    if(mx>this.x){
-                        this.x = (sl+(this.x+dx))/2;
+            } else {
+                if (dx > dy) {
+                    if (mx > this.x) {
+                        this.x = (sl + (this.x + dx)) / 2;
                         this.w = mx - sl;
-                    }
-                    else{
-                        this.x = (sr+(this.x-dx))/2;
+                    } else {
+                        this.x = (sr + (this.x - dx)) / 2;
                         this.w = sr - mx;
                     }
-                }
-                else{
-                    if(my>this.y){
-                        this.y = (su+(this.y+dy))/2;
+                } else {
+                    if (my > this.y) {
+                        this.y = (su + (this.y + dy)) / 2;
                         this.h = my - su;
-                    }
-                    else{
-                        this.y = (sd+(this.y-dy))/2;
+                    } else {
+                        this.y = (sd + (this.y - dy)) / 2;
                         this.h = sd - my;
                     }
                 }
             }
-            
-        }selectHole(this);
+
+        }
+        selectHole(this);
     }
-    unSelect(){
-        this.selected = false; 
+    snapToGrid(){
+        let roundingT = this.x*360/pwidth
+        roundingT = Math.round(roundingT)
+        this.x = roundingT/360*pwidth
+    }
+    unSelect() {
+        this.selected = false;
         this.color = 255;
     }
-    getArea(){
-        return (this.w*toInch)*(this.h*toInch);   
+    getArea() {
+        return (this.w * toInch) * (this.h * toInch);
     }
-    isUnder(x,y){
-        if(x>this.x-this.w/2&& x< this.x+this.w/2+35&&this.y-this.h/2>y&&(this.selected||seeAll))return this.y-this.h/2; 
-        return false; 
+    isUnder(x, y) {
+        if (x > this.x - this.w / 2 && x < this.x + this.w / 2 + 35 && this.y - this.h / 2 > y && (this.selected || seeAll)) return this.y - this.h / 2;
+        return false;
     }
-    updateValues(x,y,w,h,rotation){
+    updateValues(x, y, w, h, rotation) {
         this.x = x;
         this.y = y;
         this.w = w;
@@ -142,7 +157,7 @@ class Rectangle extends Shape {
         rect(this.x, this.y, this.w, this.h);
     }
     textSelected() {
-        if (this.selected||seeAll) {
+        if (this.selected || seeAll) {
             fill(0);
             textSize(16);
             textAlign(LEFT, BOTTOM);
@@ -150,37 +165,37 @@ class Rectangle extends Shape {
             const h = abs(this.h);
             let below = pheight;
             /* Top down arrow, insert the inch offset here */
-            shapes.forEach(shape=>{
-                let temp = shape.isUnder(this.x+this.w/2+15,this.y);
-                if(temp != false && temp<below)below = temp;
+            shapes.forEach(shape => {
+                let temp = shape.isUnder(this.x + this.w / 2 + 15, this.y);
+                if (temp != false && temp < below) below = temp;
                 // if(below!= false)console.log(below)
             })
-            const offsetVal = (below - this.y-h/2 )/below*loadedRing.width*inchPerUnit;
-            drawArrow(this.x+this.w/2+15, this.y+h/2 + (below - this.y-h/2)/2, below-  this.y-h/2, 5, false, offsetVal)
+            const offsetVal = (below - this.y - h / 2) / below * loadedRing.width * inchPerUnit;
+            drawArrow(this.x + this.w / 2 + 15, this.y + h / 2 + (below - this.y - h / 2) / 2, below - this.y - h / 2, 5, false, offsetVal)
             push()
             strokeWeight(1);
             stroke(50);
-            line(this.x, -10, this.x, pheight+10);
+            line(this.x, -10, this.x, pheight + 10);
             pop();
-            
+
             //text('x = ' + this.x + '\ny = ' + this.y, this.x, this.y)
             line(this.x + (w / 2), this.y, this.x + (w / 2), -35);
             line(this.x - (w / 2), this.y, this.x - (w / 2), -35);
             line(this.x, this.y + (h / 2), this.x + w / 2 + 20, this.y + (h / 2));
             line(this.x, this.y - (h / 2), this.x + w / 2 + 20, this.y - (h / 2));
-            let a = w/pheight*lrwidth*inchPerUnit;
+            let a = w / pheight * lrwidth * inchPerUnit;
             //console.log(a);
-            let b = h/pheight*lrwidth*inchPerUnit;
+            let b = h / pheight * lrwidth * inchPerUnit;
             //console.log(b);
             drawArrow(this.x, -30, w, 10, true, a);
             drawArrow(this.x + w / 2 + 15, this.y, h, 10, false, b);
             textSize(TEXTSIZE);
             textAlign(CENTER, BOTTOM);
-            text((this.x*360/pwidth).toFixed(0) + '°', this.x, -11);
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);
         }
     }
 
-    
+
 }
 
 class Circle extends Shape {
@@ -196,181 +211,182 @@ class Circle extends Shape {
     }
 
     textSelected() {
-        if (this.selected||seeAll) {
+        if (this.selected || seeAll) {
             fill(0);
             const w = abs(this.w);
             let below = pheight;
             /* Top down arrow, insert the inch offset here */
-            shapes.forEach(shape=>{
-                let temp = shape.isUnder(this.x+this.w/2+15,this.y);
-                if(temp != false && temp<below)below = temp;
+            shapes.forEach(shape => {
+                let temp = shape.isUnder(this.x + this.w / 2 + 15, this.y);
+                if (temp != false && temp < below) below = temp;
                 // if(below!= false)console.log(below)
             })
-            const offsetVal = (below - this.y)/below*loadedRing.width*inchPerUnit;
-            drawArrow(this.x+this.w/2+15, this.y + (below - this.y)/2, below-  this.y, 5, false, offsetVal)
+            const offsetVal = (below - this.y) / below * loadedRing.width * inchPerUnit;
+            drawArrow(this.x + this.w / 2 + 15, this.y + (below - this.y) / 2, below - this.y, 5, false, offsetVal)
 
 
 
             push()
             strokeWeight(1);
             stroke(50);
-            line(this.x, -10, this.x, pheight+10);
-            line(this.x-this.w/2-10, this.y, this.x+ this.w/2+20, this.y);
+            line(this.x, -10, this.x, pheight + 10);
+            line(this.x - this.w / 2 - 10, this.y, this.x + this.w / 2 + 20, this.y);
             pop();
 
             //line(this.x, this.y + (w / 2), this.x + w / 2 + 20, this.y + (w / 2));
             //line(this.x, this.y - (w / 2), this.x + w / 2 + 20, this.y - (w / 2));
             //drawArrow(this.x + w / 2 + 15, this.y, w, 10, false, w/pheight*loadedRing.width*inchPerUnit);
-            pointArrow(this, 'Ø'+(w*toInch).toFixed(3));
+            pointArrow(this, 'Ø' + (w * toInch).toFixed(3));
 
             textSize(TEXTSIZE);
             textAlign(CENTER, BOTTOM);
-            text((this.x*360/pwidth).toFixed(0) + '°', this.x, -11);
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);
         }
     }
-    isUnder(x,y){
-        if(x>this.x-this.w/2-10&& x< this.x+this.w/2+35&&this.y>y&&(this.selected||seeAll))return this.y; 
-        return false; 
+    isUnder(x, y) {
+        if (x > this.x - this.w / 2 - 10 && x < this.x + this.w / 2 + 35 && this.y > y && (this.selected || seeAll)) return this.y;
+        return false;
     }
 
 }
-class Vertical_Slot extends Rectangle{
-    constructor(x,y,w,h){
-        super(x,y,w,h);
+class Vertical_Slot extends Rectangle {
+    constructor(x, y, w, h) {
+        super(x, y, w, h);
         this.type = 'v_slot';
     }
-    draw(){
+    draw() {
         push();
         noStroke();
         fill(0);
         rect(this.x, this.y, this.w, this.h);
-        arc(this.x, this.y-this.h/2, this.w+exw, this.w+exw, PI, 0);
-        arc(this.x, this.y+this.h/2, this.w+exw, this.w+exw, 0, PI);
-        rect(this.x, this.y, this.w+exw, this.h+exw);
+        arc(this.x, this.y - this.h / 2, this.w + exw, this.w + exw, PI, 0);
+        arc(this.x, this.y + this.h / 2, this.w + exw, this.w + exw, 0, PI);
+        rect(this.x, this.y, this.w + exw, this.h + exw);
         stroke(this.color);
         fill(this.color);
-        arc(this.x, this.y-this.h/2, this.w, this.w, PI, 0);
-        arc(this.x, this.y+this.h/2, this.w, this.w, 0, PI);
+        arc(this.x, this.y - this.h / 2, this.w, this.w, PI, 0);
+        arc(this.x, this.y + this.h / 2, this.w, this.w, 0, PI);
         rectMode(CENTER);
         rect(this.x, this.y, this.w, this.h);
         pop();
     }
     textSelected() {
-        if (this.selected||seeAll) {
+        if (this.selected || seeAll) {
             fill(0);
             textSize(16);
             textAlign(LEFT, BOTTOM);
             const w = abs(this.w);
             const h = abs(this.h);
-            const offsetVal = (pheight - this.y - this.h/2)/pheight*loadedRing.width*inchPerUnit;
-            drawArrow(this.x+this.w/2+15, this.y + this.h/2 + (pheight - this.y - this.h/2)/2, pheight - this.h/2-  this.y, 5, false, offsetVal)
+            const offsetVal = (pheight - this.y - this.h / 2) / pheight * loadedRing.width * inchPerUnit;
+            drawArrow(this.x + this.w / 2 + 15, this.y + this.h / 2 + (pheight - this.y - this.h / 2) / 2, pheight - this.h / 2 - this.y, 5, false, offsetVal)
             push()
             strokeWeight(1);
             stroke(50);
-            line(this.x, -10, this.x, pheight+10);
+            line(this.x, -10, this.x, pheight + 10);
             pop();
-            line(this.x-7, this.y + (h / 2), this.x + w / 2 + 25, this.y + (h / 2));
-            line(this.x-7, this.y - (h / 2), this.x + w / 2 + 25, this.y - (h / 2));
-            let a = w/pheight*lrwidth*inchPerUnit;
-            let b = h/pheight*lrwidth*inchPerUnit;
+            line(this.x - 7, this.y + (h / 2), this.x + w / 2 + 25, this.y + (h / 2));
+            line(this.x - 7, this.y - (h / 2), this.x + w / 2 + 25, this.y - (h / 2));
+            let a = w / pheight * lrwidth * inchPerUnit;
+            let b = h / pheight * lrwidth * inchPerUnit;
             //drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a);
-            pointArrow(this, 'R'+(w/2/pheight*loadedRing.width*inchPerUnit).toFixed(3))
+            pointArrow(this, 'R' + (w / 2 / pheight * loadedRing.width * inchPerUnit).toFixed(3))
             drawArrow(this.x + w / 2 + 15, this.y, h, 10, false, b);
             textSize(TEXTSIZE);
             textAlign(CENTER, BOTTOM);
-            text((this.x*360/pwidth).toFixed(0) + '°', this.x, -11);
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);
         }
     }
-    getArea(){
-        return (this.w*toInch)*((this.h+this.w)*toInch);   
+    getArea() {
+        return (this.w * toInch) * ((this.h + this.w) * toInch);
     }
-    isInOuterBoundary(mx, my){
-        if(mx<=this.x+this.w/2&& mx>=this.x-this.w/2)
-            if(my<=this.y+this.h/2+this.w/2&&my>=this.y-this.h/2-this.w/2)
+    isInOuterBoundary(mx, my) {
+        if (mx <= this.x + this.w / 2 && mx >= this.x - this.w / 2)
+            if (my <= this.y + this.h / 2 + this.w / 2 && my >= this.y - this.h / 2 - this.w / 2)
                 return true;
         return false;
     }
 }
-class Horizontal_Slot extends Rectangle{
-    constructor(x,y,w,h){
-        super(x,y,w,h);
+class Horizontal_Slot extends Rectangle {
+    constructor(x, y, w, h) {
+        super(x, y, w, h);
         this.type = 'h_slot';
     }
-    draw(){
+    draw() {
         push();
         fill(this.color);
-        arc(this.x-this.w/2, this.y, this.h, this.h, PI/2, -PI/2);
-        arc(this.x+this.w/2, this.y, this.h, this.h, -PI/2, PI/2);
+        arc(this.x - this.w / 2, this.y, this.h, this.h, PI / 2, -PI / 2);
+        arc(this.x + this.w / 2, this.y, this.h, this.h, -PI / 2, PI / 2);
         rectMode(CENTER);
         fill(this.color);
         rect(this.x, this.y, this.w, this.h);
         pop();
     }
     textSelected() {
-        if (this.selected||seeAll) {
+        if (this.selected || seeAll) {
             fill(0);
             textSize(16);
             textAlign(LEFT, BOTTOM);
             const w = abs(this.w);
             const h = abs(this.h);
-            const offsetVal = (pheight - this.y - this.h/2)/pheight*loadedRing.width*inchPerUnit;
-            drawArrow(this.x+this.w/2+this.h/2+15, this.y + this.h/2 + (pheight - this.y - this.h/2)/2, pheight - this.h/2-  this.y, 5, false, offsetVal)
+            const offsetVal = (pheight - this.y - this.h / 2) / pheight * loadedRing.width * inchPerUnit;
+            drawArrow(this.x + this.w / 2 + this.h / 2 + 15, this.y + this.h / 2 + (pheight - this.y - this.h / 2) / 2, pheight - this.h / 2 - this.y, 5, false, offsetVal)
             push()
             strokeWeight(1);
             stroke(50);
-            line(this.x, -10, this.x, pheight+10);
+            line(this.x, -10, this.x, pheight + 10);
             pop();
-            line(this.x, this.y + (h / 2), this.x + w / 2  +h/2 + 20, this.y + (h / 2));
-            line(this.x, this.y - (h / 2), this.x + w / 2 + h/2 + 20, this.y - (h / 2));
+            line(this.x, this.y + (h / 2), this.x + w / 2 + h / 2 + 20, this.y + (h / 2));
+            line(this.x, this.y - (h / 2), this.x + w / 2 + h / 2 + 20, this.y - (h / 2));
             line(this.x + (w / 2), this.y, this.x + (w / 2), -35);
             line(this.x - (w / 2), this.y, this.x - (w / 2), -35);
-            let a = w/pheight*lrwidth*inchPerUnit;
-            let b = h/pheight*lrwidth*inchPerUnit;
+            let a = w / pheight * lrwidth * inchPerUnit;
+            let b = h / pheight * lrwidth * inchPerUnit;
             //drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a);
-            drawArrow(this.x + w / 2 + h/2 + 15, this.y, h, 10, false, b);
-            pointArrow(this, 'R'+(h/2*toInch).toFixed(3))
+            drawArrow(this.x + w / 2 + h / 2 + 15, this.y, h, 10, false, b);
+            pointArrow(this, 'R' + (h / 2 * toInch).toFixed(3))
             drawArrow(this.x, -30, w, 10, true, a);
-            
+
             textSize(TEXTSIZE);
             textAlign(CENTER, BOTTOM);
-            text((this.x*360/pwidth).toFixed(0) + '°', this.x, -11);
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);
         }
     }
-    getArea(){
-        return (this.h*toInch)*((this.h+this.w)*toInch);   
+    getArea() {
+        return (this.h * toInch) * ((this.h + this.w) * toInch);
     }
-    
+
 }
-class DemoRectangle extends Rectangle{
-    constructor(x,y,w,h){
-        super(x,y,w,h);
+class DemoRectangle extends Rectangle {
+    constructor(x, y, w, h) {
+        super(x, y, w, h);
     }
-    dragged(){}
-    textSelected(){}
+    dragged() {}
+    textSelected() {}
 }
-class DemoCircle extends Circle{
-    constructor(x,y,r){
-        super(x,y,r);
+class DemoCircle extends Circle {
+    constructor(x, y, r) {
+        super(x, y, r);
     }
-    dragged(){}
-    textSelected(){}
+    dragged() {}
+    textSelected() {}
 }
-class DemoVertical_Slot extends Vertical_Slot{
-    constructor(x,y,w,h){
-        super(x,y,w,h);
+class DemoVertical_Slot extends Vertical_Slot {
+    constructor(x, y, w, h) {
+        super(x, y, w, h);
     }
-    dragged(){}
-    textSelected(){}
+    dragged() {}
+    textSelected() {}
 }
-class DemoHorizontal_Slot extends Horizontal_Slot{
-    constructor(x,y,w,h){
-        super(x,y,w,h);
+class DemoHorizontal_Slot extends Horizontal_Slot {
+    constructor(x, y, w, h) {
+        super(x, y, w, h);
     }
-    dragged(){}
-    textSelected(){}
+    dragged() {}
+    textSelected() {}
 }
-class ScrollBar extends Shape{r
-    constructor(x,y){
+class ScrollBar extends Shape {
+    r
+    constructor(x, y) {
         super();
         this.x = x;
         this.y = y;
@@ -382,127 +398,154 @@ class ScrollBar extends Shape{r
         this.type = 'scrollbar';
         this.SELECTMOVE = 125;
         this.SELECTRESIZE = 200;
-        this.SELECTPADDING = 3/ 5;
-        this.arrowIndex = 0; 
+        this.SELECTPADDING = 3 / 5;
+        this.arrowIndex = 0;
     }
-    draw(){
+    draw() {
         rectMode(CENTER);
         rect(this.x, this.y, this.w, this.h)
-        
+
     }
-    dragged(mx){
+    dragged(mx) {
         const w = this.w;
         this.x = mx;
-        if(mx - w/2 < 0)this.x = w/2;
-        if(mx + w/2 > width)this.x = width-w/2;
+        if (mx - w / 2 < 0) this.x = w / 2;
+        if (mx + w / 2 > width) this.x = width - w / 2;
     }
-    mapTo(value, low1 = this.w/2, high1 = width-this.w/2, low2 = 0, high2 = -pwidth+canvasWidth-mright-mleft) {
+    mapTo(value, low1 = this.w / 2, high1 = width - this.w / 2, low2 = 0, high2 = -pwidth + canvasWidth - mright - mleft) {
         return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
     }
 }
 
-class Terminal extends Shape{
-    constructor(x,y,flipped,type='Object',rotation = 0){
-        super(x,y);
+class Terminal extends Shape {
+    constructor(x, y, flipped, type = 'Object', rotation = 0) {
+        super(x, y);
         this.connectors = ['borne', 'armature_bx_vertical', 'armature_bx_horizontal']
-        this.rotation = 0; 
+        this.rotation = 0;
         this.type = type;
-        if(type=='barrel'||type=='barrel_screw'){
+        if (type == 'barrel' || type == 'barrel_screw') {
             this.flipped = flipped;
-            this.h = 0.75 / (lrwidth*inchPerUnit)*pheight;
-            this.w = 0.75 / (lrlength*inchPerUnit)*pwidth;
-            if(this.flipped)this.tx=this.x+this.w/2;
-            if(!this.flipped)this.tx=this.x-this.w/2;
-        }
-        else if(type=='wire_tress'){
+            this.h = 0.68 / (lrwidth * inchPerUnit) * pheight;
+            this.w = 0.68 / (lrlength * inchPerUnit) * pwidth;
+            if (this.flipped) this.tx = this.x + this.w / 2;
+            if (!this.flipped) this.tx = this.x - this.w / 2;
+        } else if (type == 'wire_tress') {
             this.tx = x;
-            this.h = 0.31 / (lrwidth*inchPerUnit)*pheight;
-            this.w = 0.31 / (lrlength*inchPerUnit)*pwidth;
-        }
-        else if(type=='boitier'){
+            this.h = 0.31 / (lrwidth * inchPerUnit) * pheight;
+            this.w = 0.31 / (lrlength * inchPerUnit) * pwidth;
+        } else if (type == 'boitier') {
             this.tx = x;
-            this.h = 1.5 / (lrwidth*inchPerUnit)*pheight;
-            this.w = 1.5 / (lrlength*inchPerUnit)*pwidth;
-        }
-        else{
+            this.h = 1.5 / (lrwidth * inchPerUnit) * pheight;
+            this.w = 1.5 / (lrlength * inchPerUnit) * pwidth;
+        } else {
             this.tx = x;
-            this.h = 0.66 / (lrwidth*inchPerUnit)*pheight;
-            this.w = 0.66 / (lrlength*inchPerUnit)*pwidth;
+            this.h = 0.66 / (lrwidth * inchPerUnit) * pheight;
+            this.w = 0.66 / (lrlength * inchPerUnit) * pwidth;
         }
         this.rotation = rotation;
     }
 
-    draw(){
+    draw() {
         push()
-        if(this.type=='barrel'||this.type=='barrel_screw') {
-        }
-        else this.tx = this.x;
-        fill(100,100,255);
+        if (this.type == 'barrel' || this.type == 'barrel_screw') {} else this.tx = this.x;
+        fill(100, 100, 255);
         rectMode(CENTER);
-        if(this.type=='barrel'||this.type=='barrel_screw'){
-            rect(this.tx,this.y,this.w,this.h);
-        }
-        else if(this.type=='boitier'){
+        if (this.type == 'barrel' || this.type == 'barrel_screw') {
+            rect(this.tx, this.y, this.w, this.h);
+        } else if (this.type == 'boitier') {
             rect(this.x, this.y, this.w, this.h)
-        }
-        else{
-            ellipse(this.x,this.y,this.w,this.h);
+        } else {
+            ellipse(this.x, this.y, this.w, this.h);
         }
         pop()
     }
-    
-    isInOuterBoundary(mx, my){
-        if(mx<this.tx+this.w/2&&mx>this.tx-this.w/2&&
-            my<this.y+this.h/2&&my>this.y-this.h/2)return true;
+
+    isInOuterBoundary(mx, my) {
+        if (mx < this.tx + this.w / 2 && mx > this.tx - this.w / 2 &&
+            my < this.y + this.h / 2 && my > this.y - this.h / 2) return true;
         else return false;
     }
-    isInInnerBoundary(){
+    isInInnerBoundary() {
         return true;
     }
-   
-    textSelected(){
-        if(this.selected||seeAll){
-            push()
-            fill(0)
-            pointArrow(this, this.type);
-            pop()
-        }
-    }
 
-    dragged(mx, my){
-        if(this.selectMode==='move'){
-            if(!(this.type=='barrel'||this.type=='barrel_screw'))this.x = mx;
+    dragged(mx, my) {
+        if (this.selectMode === 'move') {
+            if (!(this.type == 'barrel' || this.type == 'barrel_screw')) this.x = mx;
             this.y = my;
         }
         selectHole(this);
+    }
+
+    textSelected(){
+        super.textSelected();
+        if(this.selected||seeAll)this.showDirection();
+    }
+    showDirection(){
+        const x = this.tx;
+        const y = this.y;
+        if(this.rotation == 0 && !this.flipped){
+            line(x+10, y, x+5, y-5)
+            line(x+10, y, x+5, y+5)
+        }
+        if(this.rotation == PI/2){
+            line(x, y-10, x+5, y-5)
+            line(x, y-10, x-5, y-5)
+        }
+        if(this.rotation == PI || this.flipped){
+            line(x-10, y, x-5, y-5)
+            line(x-10, y, x-5, y+5)
+        }
+        if(this.rotation == PI*3/2){
+            line(x, y+10, x-5, y+5)
+            line(x, y+10, x+5, y+5)
+        }
     }
 }
 
 /** Connectors are paired with an id and that id is used to attach them together so that if one is changed,
  * the other may also be affected by the same change. 
  */
-class Connector extends Terminal{
-    constructor(x,y,flipped,type='Object',rotation = 0,id){
-        super(x,y,flipped,type,rotation);
+class Connector extends Terminal {
+    constructor(x, y, flipped, type = 'Object', rotation = 0, id) {
+        super(x, y, flipped, type, rotation);
         this.con;
         this.id = id;
     }
-    appendCon(con){
+    appendCon(con) {
         this.con = con;
     }
 
-    draw(){
+    draw() {
         push();
-        fill(50,168,135)
+        fill(50, 168, 135)
         rectMode(CENTER);
-        rect(this.tx,this.y,this.w,this.h);
+        rect(this.tx, this.y, this.w, this.h);
         pop();
     }
-    dragged(mx, my){
-        if(this.selectMode==='move'){
+    dragged(mx, my) {
+        if (this.selectMode === 'move') {
             this.y = my;
-            if(this.con!=null)this.con.y = my;
+            if (this.con != null) this.con.y = my;
         }
         selectHole(this);
     }
+    textSelected() {
+        if (this.selected || seeAll) {
+            push()
+            fill(0)
+            const x = this.x
+            const y = this.y
+            const w = this.w
+            line(x,-10, x, pheight+10)
+            line(this.tx-w/2-10, y, this.tx+w/2+10, y)
+            pointArrow(this, this.type);
+            textSize(TEXTSIZE);
+            textAlign(CENTER, BOTTOM);
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);
+            pop()
+        }
+        if(this.selected||seeAll)this.showDirection();
+    }
+    
 }
