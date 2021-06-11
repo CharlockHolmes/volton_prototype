@@ -536,15 +536,17 @@ function pointArrow(hole,txt){
 
 }
 document.getElementById('exportholes').onclick = ()=>{
+    const DECI = 1000;
     let holes = [];
     let tring = loadedRing;
     tring.terminals = [];
     tring.connectors = [];
     shapes.forEach(shape => {
+        const yoff = Math.round((shape.y/pheight*lrwidth- lrwidth/2)*DECI)/DECI;
         if(shape.type === 'circle'){
             holes.push({
                 r: shape.w/2/(pheight)*(lrwidth),
-                offset:shape.y/pheight*lrwidth- lrwidth/2,
+                offset:yoff,
                 angle: shape.x*2*PI/pwidth,
                 type: shape.type,
             })
@@ -552,7 +554,7 @@ document.getElementById('exportholes').onclick = ()=>{
         else if(shape.type === 'rect'){
             holes.push({
                 r: {w:shape.w/2/(pheight)*(lrwidth), h:shape.h/2/(pheight)*(lrwidth)},
-                offset:shape.y/pheight*lrwidth- lrwidth/2,
+                offset:yoff,
                 angle: shape.x*2*PI/pwidth,
                 type: shape.type,
             })
@@ -561,21 +563,21 @@ document.getElementById('exportholes').onclick = ()=>{
             randID = (Math.random()*10000).toFixed(0);
             holes.push({
                 r: {w:shape.w/2/(pheight)*(lrwidth), h:shape.h/2/(pheight)*(lrwidth)},
-                offset:shape.y/pheight*lrwidth- lrwidth/2,
+                offset:yoff,
                 angle: shape.x*2*PI/pwidth,
                 type: 'rect',
                 id:'v_slot'+randID
             })
             holes.push({
                 r: shape.w/2/(pheight)*(lrwidth),
-                offset:(shape.y+shape.h/2)/pheight*lrwidth- lrwidth/2,
+                offset:Math.round(((shape.y+shape.h/2)/pheight*lrwidth- lrwidth/2)*DECI)/DECI,
                 angle: shape.x*2*PI/pwidth,
                 type: 'circle',
                 id:'v_slot'+randID
             })
             holes.push({
                 r: shape.w/2/(pheight)*(lrwidth),
-                offset:(shape.y-shape.h/2)/pheight*lrwidth- lrwidth/2,
+                offset:Math.round(((shape.y-shape.h/2)/pheight*lrwidth- lrwidth/2)*DECI)/DECI,
                 angle: shape.x*2*PI/pwidth,
                 type: 'circle',
                 id:'v_slot'+randID
@@ -585,21 +587,21 @@ document.getElementById('exportholes').onclick = ()=>{
             randID = (Math.random()*10000).toFixed(0);
             holes.push({
                 r: {w:shape.w/2/(pheight)*(lrwidth), h:shape.h/2/(pheight)*(lrwidth)},
-                offset:shape.y/pheight*lrwidth- lrwidth/2,
+                offset:yoff,
                 angle: shape.x*2*PI/pwidth,
                 type: 'rect',
                 id:'h_slot'+randID
             })
             holes.push({
                 r: shape.h/2/(pheight)*(lrwidth),
-                offset:shape.y/pheight*lrwidth- lrwidth/2,
+                offset:yoff,
                 angle: (shape.x+shape.w/4)*2*PI/pwidth,
                 type: 'circle',
                 id:'h_slot'+randID
             })
             holes.push({
                 r: shape.h/2/(pheight)*(lrwidth),
-                offset:shape.y/pheight*lrwidth- lrwidth/2,
+                offset:yoff,
                 angle: (shape.x-shape.w/4)*2*PI/pwidth,
                 type: 'circle',
                 id:'h_slot'+randID
@@ -609,7 +611,7 @@ document.getElementById('exportholes').onclick = ()=>{
             tring.connectors.push({
                 angle: shape.x*2*PI/pwidth,
                 flipped: shape.flipped,
-                offset: shape.y/pheight*lrwidth- lrwidth/2,
+                offset:yoff,
                 type:shape.type,
                 id:shape.id,
             })
@@ -617,7 +619,7 @@ document.getElementById('exportholes').onclick = ()=>{
         else if(true){ /* if its a terminal */
             tring.terminals.push({
                 angle: shape.x*2*PI/pwidth,
-                offset: shape.y/pheight*lrwidth- lrwidth/2,
+                offset:yoff,
                 type:shape.type,
                 rotation:shape.rotation,
             })

@@ -213,7 +213,7 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
 loadSavedValues();
 function loadSavedValues(){
     const ur = new URL (window.location)
-    const decoded = decodeURI(ur.toString());
+    const decoded = ur.toString();
     const decodedURL = new URL(decoded)
 
     const tr = decodedURL.searchParams.get('ring');
@@ -313,7 +313,7 @@ function loadDefaultBorniersSettings(){
 function addConnector(angle = 0, offset = 0, type = 'barrel', flipped = false,id=10) {
     r.addConnector({
         angle: angle,
-        offset: offset,
+        offset: Math.round(offset*1000)/1000,
         type: type,
         flipped: flipped,
         id:id
@@ -324,7 +324,7 @@ function addConnector(angle = 0, offset = 0, type = 'barrel', flipped = false,id
 function addTerminal(angle = Math.PI / 2, offset = 0, type='bornier',rotation = 0) {
     r.addTerminal({
         angle: angle,
-        offset: offset,
+        offset: Math.round(offset*1000)/1000,
         type:type,
         rotation:rotation
     });
@@ -343,7 +343,7 @@ function addRingGap(begin = -0.25, end = 0.25, type = 'barrel') {
 }
 
 function addRingHole(angle = Math.PI, radius = 0.2, offset = 0, type = 'circle') {
-    r.addHole(angle, radius, offset, type);
+    r.addHole(angle, radius, Math.round(offset*1000)/1000, type);
 }
 //Ø°
 
@@ -799,9 +799,9 @@ function generateURL(ring = r){
     //navigator.clipboard.writeText(encode);
     let ur = new URL(window.location);
     ur.searchParams.set('ring', ringt);
-    ur.searchParams.set('camera', camt);
+    //ur.searchParams.set('camera', camt);
     console.log(ur.toString());
-    const encoded = encodeURI(ur.toString());
+    const encoded = ur.toString();
     console.log(encoded);
     navigator.clipboard.writeText(encoded);
     window.location.replace(encoded)
