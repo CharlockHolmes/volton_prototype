@@ -212,11 +212,16 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
 /** This is where we check if preexisting values exist and load them if they do. */
 loadSavedValues();
 function loadSavedValues(){
-    const tr = getParameter('ring');
+    const ur = new URL (window.location)
+    const decoded = decodeURI(ur.toString());
+    const decodedURL = new URL(decoded)
+
+    const tr = decodedURL.searchParams.get('ring');
     if(tr!=null){
+        console.log('saved from link')
         const ring = JSON.parse(tr);
         r = new Ring(ring.radius, ring.width, ring.resolution,ring.holes, ring.gaps, ring.terminals, ring.connectors, ring.thickness);
-        const tc = getParameter('camera')
+        const tc = decodedURL.searchParams.get('camera')
         if(tc!=null){
             loadCamera(tc)
             const position = {position:{x : camera.position.x, y:camera.position.y, z:camera.position.z},rotation:{_x: camera.rotation._x, _y:camera.rotation._y, _z:camera.rotation._z}, target:{x:controls.target.x, y:controls.target.y, z:controls.target.z}}
@@ -788,7 +793,18 @@ function generateURL(ring = r){
     str+= '&camera='+camt;
 
     const hostname = window.location.host;
-    navigator.clipboard.writeText(hostname+'/'+str);
-    window.location.search = str;
+    const urltemp = 'http://'+hostname+'/'+str;
+    //const encode = encodeURI(urltemp);
+    //console.log(urltemp)
+    //navigator.clipboard.writeText(encode);
+    let ur = new URL(window.location);
+    ur.searchParams.set('ring', ringt);
+    ur.searchParams.set('camera', camt);
+    console.log(ur.toString());
+    const encoded = encodeURI(ur.toString());
+    console.log(encoded);
+    navigator.clipboard.writeText(encoded);
+    window.location.replace(encoded)
+    // window.location.search = str;
 }
 
