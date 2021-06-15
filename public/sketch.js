@@ -321,7 +321,6 @@ function addConnector(angle = 0, offset = 0, type = 'barrel', flipped = false,id
     })
 }
 
-
 function addTerminal(angle = Math.PI / 2, offset = 0, type='bornier',rotation = 0) {
     r.addTerminal({
         angle: angle,
@@ -741,9 +740,6 @@ function saveRing(ring=r){
 function ringAnglesToDeg(ring = r){
     ring.holes.forEach(h=>{  
         h.angle = Math.round(h.angle*1000)/1000
-        h.x = Math.round(1000*h.x)/1000
-        h.y = Math.round(1000*h.y)/1000
-        h.z = Math.round(1000*h.z)/1000
         h.r.w = Math.round(1000*h.r.w)/1000
         h.r.h = Math.round(1000*h.r.h)/1000
         if(h.r.w==undefined&&h.r.h==undefined)h.r = Math.round(1000*h.r)/1000
@@ -758,6 +754,11 @@ function ringAnglesToDeg(ring = r){
         h.angle = Math.round(h.angle*1000)/1000
         h.rotation = Math.round(h.rotation*1000)/1000
     })
+    ring.gaps.forEach(h=>{
+        h.begin = Math.round(h.begin*1000)/1000
+        h.end = Math.round(h.end*1000)/1000
+    })
+    
 }
 
 /**

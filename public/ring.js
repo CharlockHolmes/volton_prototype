@@ -32,6 +32,7 @@ class Ring {
         const positions = new Float32Array(nfloats);
         const indices = [];
         const t = this.thickness;
+        const radius = this.radius;
 
         let posNdx = 0;
         let ndx = 0;
@@ -89,7 +90,7 @@ class Ring {
                 this.holes.forEach(holeSearch => {
                     const v0 = new THREE.Vector3(x0, y0, holeSearch.offset);
                     const v1 = new THREE.Vector3(x1, y1, holeSearch.offset);
-                    const c = new THREE.Vector3(holeSearch.x, holeSearch.y, holeSearch.offset);
+                    const c = new THREE.Vector3(Math.cos(holeSearch.angle)*radius, Math.sin(holeSearch.angle)*radius, holeSearch.offset);
                     if(holeSearch.type=='circle'){
                         if (v0.distanceTo(c) < holeSearch.r)
                             if (v1.distanceTo(c) < holeSearch.r) {
@@ -119,7 +120,7 @@ class Ring {
                     function circleHole(s_hole,sel){
                         v0.push(new THREE.Vector3(x0, y0, s_hole.offset));
                         v1.push(new THREE.Vector3(x1, y1, s_hole.offset));
-                        c.push(new THREE.Vector3(s_hole.x, s_hole.y, s_hole.offset));
+                        c.push(new THREE.Vector3(Math.cos(s_hole.angle)*radius, Math.sin(s_hole.angle)*radius, s_hole.offset));
                         xyDelta.push(c[sel].distanceTo(v0[sel]));
                         const alpha = Math.asin(xyDelta[sel] / s_hole.r);
                         if (s_hole.type == 'rect') hz.push(s_hole.r.h);
@@ -130,7 +131,7 @@ class Ring {
                     function rectHole(s_hole,sel){
                         v0.push(new THREE.Vector3(x0, y0, s_hole.offset));
                         v1.push(new THREE.Vector3(x1, y1, s_hole.offset));
-                        c.push(new THREE.Vector3(s_hole.x, s_hole.y, s_hole.offset));
+                        c.push(new THREE.Vector3(Math.cos(s_hole.angle)*radius, Math.sin(s_hole.angle)*radius, s_hole.offset));
                         xyDelta.push(c[sel].distanceTo(v0[sel]));
                         hz.push(s_hole.r.h);
                     }
@@ -139,8 +140,8 @@ class Ring {
                     let leftCheck = true; 
                     let rightCheck = true; 
                     holeOnPass.forEach(hole=>{
-                        if(hole.z - hole.r <= z0  )leftCheck = false;
-                        if(hole.z + hole.r >= z1 )rightCheck = false;
+                        if(hole.offset - hole.r <= z0  )leftCheck = false;
+                        if(hole.offset + hole.r >= z1 )rightCheck = false;
                     });
                     if(leftCheck)makeFoldover(z0);
                     if(rightCheck)makeFoldover(z1)
@@ -246,9 +247,6 @@ class Ring {
         
         if(type=='rect'){
             this.holes.push({
-                x: Math.cos(angle) * this.radius,
-                y: Math.sin(angle) * this.radius,
-                z: offset,
                 r: {w:r.w, h:r.h},
                 offset: offset,
                 type: type,
@@ -259,9 +257,6 @@ class Ring {
         }
         else{
             this.holes.push({
-                x: Math.cos(angle) * this.radius,
-                y: Math.sin(angle) * this.radius,
-                z: offset,
                 r: r,
                 offset: offset,
                 type: type,
@@ -307,7 +302,7 @@ class Ring {
     /** USed to count for the space needed for the ring, goes through a simulation of all vertexes needed. */
     countFloats(res, width) {
         const resolution = res;
-
+        const radius = this.radius;
         let posNdx = 0;
         let a = 0;
         let da = 2 * Math.PI / resolution;
@@ -327,7 +322,7 @@ class Ring {
             this.holes.forEach(holeSearch => {
                 const v0 = new THREE.Vector3(x0, y0, holeSearch.offset);
                 const v1 = new THREE.Vector3(x1, y1, holeSearch.offset);
-                const c = new THREE.Vector3(holeSearch.x, holeSearch.y, holeSearch.offset);
+                const c = new THREE.Vector3(Math.cos(holeSearch.angle)*radius, Math.sin(holeSearch.angle)*radius, holeSearch.offset);
                 if (v0.distanceTo(c) < holeSearch.r)
                     if (v1.distanceTo(c) < holeSearch.r) {
                         holeOnPass.push(holeSearch);
