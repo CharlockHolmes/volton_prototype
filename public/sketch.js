@@ -227,6 +227,7 @@ function loadSavedValues(){
             const position = {position:{x : camera.position.x, y:camera.position.y, z:camera.position.z},rotation:{_x: camera.rotation._x, _y:camera.rotation._y, _z:camera.rotation._z}, target:{x:controls.target.x, y:controls.target.y, z:controls.target.z}}
             localStorage.setItem('camera', JSON.stringify(position));
         }
+        ringAnglesToDeg(r);
         localStorage.setItem('ring', JSON.stringify(r));
         loadCustomItem();
     }
@@ -468,7 +469,6 @@ function clearObjectArrays(){
  */
 function loadCustomItem() {
     loadMenuThings();
-    //loadDefaultBorniersSettings();
     initGlobals();
     addRingClock();
 
@@ -727,6 +727,7 @@ document.getElementById('save').onclick = () =>{
  */
 function saveRing(ring=r){
     const position = {position:{x : camera.position.x, y:camera.position.y, z:camera.position.z},rotation:{_x: camera.rotation._x, _y:camera.rotation._y, _z:camera.rotation._z}, target:{x:controls.target.x, y:controls.target.y, z:controls.target.z}}
+    ringAnglesToDeg(ring);
     localStorage.setItem('camera', JSON.stringify(position));
     localStorage.setItem('ring', JSON.stringify(ring));
     reloadCount++;
@@ -736,6 +737,29 @@ function saveRing(ring=r){
     }
     else loadCustomItem();
 }
+/** Converts all ring angles to degrees*/
+function ringAnglesToDeg(ring = r){
+    ring.holes.forEach(h=>{  
+        h.angle = Math.round(h.angle*1000)/1000
+        h.x = Math.round(1000*h.x)/1000
+        h.y = Math.round(1000*h.y)/1000
+        h.z = Math.round(1000*h.z)/1000
+        h.r.w = Math.round(1000*h.r.w)/1000
+        h.r.h = Math.round(1000*h.r.h)/1000
+        if(h.r.w==undefined&&h.r.h==undefined)h.r = Math.round(1000*h.r)/1000
+    })
+    ring.connectors.forEach(h=>{ 
+        
+        h.angle = Math.round(h.angle*1000)/1000
+        h.rotation = Math.round(h.rotation*1000/1000)
+        
+    })
+    ring.terminals.forEach(h=>{
+        h.angle = Math.round(h.angle*1000)/1000
+        h.rotation = Math.round(h.rotation*1000)/1000
+    })
+}
+
 /**
  * Loads the camera position then loads the ring.
  */
@@ -787,6 +811,7 @@ function loadCamera(cameraImports){
 function generateURL(ring = r){
     const position = {position:{x : camera.position.x, y:camera.position.y, z:camera.position.z},rotation:{_x: camera.rotation._x, _y:camera.rotation._y, _z:camera.rotation._z}, target:{x:controls.target.x, y:controls.target.y, z:controls.target.z}}
     const camt = JSON.stringify(position);
+    ringAnglesToDeg();
     const ringt = JSON.stringify(ring);
     let str = '?';
     str+= 'ring=' + ringt;
@@ -804,7 +829,7 @@ function generateURL(ring = r){
     const encoded = ur.toString();
     console.log(encoded);
     navigator.clipboard.writeText(encoded);
-    window.location.replace(encoded)
+    //window.location.replace(encoded)
     // window.location.search = str;
 }
 

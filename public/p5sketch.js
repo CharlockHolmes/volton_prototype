@@ -29,6 +29,7 @@ let xtrans = 0;
 
 const toInch = 1/pheight*lrwidth*inchPerUnit;
 const toDeg = 360/pwidth;
+const toRad = 2*PI/pwidth;
 
 let seeAll = false; 
 const STARTHIDDEN = true;
@@ -230,9 +231,16 @@ function keyPressed() {
             shapes.splice(ind, 1);
         }
     })
-    itemKeyOperation(key);
+    if(keyIsDown(17)){
+        ctrlKeyOperation(key)
+    }
+    else itemKeyOperation(key);
 }
-
+function ctrlKeyOperation(key){
+    if(key=='z'||key=='Z'){
+        console.log('go back')
+    }
+}
 function itemKeyOperation(key) {
     if (key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'e' || key == 'q' || key=='r' || key =='f') {
         shapes.forEach((shape) => {
@@ -536,98 +544,7 @@ function pointArrow(hole,txt){
 
 }
 document.getElementById('exportholes').onclick = ()=>{
-    const DECI = 1000;
-    let holes = [];
-    let tring = loadedRing;
-    tring.terminals = [];
-    tring.connectors = [];
-    shapes.forEach(shape => {
-        const yoff = Math.round((shape.y/pheight*lrwidth- lrwidth/2)*DECI)/DECI;
-        if(shape.type === 'circle'){
-            holes.push({
-                r: shape.w/2/(pheight)*(lrwidth),
-                offset:yoff,
-                angle: shape.x*2*PI/pwidth,
-                type: shape.type,
-            })
-        }
-        else if(shape.type === 'rect'){
-            holes.push({
-                r: {w:shape.w/2/(pheight)*(lrwidth), h:shape.h/2/(pheight)*(lrwidth)},
-                offset:yoff,
-                angle: shape.x*2*PI/pwidth,
-                type: shape.type,
-            })
-        }
-        else if(shape.type === 'v_slot'){
-            randID = (Math.random()*10000).toFixed(0);
-            holes.push({
-                r: {w:shape.w/2/(pheight)*(lrwidth), h:shape.h/2/(pheight)*(lrwidth)},
-                offset:yoff,
-                angle: shape.x*2*PI/pwidth,
-                type: 'rect',
-                id:'v_slot'+randID
-            })
-            holes.push({
-                r: shape.w/2/(pheight)*(lrwidth),
-                offset:Math.round(((shape.y+shape.h/2)/pheight*lrwidth- lrwidth/2)*DECI)/DECI,
-                angle: shape.x*2*PI/pwidth,
-                type: 'circle',
-                id:'v_slot'+randID
-            })
-            holes.push({
-                r: shape.w/2/(pheight)*(lrwidth),
-                offset:Math.round(((shape.y-shape.h/2)/pheight*lrwidth- lrwidth/2)*DECI)/DECI,
-                angle: shape.x*2*PI/pwidth,
-                type: 'circle',
-                id:'v_slot'+randID
-            })
-        }
-        else if(shape.type === 'h_slot'){
-            randID = (Math.random()*10000).toFixed(0);
-            holes.push({
-                r: {w:shape.w/2/(pheight)*(lrwidth), h:shape.h/2/(pheight)*(lrwidth)},
-                offset:yoff,
-                angle: shape.x*2*PI/pwidth,
-                type: 'rect',
-                id:'h_slot'+randID
-            })
-            holes.push({
-                r: shape.h/2/(pheight)*(lrwidth),
-                offset:yoff,
-                angle: (shape.x+shape.w/4)*2*PI/pwidth,
-                type: 'circle',
-                id:'h_slot'+randID
-            })
-            holes.push({
-                r: shape.h/2/(pheight)*(lrwidth),
-                offset:yoff,
-                angle: (shape.x-shape.w/4)*2*PI/pwidth,
-                type: 'circle',
-                id:'h_slot'+randID
-            })
-        }
-        else if(shape.type=='barrel'||shape.type=='barrel_screw'){ /* if its a connector */
-            tring.connectors.push({
-                angle: shape.x*2*PI/pwidth,
-                flipped: shape.flipped,
-                offset:yoff,
-                type:shape.type,
-                id:shape.id,
-            })
-        }
-        else if(true){ /* if its a terminal */
-            tring.terminals.push({
-                angle: shape.x*2*PI/pwidth,
-                offset:yoff,
-                type:shape.type,
-                rotation:shape.rotation,
-            })
-        }
-    })
-    localStorage.setItem('ring', JSON.stringify(tring));
-    localStorage.setItem('holes', JSON.stringify(holes));
-    loadRingFromDrawing();
+    holeExport();  
 }
 
 document.getElementById('importholes').onclick = ()=>{
@@ -642,6 +559,7 @@ function selectHole(hole){
     document.getElementById('h_offset').value = (hole.y*toInch).toFixed(3); 
     if(hole.rotation!=null)document.getElementById('h_rotation').value =(hole.rotation*360/(2*PI));
 }  
+
 document.getElementById('submitholebutton').onclick = ()=>{
     shapes.forEach(hole=>{
         if(hole.selected){
@@ -659,15 +577,17 @@ function itemImport(){
     let con = loadedRing.connectors
     let ter = loadedRing.terminals
     con.forEach(c=>{
-        let pos = rad_to_XY_pixels(c.angle, c.offset)
+        let pos = rad_to_XY_pixels(c.angle, c.offset);
         shapes.push(new Connector(pos.x, pos.y, c.flipped,c.type,undefined,c.id))
     })
     ter.forEach(t=>{
-        let pos = rad_to_XY_pixels(t.angle, t.offset)
+        let pos= rad_to_XY_pixels(t.angle, t.offset);
+        
         shapes.push(new Terminal(pos.x, pos.y, t.flipped,t.type,t.rotation))
     })
     attachConnectors();
 }
+
 function attachConnectors(){
     shapes.forEach(s=>{
         let id=0;
@@ -680,11 +600,107 @@ function attachConnectors(){
         })
     })        
 }
+function holeExport(){
+    const DECI = 1000;
+    let holes = [];
+    let tring = loadedRing;
+    tring.terminals = [];
+    tring.connectors = [];
+    shapes.forEach(shape => {
+        const yoff = Math.round((shape.y/pheight*lrwidth- lrwidth/2)*DECI)/DECI;
+        if(shape.type === 'circle'){
+            holes.push({
+                r: shape.w/2/(pheight)*(lrwidth),
+                offset:yoff,
+                angle: shape.x*toRad,
+                type: shape.type,
+            })
+        }
+        else if(shape.type === 'rect'){
+            holes.push({
+                r: {w:shape.w/2/(pheight)*(lrwidth), h:shape.h/2/(pheight)*(lrwidth)},
+                offset:yoff,
+                angle: shape.x*toRad,
+                type: shape.type,
+            })
+        }
+        else if(shape.type === 'v_slot'){
+            randID = (Math.random()*10000).toFixed(0);
+            holes.push({
+                r: {w:shape.w/2/(pheight)*(lrwidth), h:shape.h/2/(pheight)*(lrwidth)},
+                offset:yoff,
+                angle: shape.x*toRad,
+                type: 'rect',
+                id:'v_slot'+randID
+            })
+            holes.push({
+                r: shape.w/2/(pheight)*(lrwidth),
+                offset:Math.round(((shape.y+shape.h/2)/pheight*lrwidth- lrwidth/2)*DECI)/DECI,
+                angle: shape.x*toRad,
+
+                type: 'circle',
+                id:'v_slot'+randID
+            })
+            holes.push({
+                r: shape.w/2/(pheight)*(lrwidth),
+                offset:Math.round(((shape.y-shape.h/2)/pheight*lrwidth- lrwidth/2)*DECI)/DECI,
+                angle: shape.x*toRad,
+                type: 'circle',
+                id:'v_slot'+randID
+            })
+        }
+        else if(shape.type === 'h_slot'){
+            randID = (Math.random()*10000).toFixed(0);
+            holes.push({
+                r: {w:shape.w/2/(pheight)*(lrwidth), h:shape.h/2/(pheight)*(lrwidth)},
+                offset:yoff,
+                angle: shape.x*toRad,
+                type: 'rect',
+                id:'h_slot'+randID
+            })
+            holes.push({
+                r: shape.h/2/(pheight)*(lrwidth),
+                offset:yoff,
+                angle: (shape.x+shape.w/4)*toRad,
+                type: 'circle',
+                id:'h_slot'+randID
+            })
+            holes.push({
+                r: shape.h/2/(pheight)*(lrwidth),
+                offset:yoff,
+                angle:(shape.x-shape.w/4)*toDeg,
+                type: 'circle',
+                id:'h_slot'+randID
+            })
+        }
+        else if(shape.type=='barrel'||shape.type=='barrel_screw'){ /* if its a connector */
+            tring.connectors.push({
+                angle: shape.x*toRad,
+                flipped: shape.flipped,
+                offset:yoff,
+                type:shape.type,
+                id:shape.id,
+            })
+        }
+        else if(true){ /* if its a terminal */
+            tring.terminals.push({
+                angle: shape.x*toRad,
+                offset:yoff,
+                type:shape.type,
+                rotation:shape.rotation,
+            })
+        }
+    })
+    localStorage.setItem('ring', JSON.stringify(tring));
+    localStorage.setItem('holes', JSON.stringify(holes));
+    loadRingFromDrawing();
+}
 function holeImport(){
     let holes = loadedRing.holes;
     shapes = [];
     holes.forEach(hole =>{
         const pos = rad_to_XY_pixels(hole.angle, hole.offset);
+
         if(hole.id==undefined){
             if(hole.type=='circle'){
                 shapes.push(new Circle(pos.x, pos.y, 
@@ -711,6 +727,14 @@ function holeImport(){
 
 function rad_to_XY_pixels(angle,offset){
     let xp = angle/(2*PI)*pwidth;
+    let yp = (lrwidth/2+offset)/lrwidth*pheight;
+
+    if(xp<0)xp = pwidth + xp;
+    return {x:xp, y:yp};
+}
+
+function deg_to_XY_pixels(angle,offset){
+    let xp = angle/360*pwidth;
     let yp = (lrwidth/2+offset)/lrwidth*pheight;
 
     if(xp<0)xp = pwidth + xp;
