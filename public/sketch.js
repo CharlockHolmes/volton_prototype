@@ -267,7 +267,7 @@ function loadDefaultConnectorSettings(){
     r.gaps.forEach(gap => {
         const randId0 = (Math.random()*10000000).toFixed();
         const randId1 = (Math.random()*10000000).toFixed();
-        if (gap.type == 'barrel') {
+        if (gap.t == 'barrel') {
             const conNum = Math.floor(r.width);
             if(conNum%2==1){
                 if(gapcnt%2==0){
@@ -311,21 +311,21 @@ function loadDefaultBorniersSettings(){
     addTerminal(Math.PI / 3, -r.width/4)
 }
 
-function addConnector(angle = 0, offset = 0, type = 'barrel', flipped = false,id=10) {
+function addConnector(angle = 0, offset = 0, t = 'barrel', flipped = false,id=10) {
     r.addConnector({
         angle: angle,
         offset: Math.round(offset*1000)/1000,
-        type: type,
+        t: t,
         flipped: flipped,
         id:id
     })
 }
 
-function addTerminal(angle = Math.PI / 2, offset = 0, type='bornier',rotation = 0) {
+function addTerminal(angle = Math.PI / 2, offset = 0, t='bornier',rotation = 0) {
     r.addTerminal({
         angle: angle,
         offset: Math.round(offset*1000)/1000,
-        type:type,
+        t:t,
         rotation:rotation
     });
 }
@@ -338,12 +338,12 @@ function clearHoles() {
     r.holes = [];
 }
 
-function addRingGap(begin = -0.25, end = 0.25, type = 'barrel') {
-    r.addGap(begin, end, type);
+function addRingGap(begin = -0.25, end = 0.25, t = 'barrel') {
+    r.addGap(begin, end, t);
 }
 
-function addRingHole(angle = Math.PI, radius = 0.2, offset = 0, type = 'circle') {
-    r.addHole(angle, radius, Math.round(offset*1000)/1000, type);
+function addRingHole(angle = Math.PI, radius = 0.2, offset = 0, t = 'circle') {
+    r.addHole(angle, radius, Math.round(offset*1000)/1000, t);
 }
 //Ø°
 
@@ -472,10 +472,10 @@ function loadCustomItem() {
     addRingClock();
 
     r.terminals.forEach(borne => {
-        loadTerminal(borne.offset, r.radius, borne.angle,borne.type,borne.rotation);
+        loadTerminal(borne.offset, r.radius, borne.angle,borne.t,borne.rotation);
     });
     r.connectors.forEach(connector => {
-        loadConnector(connector.offset, r.radius, connector.angle, connector.type, connector.flipped);
+        loadConnector(connector.offset, r.radius, connector.angle, connector.t, connector.flipped);
     });
     addLight(-2, 20, 10);
     //addLight(2, -20, 3);
@@ -736,27 +736,28 @@ function saveRing(ring=r){
     }
     else loadCustomItem();
 }
+const dcmpts =100000;
 /** Converts all ring angles to degrees*/
 function ringAnglesToDeg(ring = r){
     ring.holes.forEach(h=>{  
-        h.angle = Math.round(h.angle*1000)/1000
-        h.r.w = Math.round(1000*h.r.w)/1000
-        h.r.h = Math.round(1000*h.r.h)/1000
-        if(h.r.w==undefined&&h.r.h==undefined)h.r = Math.round(1000*h.r)/1000
+        h.angle = Math.round(h.angle*dcmpts)/dcmpts
+        h.r.w = Math.round(dcmpts*h.r.w)/dcmpts
+        h.r.h = Math.round(dcmpts*h.r.h)/dcmpts
+        if(h.r.w==undefined&&h.r.h==undefined)h.r = Math.round(dcmpts*h.r)/dcmpts
     })
     ring.connectors.forEach(h=>{ 
         
-        h.angle = Math.round(h.angle*1000)/1000
+        h.angle = Math.round(h.angle*dcmpts)/dcmpts
         h.rotation = Math.round(h.rotation*1000/1000)
         
     })
     ring.terminals.forEach(h=>{
-        h.angle = Math.round(h.angle*1000)/1000
+        h.angle = Math.round(h.angle*dcmpts)/dcmpts
         h.rotation = Math.round(h.rotation*1000)/1000
     })
     ring.gaps.forEach(h=>{
-        h.begin = Math.round(h.begin*1000)/1000
-        h.end = Math.round(h.end*1000)/1000
+        h.begin = Math.round(h.begin*dcmpts)/dcmpts
+        h.end = Math.round(h.end*dcmpts)/dcmpts
     })
     
 }
@@ -787,7 +788,7 @@ function loadRingFromDrawing(){
     let tr = JSON.parse(localStorage.getItem('ring'));
     r.holes = [];
     holes.forEach(h=>{
-        r.addHole(h.angle, h.r, h.offset, h.type, h.id);
+        r.addHole(h.angle, h.r, h.offset, h.t, h.id);
     })
     tr.holes = r.holes;
     saveRing(tr);
@@ -828,7 +829,6 @@ function generateURL(ring = r){
     //ur.searchParams.set('camera', camt);
     console.log(ur.toString());
     const encoded = ur.toString();
-    console.log(encoded);
     navigator.clipboard.writeText(encoded);
     //window.location.replace(encoded)
     // window.location.search = str;

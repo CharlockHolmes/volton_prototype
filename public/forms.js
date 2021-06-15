@@ -8,7 +8,7 @@ class Shape {
         this.color = 255;
         this.selected = false;
         this.selectMode = '';
-        this.type = '';
+        this.t = '';
         this.SELECTMOVE = 125;
         this.SELECTRESIZE = 200;
         this.SELECTPADDING = 3 / 5;
@@ -33,7 +33,7 @@ class Shape {
             const w = this.w
             line(x,-10, x, pheight+10)
             line(x-w/2-10, y, x+w/2+10, y)
-            pointArrow(this, this.type);
+            pointArrow(this, this.t);
             textSize(TEXTSIZE);
             textAlign(CENTER, BOTTOM);
             text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);
@@ -80,7 +80,7 @@ class Shape {
                 sd = this.y + this.h / 2;
             const dx = Math.abs(this.x - mx);
             const dy = Math.abs(this.y - my);
-            if (this.type === 'circle' || centerResize == true) {
+            if (this.t === 'circle' || centerResize == true) {
                 if (dx > dy) {
                     this.w = 2 * dx;
                     this.h = this.w;
@@ -147,7 +147,7 @@ class Shape {
 class Rectangle extends Shape {
     constructor(x, y, w, h) {
         super(x, y);
-        this.type = 'rect';
+        this.t = 'rect';
         this.w = w;
         this.h = h;
     }
@@ -201,7 +201,7 @@ class Rectangle extends Shape {
 class Circle extends Shape {
     constructor(x, y, d = 50) {
         super(x, y);
-        this.type = 'circle';
+        this.t = 'circle';
         this.w = d;
         this.h = d;
     }
@@ -252,7 +252,7 @@ class Circle extends Shape {
 class Vertical_Slot extends Rectangle {
     constructor(x, y, w, h) {
         super(x, y, w, h);
-        this.type = 'v_slot';
+        this.t = 'v_slot';
     }
     draw() {
         push();
@@ -309,7 +309,7 @@ class Vertical_Slot extends Rectangle {
 class Horizontal_Slot extends Rectangle {
     constructor(x, y, w, h) {
         super(x, y, w, h);
-        this.type = 'h_slot';
+        this.t = 'h_slot';
     }
     draw() {
         push();
@@ -395,7 +395,7 @@ class ScrollBar extends Shape {
         this.color = 255;
         this.selected = false;
         this.selectMode = '';
-        this.type = 'scrollbar';
+        this.t = 'scrollbar';
         this.SELECTMOVE = 125;
         this.SELECTRESIZE = 200;
         this.SELECTPADDING = 3 / 5;
@@ -416,24 +416,23 @@ class ScrollBar extends Shape {
         return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
     }
 }
-
 class Terminal extends Shape {
-    constructor(x, y, flipped, type = 'Object', rotation = 0) {
+    constructor(x, y, flipped, t = 'Object', rotation = 0) {
         super(x, y);
         this.connectors = ['borne', 'armature_bx_vertical', 'armature_bx_horizontal']
         this.rotation = 0;
-        this.type = type;
-        if (type == 'barrel' || type == 'barrel_screw') {
+        this.t = t;
+        if (t == 'barrel' || t == 'barrel_screw') {
             this.flipped = flipped;
             this.h = 0.68 / (lrwidth * inchPerUnit) * pheight;
             this.w = 0.68 / (lrlength * inchPerUnit) * pwidth;
             if (this.flipped) this.tx = this.x + this.w / 2;
             if (!this.flipped) this.tx = this.x - this.w / 2;
-        } else if (type == 'wire_tress') {
+        } else if (t == 'wire_tress') {
             this.tx = x;
             this.h = 0.31 / (lrwidth * inchPerUnit) * pheight;
             this.w = 0.31 / (lrlength * inchPerUnit) * pwidth;
-        } else if (type == 'boitier') {
+        } else if (t == 'boitier') {
             this.tx = x;
             this.h = 1.5 / (lrwidth * inchPerUnit) * pheight;
             this.w = 1.5 / (lrlength * inchPerUnit) * pwidth;
@@ -447,12 +446,12 @@ class Terminal extends Shape {
 
     draw() {
         push()
-        if (this.type == 'barrel' || this.type == 'barrel_screw') {} else this.tx = this.x;
+        if (this.t == 'barrel' || this.t == 'barrel_screw') {} else this.tx = this.x;
         fill(100, 100, 255);
         rectMode(CENTER);
-        if (this.type == 'barrel' || this.type == 'barrel_screw') {
+        if (this.t == 'barrel' || this.t == 'barrel_screw') {
             rect(this.tx, this.y, this.w, this.h);
-        } else if (this.type == 'boitier') {
+        } else if (this.t == 'boitier') {
             rect(this.x, this.y, this.w, this.h)
         } else {
             ellipse(this.x, this.y, this.w, this.h);
@@ -471,7 +470,7 @@ class Terminal extends Shape {
 
     dragged(mx, my) {
         if (this.selectMode === 'move') {
-            if (!(this.type == 'barrel' || this.type == 'barrel_screw')) this.x = mx;
+            if (!(this.t == 'barrel' || this.t == 'barrel_screw')) this.x = mx;
             this.y = my;
         }
         selectHole(this);
@@ -484,19 +483,19 @@ class Terminal extends Shape {
     showDirection(){
         const x = this.tx;
         const y = this.y;
-        if(this.rotation == 0 && !this.flipped){
+        if(Math.round(this.rotation*360/(2*PI)) == 0 && !this.flipped){
             line(x+10, y, x+5, y-5)
             line(x+10, y, x+5, y+5)
         }
-        if(this.rotation == PI/2){
+        if(Math.round(this.rotation*360/(2*PI)) == 90){
             line(x, y-10, x+5, y-5)
             line(x, y-10, x-5, y-5)
         }
-        if(this.rotation == PI || this.flipped){
+        if(Math.round(this.rotation*360/(2*PI)) ==180 || this.flipped){
             line(x-10, y, x-5, y-5)
             line(x-10, y, x-5, y+5)
         }
-        if(this.rotation == PI*3/2){
+        if(Math.round(this.rotation*360/(2*PI)) ==270){
             line(x, y+10, x-5, y+5)
             line(x, y+10, x+5, y+5)
         }
@@ -507,13 +506,13 @@ class Terminal extends Shape {
  * the other may also be affected by the same change. 
  */
 class Connector extends Terminal {
-    constructor(x, y, flipped, type = 'Object', rotation = 0, id) {
-        super(x, y, flipped, type, rotation);
-        this.con;
+    constructor(x, y, flipped, t = 'Object', rotation = 0, id) {
+        super(x, y, flipped, t, rotation);
+        this.conn=null;
         this.id = id;
     }
-    appendCon(con) {
-        this.con = con;
+    appendCon(conn) {
+        this.conn = conn;
     }
 
     draw() {
@@ -526,7 +525,7 @@ class Connector extends Terminal {
     dragged(mx, my) {
         if (this.selectMode === 'move') {
             this.y = my;
-            if (this.con != null) this.con.y = my;
+            if (this.conn != null) this.conn.y = my;
         }
         selectHole(this);
     }
@@ -539,7 +538,7 @@ class Connector extends Terminal {
             const w = this.w
             line(x,-10, x, pheight+10)
             line(this.tx-w/2-10, y, this.tx+w/2+10, y)
-            pointArrow(this, this.type);
+            pointArrow(this, this.t);
             textSize(TEXTSIZE);
             textAlign(CENTER, BOTTOM);
             text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);

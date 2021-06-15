@@ -49,14 +49,14 @@ class Ring {
          */
         if (this.gaps.length > 0) {
             this.gaps.forEach(gap => {
-                if (gap.type == 'screws') {
+                if (gap.t == 'screws') {
                     const x0 = Math.cos(gap.begin) * this.radius;
                     const y0 = Math.sin(gap.begin) * this.radius;
                     const z0 = -width / 2;
                     const z1 = width / 2;
                     makeTriangle(x0, y0, z0, x0 * 1.08, y0 * 1.08, z1);
                 }
-                if (gap.type == 'screws') {
+                if (gap.t == 'screws') {
                     const x0 = Math.cos(gap.end) * this.radius;
                     const y0 = Math.sin(gap.end) * this.radius;
                     const z0 = -width / 2;
@@ -91,13 +91,13 @@ class Ring {
                     const v0 = new THREE.Vector3(x0, y0, holeSearch.offset);
                     const v1 = new THREE.Vector3(x1, y1, holeSearch.offset);
                     const c = new THREE.Vector3(Math.cos(holeSearch.angle)*radius, Math.sin(holeSearch.angle)*radius, holeSearch.offset);
-                    if(holeSearch.type=='circle'){
+                    if(holeSearch.t=='circle'){
                         if (v0.distanceTo(c) < holeSearch.r)
                             if (v1.distanceTo(c) < holeSearch.r) {
                                 holeOnPass.push(holeSearch);
                             }
                     }
-                    if(holeSearch.type=='rect'){
+                    if(holeSearch.t=='rect'){
                         if (v0.distanceTo(c) < holeSearch.r.w)
                             if (v1.distanceTo(c) < holeSearch.r.w) {
                             holeOnPass.push(holeSearch);
@@ -113,8 +113,8 @@ class Ring {
                     const hz = [];
                     //Here look for every hole in the section
                     for (let ii = 0; ii < holeOnPass.length; ii++) {
-                        if(holeOnPass[ii].type=='circle')circleHole(holeOnPass[ii],ii);
-                        if(holeOnPass[ii].type=='rect')rectHole(holeOnPass[ii],ii);
+                        if(holeOnPass[ii].t=='circle')circleHole(holeOnPass[ii],ii);
+                        if(holeOnPass[ii].t=='rect')rectHole(holeOnPass[ii],ii);
 
                     }
                     function circleHole(s_hole,sel){
@@ -123,7 +123,7 @@ class Ring {
                         c.push(new THREE.Vector3(Math.cos(s_hole.angle)*radius, Math.sin(s_hole.angle)*radius, s_hole.offset));
                         xyDelta.push(c[sel].distanceTo(v0[sel]));
                         const alpha = Math.asin(xyDelta[sel] / s_hole.r);
-                        if (s_hole.type == 'rect') hz.push(s_hole.r.h);
+                        if (s_hole.t == 'rect') hz.push(s_hole.r.h);
                         else if (xyDelta[sel] == 0) {
                             hz.push(s_hole.r);
                         } else hz.push(xyDelta[sel] / Math.tan(alpha));
@@ -243,13 +243,13 @@ class Ring {
             indices
         };
     }
-    addHole(angle, r, offset, type = 'circle',id = undefined) {
+    addHole(angle, r, offset, t = 'circle',id = undefined) {
         
-        if(type=='rect'){
+        if(t=='rect'){
             this.holes.push({
                 r: {w:r.w, h:r.h},
                 offset: offset,
-                type: type,
+                t: t,
                 angle:angle,
                 id:id,
                 
@@ -259,7 +259,7 @@ class Ring {
             this.holes.push({
                 r: r,
                 offset: offset,
-                type: type,
+                t: t,
                 angle:angle,
                 id:id,
             });
@@ -270,22 +270,22 @@ class Ring {
      * To add a custom gap
      * @param {} begin The start angle, lower value in RAD
      * @param {*} end  The end angle, higher value in RAD
-     * @param {*} type Screw or barrel
+     * @param {*} t Screw or barrel
      * @param {*} options Enter a 'position' for angle begining and a 'angle' for the gap angle
      */
-    addGap(begin, end, type = 'screws',options) {
+    addGap(begin, end, t = 'screws',options) {
         if(options!==undefined&&options.position!==undefined&&options.angle!==undefined){
             this.gaps.push({
                 begin: options.position - options.angle/2,
                 end: options.position + options.angle/2,
-                type : type,
+                t : t,
             })
         }
         else{
             this.gaps.push({
                 begin: begin,
                 end: end,
-                type: type
+                t: t
             });
         }
     }
