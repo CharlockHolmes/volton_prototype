@@ -241,9 +241,10 @@ function ctrlKeyOperation(key){
     }
 }
 function itemKeyOperation(key) {
-    if (key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'e' || key == 'q' || key=='r' || key =='f') {
+    if (key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'e' || key == 'q' || key=='r' || key =='f'|| key =='c'|| key =='m') {
         shapes.forEach((shape) => {
             if (shape.selected) {
+                add_z_save();
                 switch (key) {
                     case "w":
                         shape.y -= 1;
@@ -268,6 +269,13 @@ function itemKeyOperation(key) {
                         break;
                     case 'f':
                         shape.h-=1;
+                        break;
+                    case 'c':
+                        shape.center();
+                        break;
+                    case 'm':
+                        shapes.push(shape.mirror());
+                        break;
                     default:
                         break;
                 }
@@ -294,7 +302,6 @@ function doubleClicked() {
 
 function mousePressed() {
     if(mouseX > 0 && mouseX < width &&mouseY>0 && mouseY<height){
-        add_z_save();
         shapes.forEach(shape => {
             shape.unSelect();
         });
@@ -304,20 +311,27 @@ function mousePressed() {
         demoShapes.forEach(shape =>{
             if(shape.isInOuterBoundary(mouseX,mouseY)){
                 if(shape.t=='rect'){
+                    add_z_save();
                     //console.log('make new rectangle')
                     if(lastClick.show){
                         shapes.push(new Rectangle(lastClick.x,lastClick.y, 50,50))
                     }
-                    else shapes.push(new Rectangle(50,50, 50,50))
+                    else {
+                        shapes.push(new Rectangle(50,50, 50,50))
+                    }
                 }
                 if(shape.t=='circle'){
+                    add_z_save();
                     //console.log('make new circle')
                     if(lastClick.show){
                         shapes.push(new Circle(lastClick.x,lastClick.y, 50))
                     }
-                    else shapes.push(new Circle(50,50, 50))
+                    else {
+                        shapes.push(new Circle(50,50, 50))
+                    }
                 }
                 if(shape.t=='v_slot'){
+                    add_z_save();
                     //console.log('make new v_slot')
                     if(lastClick.show){
                         shapes.push(new Vertical_Slot(lastClick.x,lastClick.y, 50,50))
@@ -325,6 +339,7 @@ function mousePressed() {
                     else shapes.push(new Vertical_Slot(50,50,50,50))
                 }
                 if(shape.t=='h_slot'){
+                    add_z_save();
                     //console.log('make new h_slot')
                     if(lastClick.show){
                         shapes.push(new Horizontal_Slot(lastClick.x,lastClick.y, 50,50))
@@ -339,6 +354,7 @@ function mousePressed() {
             const mx = mouseX - mleft-xtrans;
             const my = mouseY - mtop;
             if(!oneClicked&&shape.isInOuterBoundary(mx,my)){
+                add_z_save();
                 shape.select(mx, my);
                 oneClicked = true;
             }
@@ -358,9 +374,9 @@ function mousePressed() {
         else if(!oneClicked){
             lastClick.x = mouseX - mleft - xtrans;
             lastClick.y = mouseY - mtop;
-            lastClick.show = true
+            lastClick.show = true;
         }
-}
+    }
 }
 function mouseReleased(){
     scrollbar.selected = false;
@@ -745,6 +761,8 @@ function add_z_save(obj = shapes){
     if(!hidden){
         let things = []
         things =  JSON.parse(localStorage.getItem('shapesZ'));
+        
+        clear_begining_of_array(things, 20);
         if(things==null)things = []
         let temp = [];
         obj.forEach(shape =>{
@@ -808,4 +826,18 @@ function get_z_save(){
         localStorage.setItem('shapesZ', JSON.stringify(temp));
         attachConnectors();
     }
+}
+/**
+ * Cleans up the beginning of the array by clearing it. 
+ * @param {*} array     The array to clear
+ * @param {*} maxLength The maximal length of the array
+ * @returns The changed array
+ */
+function clear_begining_of_array(array,maxLength = 25){
+    let tpv = true; 
+    while(tpv){
+        if(array.length>maxLength)array.shift()
+        else tpv = false;
+    }
+    return array
 }

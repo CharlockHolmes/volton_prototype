@@ -195,7 +195,7 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
             gltf.scene.traverse(o=>{
                 if(o.material!=null){
                     //o.material.color = {r:0.25, g:0.84,b:0.68};
-                    o.material.color = {r:0.8, g:0.8,b:0.88};
+                    o.material.color = {r:0.99, g:0.99,b:0.99};
                 }
             })
             scene.add(gltf.scene);

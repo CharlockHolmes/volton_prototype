@@ -143,6 +143,20 @@ class Shape {
         this.h = h;
         this.rotation = rotation;
     }
+    center(){
+        this.y = pheight/2;
+    }
+
+    mirror(){
+        let tx
+        if(this.x < pwidth/2) tx = this.x+pwidth/2
+        else tx = this.x-pwidth/2
+        return  this.copySelf(tx)
+        
+    }
+    copySelf(x){
+
+    }
 }
 class Rectangle extends Shape {
     constructor(x, y, w, h) {
@@ -194,7 +208,9 @@ class Rectangle extends Shape {
             text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);
         }
     }
-
+    copySelf(x){
+        return new Rectangle(x, this.y, this.w, this.h)   
+    }
 
 }
 
@@ -247,7 +263,9 @@ class Circle extends Shape {
         if (x > this.x - this.w / 2 - 10 && x < this.x + this.w / 2 + 35 && this.y > y && (this.selected || seeAll)) return this.y;
         return false;
     }
-
+    copySelf(x){
+        return new Circle(x, this.y, this.w)   
+    }
 }
 class Vertical_Slot extends Rectangle {
     constructor(x, y, w, h) {
@@ -305,6 +323,9 @@ class Vertical_Slot extends Rectangle {
                 return true;
         return false;
     }
+    copySelf(x){
+        return new Vertical_Slot(x, this.y, this.w, this.h)   
+    }
 }
 class Horizontal_Slot extends Rectangle {
     constructor(x, y, w, h) {
@@ -353,6 +374,10 @@ class Horizontal_Slot extends Rectangle {
     }
     getArea() {
         return (this.h * toInch) * ((this.h + this.w) * toInch);
+    }
+
+    copySelf(x){
+        return new Horizontal_Slot(x, this.y, this.w, this.h)   
     }
 
 }
@@ -500,6 +525,9 @@ class Terminal extends Shape {
             line(x, y+10, x+5, y+5)
         }
     }
+    copySelf(x){
+        return new Terminal(x, this.y, this.flipped, this.t, this.rotation)   
+    }
 }
 
 /** Connectors are paired with an id and that id is used to attach them together so that if one is changed,
@@ -546,5 +574,17 @@ class Connector extends Terminal {
         }
         if(this.selected||seeAll)this.showDirection();
     }
-    
+    mirror(){
+        let ty
+        if(this.y < pheight/2) ty = this.y+pheight/2
+        else ty = this.y-pheight/2
+        return this.copySelf(ty)
+    }
+    copySelf(y){
+        return new Connector(this.x, y, this.flipped, this.t, this.rotation, Math.round(Math.random()*10000))   
+    } 
+    center(){
+        this.y = pheight/2; 
+        this.conn.y = this.y;
+    }  
 }
