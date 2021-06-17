@@ -38,6 +38,8 @@ let loaderCount = 0; // Used in the GUI
 let inverseConnectors = false;
 let gui = new dat.GUI();
 
+const dcmpts =100000;
+
 let renderer;
 
 const textureLoader = new THREE.TextureLoader();
@@ -238,7 +240,9 @@ function loadSavedValues(){
         loadCustomItem();
     }
     else {
+        console.log('ayyaya')
         defaultRing();
+        saveRing();
     }
 }
 
@@ -735,7 +739,6 @@ function saveRing(ring=r){
     }
     else loadCustomItem();
 }
-const dcmpts =100000;
 /** Converts all ring angles to degrees*/
 function ringAnglesToDeg(ring = r){
     ring.holes.forEach(h=>{  
