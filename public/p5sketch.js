@@ -42,6 +42,24 @@ let demoShapes = [];
 let lastClick = {x:0,y:0, show:false}
 
 let scrollbar;
+let barrel_img;
+let barrel_f_img;
+let barrel_screw_img;
+let barrel_screw_f_img;
+let barrel_qlatch_img;
+let barrel_qlatch_f_img;
+let terminal_img;
+let hash_img;
+function preload(){
+    barrel_img = loadImage('ressources/2dtextures/barrel.png');
+    barrel_f_img= loadImage('ressources/2dtextures/barrel_f.png');
+    barrel_screw_img= loadImage('ressources/2dtextures/barrel_screw.png');
+    barrel_screw_f_img= loadImage('ressources/2dtextures/barrel_screw_f.png');
+    barrel_qlatch_img= loadImage('ressources/2dtextures/barrel_qlatch.png');
+    barrel_qlatch_f_img= loadImage('ressources/2dtextures/barrel_qlatch_f.png');
+    terminal_img= loadImage('ressources/2dtextures/terminal.png');
+    hash_img = loadImage('ressources/2dtextures/hash.png');
+}
 
 function setup() {
     p5canvas = createCanvas(canvasWidth, canvasHeight);
@@ -181,12 +199,15 @@ function drawGaps(){
         let ge = gap.end/(2*PI)*pwidth; 
         fill(255,10,10);
         if(gb>=0&&ge>=0){  
-            rect(gb, 0, ge-gb,pheight);
+            //rect(gb, 0, ge-gb,pheight);
+            image(hash_img,gb, 0, ge-gb,pheight);
         }
         else if(gb<0&&ge>=0){
             gb += pwidth;
-            rect(gb,0, pwidth-gb, pheight);
-            rect(0,0, ge, pheight);
+            image(hash_img,gb,0, pwidth-gb, pheight);
+            image(hash_img,0,0, ge, pheight);
+            // rect(gb,0, pwidth-gb, pheight);
+            // rect(0,0, ge, pheight);
         }
     })
     pop();
@@ -512,6 +533,8 @@ function pointArrow(hole,txt){
             }
             break;
         case 'boitier':
+        case 'barrel_qlatch':
+        case 'barrel_screw_qlatch':
         case 'barrel':
         case 'barrel_screw':
             if(hole.arrowIndex==0){
@@ -598,7 +621,6 @@ function itemImport(){
     })
     ter.forEach(t=>{
         let pos= rad_to_XY_pixels(t.angle, t.offset);
-        
         shapes.push(new Terminal(pos.x, pos.y, t.flipped,t.t,t.rotation))
     })
     attachConnectors();
@@ -610,6 +632,13 @@ function attachConnectors(){
         if(s.t=='barrel')id = s.id;
         shapes.forEach(other=>{
             if(other.t=='barrel_screw'&&other.id==id){
+                other.appendCon(s);
+                s.appendCon(other);
+            }
+        })
+        if(s.t=='barrel_qlatch')id = s.id;
+        shapes.forEach(other=>{
+            if(other.t=='barrel_screw_qlatch'&&other.id==id){
                 other.appendCon(s);
                 s.appendCon(other);
             }
@@ -689,7 +718,7 @@ function holeExport(){
                 id:'h_slot'+randID
             })
         }
-        else if(shape.t=='barrel'||shape.t=='barrel_screw'){ /* if its a connector */
+        else if(shape.t=='barrel'||shape.t=='barrel_screw'||shape.t=='barrel_qlatch'||shape.t=='barrel_screw_qlatch'){ /* if its a connector */
             tring.connectors.push({
                 angle: shape.x*toRad,
                 flipped: shape.flipped,
@@ -766,7 +795,7 @@ function add_z_save(obj = shapes){
         if(things==null)things = []
         let temp = [];
         obj.forEach(shape =>{
-            if(shape.t=='barrel'||shape.t=='barrel_screw'){ /* if its a connector */
+            if(shape.t=='barrel'||shape.t=='barrel_screw'||shape.t=='barrel_qlatch'||shape.t=='barrel_screw_qlatch'){ /* if its a connector */
                 temp.push({
                     x: shape.x,
                     flipped: shape.flipped,
@@ -819,7 +848,7 @@ function get_z_save(){
             else if(c.t=='rect')shapes.push(new Rectangle(c.x, c.y, c.w, c.h))
             else if(c.t=='v_slot')shapes.push(new Vertical_Slot(c.x, c.y, c.w, c.h))
             else if(c.t=='h_slot')shapes.push(new Horizontal_Slot(c.x, c.y, c.w, c.h))
-            else if(c.t=='barrel'||c.t=='barrel_screw')shapes.push(new Connector(c.x, c.y, c.flipped,c.t,undefined,c.id))
+            else if(c.t=='barrel'||c.t=='barrel_screw'||c.t=='barrel_qlatch'||c.t=='barrel_screw_qlatch')shapes.push(new Connector(c.x, c.y, c.flipped,c.t,undefined,c.id))
             else shapes.push(new Terminal(c.x, c.y, c.flipped,c.t,c.rotation))
         })
         console.log(temp)

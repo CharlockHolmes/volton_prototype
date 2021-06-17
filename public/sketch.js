@@ -115,8 +115,7 @@ function loadTerminal(offsetZ, radius, angle = Math.PI / 2,name = 'bornier', rot
             loadBasicGUI(gltf, num, name);
             //angle-=Math.PI/2;
     
-            if(name=='wire_tress')gltf.scene.scale.x = 0.008;
-            else gltf.scene.scale.x = 0.0125;
+            gltf.scene.scale.x = 0.0125;
             gltf.scene.scale.y = 0.0125;
             gltf.scene.scale.z = 0.0125;
 
@@ -180,14 +179,14 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
             gltf.scene.scale.y = 0.01;
             gltf.scene.scale.z = 0.01;
 
-            gltf.scene.position.x = Math.cos(angle) * radius*1.006;
-            gltf.scene.position.y = Math.sin(angle) * radius*1.006;
+            gltf.scene.position.x = Math.cos(angle) * radius*1.0064;
+            gltf.scene.position.y = Math.sin(angle) * radius*1.0064;
             gltf.scene.position.z = offsetZ;
-            if(flipped && name=='barrel')angle +=0.1;
-            else if(name=='barrel')angle-=0.1;
+            if(flipped && (name=='barrel'||name=='barrel_qlatch'))angle +=CONNECTOR_ANGLE_OFFSET/r.radius;
+            else if(name=='barrel'||name=='barrel_qlatch')angle-=CONNECTOR_ANGLE_OFFSET/r.radius;
             
-            if(flipped && name=='barrel_screw')angle +=0.1;
-            else if(name=='barrel_screw')angle-=0.1;
+            if(flipped && (name=='barrel_screw'||name=='barrel_screw_qlatch'))angle +=CONNECTOR_ANGLE_OFFSET/r.radius
+            else if(name=='barrel_screw'||name=='barrel_screw_qlatch')angle-=CONNECTOR_ANGLE_OFFSET/r.radius;
 
 
             gltf.scene.rotation.z = angle - Math.PI / 2;
@@ -271,8 +270,8 @@ function loadDefaultConnectorSettings(){
             const conNum = Math.floor(r.width);
             if(conNum%2==1){
                 if(gapcnt%2==0){
-                    addConnector(gap.begin, 0, 'barrel_screw',false,randId0); 
-                    addConnector(gap.end, 0, 'barrel', true,randId0) 
+                    addConnector(gap.begin, 0, 'barrel_screw_qlatch',false,randId0); 
+                    addConnector(gap.end, 0, 'barrel_qlatch', true,randId0) 
                 }
                 if(gapcnt%2==1){
                     addConnector(gap.begin, 0, 'barrel',false,randId0); 

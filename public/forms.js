@@ -447,7 +447,7 @@ class Terminal extends Shape {
         this.connectors = ['borne', 'armature_bx_vertical', 'armature_bx_horizontal']
         this.rotation = 0;
         this.t = t;
-        if (t == 'barrel' || t == 'barrel_screw') {
+        if (t == 'barrel' || t == 'barrel_screw'||t=='barrel_qlatch'||t=='barrel_screw_qlatch') {
             this.flipped = flipped;
             this.h = 0.68 / (lrwidth * inchPerUnit) * pheight;
             this.w = 0.68 / (lrlength * inchPerUnit) * pwidth;
@@ -471,16 +471,16 @@ class Terminal extends Shape {
 
     draw() {
         push()
-        if (this.t == 'barrel' || this.t == 'barrel_screw') {} else this.tx = this.x;
+        this.tx = this.x;
         fill(100, 100, 255);
         rectMode(CENTER);
-        if (this.t == 'barrel' || this.t == 'barrel_screw') {
-            rect(this.tx, this.y, this.w, this.h);
-        } else if (this.t == 'boitier') {
+        imageMode(CENTER)
+        if (this.t == 'boitier') {
             rect(this.x, this.y, this.w, this.h)
         } else {
-            ellipse(this.x, this.y, this.w, this.h);
-        }
+            image(terminal_img, this.x, this.y, this.w, this.h);
+        } 
+            
         pop()
     }
 
@@ -495,7 +495,7 @@ class Terminal extends Shape {
 
     dragged(mx, my) {
         if (this.selectMode === 'move') {
-            if (!(this.t == 'barrel' || this.t == 'barrel_screw')) this.x = mx;
+            if (!(this.t == 'barrel' || this.t == 'barrel_screw'|| this.t == 'barrel_screw_qlatch'|| this.t == 'barrel_qlatch')) this.x = mx;
             this.y = my;
         }
         selectHole(this);
@@ -508,13 +508,15 @@ class Terminal extends Shape {
     showDirection(){
         const x = this.tx;
         const y = this.y;
+        const off = this.w;
         if(Math.round(this.rotation*360/(2*PI)) == 0 && !this.flipped){
-            line(x+10, y, x+5, y-5)
-            line(x+10, y, x+5, y+5)
+            line(x+(10+off/2), y, x+(5+off/2), y-5)
+            line(x+(10+off/2), y, x+(5+off/2), y+5)
         }
         if(Math.round(this.rotation*360/(2*PI)) == 90){
-            line(x, y-10, x+5, y-5)
-            line(x, y-10, x-5, y-5)
+            line(x, y-(10+off/2), x+5, y-(5+off/2))
+            line(x, y-(10+off/2), x-5, y-(5+off/2))
+            
         }
         if(Math.round(this.rotation*360/(2*PI)) ==180 || this.flipped){
             line(x-10, y, x-5, y-5)
@@ -547,7 +549,14 @@ class Connector extends Terminal {
         push();
         fill(50, 168, 135)
         rectMode(CENTER);
-        rect(this.tx, this.y, this.w, this.h);
+        imageMode(CENTER);
+        if(this.t =='barrel'&&!this.flipped)image(barrel_img, this.tx, this.y, this.w, this.h);
+        else if(this.t =='barrel'&&this.flipped)image(barrel_f_img, this.tx, this.y, this.w, this.h);
+        else if((this.t =='barrel_screw'||this.t=='barrel_screw_qlatch')&&!this.flipped)image(barrel_screw_img, this.tx, this.y, this.w, this.h);
+        else if((this.t =='barrel_screw'||this.t=='barrel_screw_qlatch')&&this.flipped)image(barrel_screw_f_img, this.tx, this.y, this.w, this.h);
+        else if(this.t =='barrel_qlatch'&&!this.flipped)image(barrel_qlatch_img, this.tx, this.y, this.w, this.h);
+        else if(this.t =='barrel_qlatch'&&this.flipped)image(barrel_qlatch_f_img, this.tx, this.y, this.w, this.h);
+        else rect(this.tx, this.y, this.w, this.h);
         pop();
     }
     dragged(mx, my) {
