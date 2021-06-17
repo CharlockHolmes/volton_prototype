@@ -519,12 +519,12 @@ class Terminal extends Shape {
             
         }
         if(Math.round(this.rotation*360/(2*PI)) ==180 || this.flipped){
-            line(x-10, y, x-5, y-5)
-            line(x-10, y, x-5, y+5)
+            line(x-(10+off/2), y, x-(5+off/2), y-5)
+            line(x-(10+off/2), y, x-(5+off/2), y+5)
         }
         if(Math.round(this.rotation*360/(2*PI)) ==270){
-            line(x, y+10, x-5, y+5)
-            line(x, y+10, x+5, y+5)
+            line(x, y+(10+off/2), x-5, y+(5+off/2))
+            line(x, y+(10+off/2), x+5, y+(5+off/2))
         }
     }
     copySelf(x){
