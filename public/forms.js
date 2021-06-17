@@ -449,8 +449,8 @@ class Terminal extends Shape {
         this.t = t;
         if (t == 'barrel' || t == 'barrel_screw'||t=='barrel_screw_qlatch') {
             this.flipped = flipped;
-            this.h = 0.7/ (lrwidth * inchPerUnit) * pheight;
-            this.w = 0.875 / (lrlength * inchPerUnit) * pwidth;
+            this.h = 0.6/ (lrwidth * inchPerUnit) * pheight;
+            this.w = 0.75 / (lrlength * inchPerUnit) * pwidth;
             if (this.flipped) this.tx = this.x + this.w / 2;
             if (!this.flipped) this.tx = this.x - this.w / 2;
         } else if (t=='barrel_qlatch') {
