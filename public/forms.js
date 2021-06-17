@@ -449,8 +449,8 @@ class Terminal extends Shape {
         this.t = t;
         if (t == 'barrel' || t == 'barrel_screw'||t=='barrel_screw_qlatch') {
             this.flipped = flipped;
-            this.h = 0.68 / (lrwidth * inchPerUnit) * pheight;
-            this.w = 0.68 / (lrlength * inchPerUnit) * pwidth;
+            this.h = 0.7/ (lrwidth * inchPerUnit) * pheight;
+            this.w = 0.875 / (lrlength * inchPerUnit) * pwidth;
             if (this.flipped) this.tx = this.x + this.w / 2;
             if (!this.flipped) this.tx = this.x - this.w / 2;
         } else if (t=='barrel_qlatch') {
@@ -459,18 +459,20 @@ class Terminal extends Shape {
             this.w = 0.9 / (lrlength * inchPerUnit) * pwidth;
             if (this.flipped) this.tx = this.x + this.w / 2;
             if (!this.flipped) this.tx = this.x - this.w / 2;
-        } else if (t == 'wire_tress') {
-            this.tx = x;
-            this.h = 0.31 / (lrwidth * inchPerUnit) * pheight;
-            this.w = 0.31 / (lrlength * inchPerUnit) * pwidth;
-        } else if (t == 'boitier') {
+        } 
+        // else if (t == 'wire_tress') {
+        //     this.tx = x;
+        //     this.h = 0.31 / (lrwidth * inchPerUnit) * pheight;
+        //     this.w = 0.31 / (lrlength * inchPerUnit) * pwidth;
+        // } 
+        else if (t == 'boitier') {
             this.tx = x;
             this.h = 1.5 / (lrwidth * inchPerUnit) * pheight;
             this.w = 1.5 / (lrlength * inchPerUnit) * pwidth;
         } else {
             this.tx = x;
-            this.h = 0.66 / (lrwidth * inchPerUnit) * pheight;
-            this.w = 0.66 / (lrlength * inchPerUnit) * pwidth;
+            this.h = 0.7 / (lrwidth * inchPerUnit) * pheight;
+            this.w = 0.7 / (lrlength * inchPerUnit) * pwidth;
         }
         this.rotation = rotation;
     }
@@ -483,8 +485,11 @@ class Terminal extends Shape {
         imageMode(CENTER)
         if (this.t == 'boitier') {
             rect(this.x, this.y, this.w, this.h)
+            ellipse(this.x, this.y, this.w*2/3, this.h*2/3)
         } else {
-            image(terminal_img, this.x, this.y, this.w, this.h);
+            ellipse(this.x, this.y, this.w, this.h)
+            ellipse(this.x, this.y, this.w*2/3, this.h*2/3)
+            //image(terminal_img, this.x, this.y, this.w, this.h);
         } 
             
         pop()
