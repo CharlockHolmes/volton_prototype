@@ -447,10 +447,16 @@ class Terminal extends Shape {
         this.connectors = ['borne', 'armature_bx_vertical', 'armature_bx_horizontal']
         this.rotation = 0;
         this.t = t;
-        if (t == 'barrel' || t == 'barrel_screw'||t=='barrel_qlatch'||t=='barrel_screw_qlatch') {
+        if (t == 'barrel' || t == 'barrel_screw'||t=='barrel_screw_qlatch') {
             this.flipped = flipped;
             this.h = 0.68 / (lrwidth * inchPerUnit) * pheight;
             this.w = 0.68 / (lrlength * inchPerUnit) * pwidth;
+            if (this.flipped) this.tx = this.x + this.w / 2;
+            if (!this.flipped) this.tx = this.x - this.w / 2;
+        } else if (t=='barrel_qlatch') {
+            this.flipped = flipped;
+            this.h = 0.68 / (lrwidth * inchPerUnit) * pheight;
+            this.w = 0.9 / (lrlength * inchPerUnit) * pwidth;
             if (this.flipped) this.tx = this.x + this.w / 2;
             if (!this.flipped) this.tx = this.x - this.w / 2;
         } else if (t == 'wire_tress') {
