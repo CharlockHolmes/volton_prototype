@@ -790,9 +790,9 @@ function add_z_save(obj = shapes){
     if(!hidden){
         let things = []
         things =  JSON.parse(localStorage.getItem('shapesZ'));
-        
-        clear_begining_of_array(things, 20);
         if(things==null)things = []
+        clear_begining_of_array(things, 20);
+        
         let temp = [];
         obj.forEach(shape =>{
             if(shape.t=='barrel'||shape.t=='barrel_screw'||shape.t=='barrel_qlatch'||shape.t=='barrel_screw_qlatch'){ /* if its a connector */
