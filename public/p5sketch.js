@@ -13,7 +13,7 @@ let aspectRatio = lrwidth / lrlength;
 let centerResize = false; 
 
 let canvasWidth = window.innerWidth*0.75; 
-let canvasHeight = canvasWidth*aspectRatio+200;
+let canvasHeight = canvasWidth*aspectRatio+400;
 let mtop = 75;
 let mleft = 25;
 let mright = 25;
@@ -50,6 +50,9 @@ let barrel_qlatch_img;
 let barrel_qlatch_f_img;
 let terminal_img;
 let hash_img;
+let scrollbar_img;
+let leftarrow_img;
+let rightarrow_img;
 function preload(){
     barrel_img = loadImage('ressources/2dtextures/barrel.png');
     barrel_f_img= loadImage('ressources/2dtextures/barrel_f.png');
@@ -59,6 +62,9 @@ function preload(){
     barrel_qlatch_f_img= loadImage('ressources/2dtextures/barrel_qlatch_f.png');
     terminal_img= loadImage('ressources/2dtextures/terminal.png');
     hash_img = loadImage('ressources/2dtextures/hash.png');
+    scrollbar_img = loadImage('ressources/2dtextures/scrollbar.png');
+    rightarrow_img = loadImage('ressources/2dtextures/rightarrow.png');
+    leftarrow_img = loadImage('ressources/2dtextures/leftarrow.png');
 }
 
 function setup() {
@@ -102,6 +108,9 @@ function draw() {
     drawLastClick();
     drawTextSelected();
     drawDegrees();
+    if(mouseIsPressed)
+        if(scrollbar.isInArrowBoxes(mouseX, mouseY))
+            scrollbar.clickArrowBoxes(mouseX, mouseY);
     scrollbar.draw();
     
 }
@@ -169,12 +178,15 @@ function drawDegrees(){
     translate(mleft, mtop);
     translate(xtrans,0);
     textAlign(CENTER,BOTTOM);
+    strokeWeight(1);
     for(let i =0; i<=pwidth; i+=pwidth/12){
         fill(0);
         text((i/pwidth*360).toFixed(0)+'°', i, pheight);
         fill('rgba(0,0,0,0.1)')
-        line(i, pheight-15, i, pheight-20);
-        line(i, 5, i, 10);
+        line(i, pheight-15, i, pheight-21);
+        line(i, 5, i, 11);
+        line(i+pwidth/24, pheight-15, i+pwidth/24, pheight-18);
+        line(i+pwidth/24, 5, i+pwidth/24,8);
     }
     pop();
 }
@@ -193,24 +205,42 @@ function drawContour(){
 function drawGaps(){
     push();
     rectMode(CORNER);
-    noStroke();
+    strokeWeight(1);
     lr.gaps.forEach(gap=>{
         let gb = gap.begin/(2*PI)*pwidth;
         let ge = gap.end/(2*PI)*pwidth; 
-        fill(255,10,10);
         if(gb>=0&&ge>=0){  
-            //rect(gb, 0, ge-gb,pheight);
-            image(hash_img,gb, 0, ge-gb,pheight);
+            fill(115,110,110);
+            rect(gb, 0, ge-gb,pheight);
+            if(seeAll)
+                text_with_angle('GAP', gb+(ge-gb)/2, pheight/2, -Math.PI/2)
+            //image(hash_img,gb, 0, ge-gb,pheight);
         }
         else if(gb<0&&ge>=0){
+            fill(115,110,110);
             gb += pwidth;
-            image(hash_img,gb,0, pwidth-gb, pheight);
-            image(hash_img,0,0, ge, pheight);
-            // rect(gb,0, pwidth-gb, pheight);
-            // rect(0,0, ge, pheight);
+            //image(hash_img,gb,0, pwidth-gb, pheight);
+            //image(hash_img,0,0, ge, pheight);
+            rect(gb,0, pwidth-gb, pheight);
+            rect(0,0, ge, pheight);
+            if(seeAll){
+                text_with_angle('GAP', gb+(pwidth-gb)/2, pheight/2, -Math.PI/2)
+                text_with_angle('GAP', ge/2, pheight/2, -Math.PI/2)
+            }
         }
     })
     pop();
+}
+function text_with_angle(msg='a', x, y = pheight/2, angle){
+    push()
+    translate(x,y)
+    fill(0);
+    textAlign(CENTER,CENTER)
+    stroke(1);
+    textSize(20);
+    rotate(angle);
+    text(msg,0, 0)
+    pop()
 }
 function calculatePower(){
 
@@ -295,7 +325,9 @@ function itemKeyOperation(key) {
                         shape.center();
                         break;
                     case 'm':
-                        shapes.push(shape.mirror());
+                        if(shape instanceof Connector)
+                            shapes.push(...shape.mirror());
+                        else shapes.push(shape.mirror());
                         break;
                     default:
                         break;
@@ -386,7 +418,10 @@ function mousePressed() {
             if(b.selected)return 1;
             return 0;
         })
-        if(mouseY>height-mbot){
+
+        if(scrollbar.isInArrowBoxes(mouseX, mouseY))scrollbar.clickArrowBoxes(mouseX, mouseY);
+
+        else if(mouseY>height-mbot){
             if(scrollbar.isInOuterBoundary(mouseX,mouseY)){
                 scrollbar.selected = true;
                 oneClicked = true; 
@@ -421,6 +456,12 @@ function mouseDragged() {
         //xtrans = pwidth-(mouseX/width*(pwidth-(canvasWidth-mleft-mright)/2))-pwidth+(canvasWidth-mleft-mright)/2;
      }
 
+}
+function mouseWheel(event){
+    if(!hidden){
+        if(mouseX>0&&mouseX<width&&mouseY>0&&mouseY<height)
+            return false;
+    }
 }
 
 

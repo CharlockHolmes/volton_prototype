@@ -155,24 +155,15 @@
 
 
 		<script>
-			const inchPerUnit = 3;
-			const MAX_MIN_TYPES = 'inch'
-			const MAX_WIDTH = 12; 
-			const MIN_WIDTH = 1;
-			const MIN_DIAMETER = 1;
-			const MAX_CIRCOMFERENCE_PER_SECTION = 96;
-			const MAX_DIAMETER_PER_SECTION = MAX_CIRCOMFERENCE_PER_SECTION / Math.PI;
-			const FOLDOVER_WIDTH = 0.3; 
-			const MIN_HOLE_OFFSET = 1/16;
-			const INCH_PER_UNIT = 3;
-			const PI = Math.PI;
-			const CONNECTOR_ANGLE_OFFSET = 0.1
+			
 			function getParameter(parameterName){
 				let parameters = new URLSearchParams( window.location.search)
 				return parameters.get( parameterName)
 			}
 		</script>
 
+		<script src="globalConst.js"></script>
+		<script src="globalVar.js"></script>
 		<script src="ring.js"></script>
 		<script src="sketch.js"></script>
 		<script src="p5sketch.js"></script>

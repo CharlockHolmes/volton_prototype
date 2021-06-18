@@ -410,7 +410,6 @@ class DemoHorizontal_Slot extends Horizontal_Slot {
     textSelected() {}
 }
 class ScrollBar extends Shape {
-    r
     constructor(x, y) {
         super();
         this.x = x;
@@ -427,18 +426,47 @@ class ScrollBar extends Shape {
         this.arrowIndex = 0;
     }
     draw() {
-        rectMode(CENTER);
-        rect(this.x, this.y, this.w, this.h)
+        imageMode(CENTER);
+        image(scrollbar_img,this.x, this.y, this.w, this.h)
+        image(leftarrow_img, mleft/2, height - mbot/2, mleft-4, mbot-4)
+        image(rightarrow_img, width - mright/2, height - mbot/2, mright-4, mbot-4)
+        // rectMode(CENTER);
+        // rect(this.x, this.y, this.w, this.h)
 
     }
     dragged(mx) {
         const w = this.w;
         this.x = mx;
-        if (mx - w / 2 < 0) this.x = w / 2;
-        if (mx + w / 2 > width) this.x = width - w / 2;
+        if (mx - w / 2 < 0+mleft) this.x = w / 2+mleft;
+        if (mx + w / 2 > width-mright) this.x = width -mright- w / 2;
     }
-    mapTo(value, low1 = this.w / 2, high1 = width - this.w / 2, low2 = 0, high2 = -pwidth + canvasWidth - mright - mleft) {
+    mapTo(value, low1 = this.w / 2+mleft, high1 = width - this.w / 2 -mright, low2 = 0, high2 = -pwidth + canvasWidth - mright - mleft) {
         return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+    }
+    isInArrowBoxes(x, y){
+        if(y<height&&y>height - mbot){
+            if(x>0&&x<width){
+                if(x<mleft){
+                    return true;
+                }
+                if(x>width-mright){
+                    return true;
+                }
+            }
+        }
+        return false; 
+    }
+    clickArrowBoxes(x, y){
+        if(y<height&&y>height - mbot){
+            if(x>0&&x<width){
+                if(x<mleft){
+                    this.dragged(this.x-3)
+                }
+                if(x>width-mright){
+                    this.dragged(this.x+3)
+                }
+            }
+        }
     }
 }
 class Terminal extends Shape {
@@ -598,10 +626,14 @@ class Connector extends Terminal {
         let ty
         if(this.y < pheight/2) ty = this.y+pheight/2
         else ty = this.y-pheight/2
-        return this.copySelf(ty)
+        const id = Math.round(Math.random()*10000);
+        let copy = [this.copySelf(ty,id), this.conn.copySelf(ty, id)];
+        copy[0].appendCon(copy[1]);
+        copy[1].appendCon(copy[0]);
+        return copy;
     }
-    copySelf(y){
-        return new Connector(this.x, y, this.flipped, this.t, this.rotation, Math.round(Math.random()*10000))   
+    copySelf(y,id){
+        return new Connector(this.x, y, this.flipped, this.t, this.rotation, id)   
     } 
     center(){
         this.y = pheight/2; 
