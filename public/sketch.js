@@ -251,11 +251,9 @@ function defaultRing() {
     //Create default ring
     createRing(1,1,1000);
     clearObjectArrays();
-
     // Adding default hole
     //addRingHole();
-    addRingGap(-Math.PI / 16, Math.PI / 16);
-    addRingGap(PI - PI / 16, PI + PI / 16);
+    loadDefaultGapSettings(2, 'barrel')
 
     //Add borniers
     
@@ -313,6 +311,19 @@ function loadDefaultBorniersSettings(){
     addTerminal(undefined, -r.width/4, 'armaturebx_v',3*PI/2)
     addTerminal(Math.PI / 3, -r.width/4)
 }
+/**
+ * Function to initialize the gaps according to the standard gap length with the diameter. 
+ */
+function loadDefaultGapSettings(nb = 2, type = 'barrel'){
+    const data = getStandardData(r.width*inchPerUnit, r.radius*2*inchPerUnit, 'barrel')
+    let gapOffset; 
+    if(nb==1)gapOffset = arcToDeg_offset(r.radius*inchPerUnit, data.gap.single);
+    if(nb>=2)gapOffset = arcToDeg_offset(r.radius*inchPerUnit, data.gap.multiple);
+    r.gaps = [];
+    for(let i=0, angle=0; i<nb; i++, angle+=2*PI/nb){
+        addRingGap(angle, gapOffset, type);
+    }
+}
 
 function addConnector(angle = 0, offset = 0, t = 'barrel', flipped = false,id=10) {
     r.addConnector({
@@ -341,8 +352,8 @@ function clearHoles() {
     r.holes = [];
 }
 
-function addRingGap(begin = -0.25, end = 0.25, t = 'barrel') {
-    r.addGap(begin, end, t);
+function addRingGap(position = 0, offset, t = 'barrel') {
+    r.addGap(position-offset, position+offset, t);
 }
 
 function addRingHole(angle = Math.PI, radius = 0.2, offset = 0, t = 'circle') {
@@ -835,4 +846,7 @@ function generateURL(ring = r){
     //window.location.replace(encoded)
     // window.location.search = str;
 }
+/**
+ * 
+ */
 

@@ -14,6 +14,7 @@ let centerResize = false;
 
 let canvasWidth = window.innerWidth*0.75; 
 let canvasHeight = canvasWidth*aspectRatio+400;
+if(canvasHeight >= window.innerHeight*0.8)canvasHeight = window.innerHeight*0.8;
 let mtop = 75;
 let mleft = 25;
 let mright = 25;
