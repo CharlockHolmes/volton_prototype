@@ -155,7 +155,7 @@ function loadTerminal(offsetZ, radius, angle = Math.PI / 2,name = 'bornier', rot
             gltf.scene.traverse(o=>{
                 if(o.material!=null){
                     //o.material.color = {r:0.5, g:0.5,b:1};
-                    o.material.color = {r:0.1, g:0.3,b:0.85};
+                    o.material.color = {r:0.9, g:0.99,b:0.99};
                 }
             })
             scene.add(gltf.scene);
