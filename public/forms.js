@@ -32,7 +32,7 @@ class Shape {
             const y = this.y
             const w = this.w
             line(x,-10, x, pheight+10)
-            line(x-w/2-10, y, x+w/2+10, y)
+            line(x-w/2-15, y, x+w/2+15, y)
             pointArrow(this, this.t);
             textSize(TEXTSIZE);
             textAlign(CENTER, BOTTOM);
@@ -518,7 +518,6 @@ class Terminal extends Shape {
             ellipse(this.x, this.y, this.w*2/3, this.h*2/3)
             //image(terminal_img, this.x, this.y, this.w, this.h);
         } 
-            
         pop()
     }
 
@@ -541,12 +540,29 @@ class Terminal extends Shape {
 
     textSelected(){
         super.textSelected();
-        if(this.selected||seeAll)this.showDirection();
+        if(this.selected||seeAll){
+            this.showDirection();
+            let overClear = true;
+            shapes.forEach(s=>{
+                const o = s.isOver(this.x+this.w/2+10, this.y);
+                if(o===false);
+                else{
+                    overClear=false;
+                    drawArrow(this.x+this.w/2+10, (this.y-o.y)/2+o.y, this.y-o.y, 10, false, (this.y-o.y)*toInch)
+                }
+            })
+            if(overClear)drawArrow(this.x+this.w/2+10, this.y/2, this.y, 10, false, this.y*toInch)
+        }
     }
+    isOver(x,y){
+        if(this.tx+this.w/2+15>x&&this.tx-this.w/2-15<x&&this.y<y&&(this.selected||seeAll))return {x:this.tx, y:this.y}
+        return false;
+    }
+    
     showDirection(){
         const x = this.tx;
         const y = this.y;
-        const off = this.w;
+        const off = this.w/2;
         if(Math.round(this.rotation*360/(2*PI)) == 0 && !this.flipped){
             line(x+(10+off/2), y, x+(5+off/2), y-5)
             line(x+(10+off/2), y, x+(5+off/2), y+5)
@@ -608,18 +624,33 @@ class Connector extends Terminal {
         if (this.selected || seeAll) {
             push()
             fill(0)
+            stroke(2)
             const x = this.x
             const y = this.y
             const w = this.w
             line(x,-10, x, pheight+10)
             line(this.tx-w/2-10, y, this.tx+w/2+10, y)
-            pointArrow(this, this.t);
+            //pointArrow(this, this.t);
             textSize(TEXTSIZE);
             textAlign(CENTER, BOTTOM);
             text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);
             pop()
         }
-        if(this.selected||seeAll)this.showDirection();
+        if(this.selected||seeAll){
+            //this.showDirection();
+            let overClear = true;
+            shapes.forEach(s=>{
+                const o = s.isOver(this.x+this.w/2+10, this.y);
+                if(o===false);
+                else{
+                    overClear=false;
+                    if(this.flipped) drawArrow(this.tx+this.w/2+10, (this.y-o.y)/2+o.y, this.y-o.y, 10, false, (this.y-o.y)*toInch)
+                    if(!this.flipped) drawArrow(this.tx-this.w/2-10, (this.y-o.y)/2+o.y, this.y-o.y, 10, false, (this.y-o.y)*toInch)
+                }
+            })
+            if(overClear&&this.flipped)drawArrow(this.tx+this.w/2+10, this.y/2, this.y, 10, false, this.y*toInch)
+            if(overClear&&!this.flipped)drawArrow(this.tx-this.w/2-10, this.y/2, this.y, 10, false, this.y*toInch)
+        }
     }
     mirror(){
         let ty

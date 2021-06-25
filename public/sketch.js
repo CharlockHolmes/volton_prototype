@@ -263,21 +263,23 @@ function defaultRing() {
     loadCustomItem();
 }
 function loadDefaultConnectorSettings(){
+    const data = getStandardData(r.width*inchPerUnit, r.radius*2*inchPerUnit, 'barrel')
     connectors = [];
     let gapcnt = 0;
     r.gaps.forEach(gap => {
         const randId0 = (Math.random()*10000000).toFixed();
         const randId1 = (Math.random()*10000000).toFixed();
         if (gap.t == 'barrel') {
-            const conNum = Math.floor(r.width);
+            const conNum = data.num;
+            console.log(conNum)
             if(conNum%2==1){
                 if(gapcnt%2==0){
                     addConnector(gap.begin, 0, 'barrel_screw_qlatch',false,randId0); 
                     addConnector(gap.end, 0, 'barrel_qlatch', true,randId0) 
                 }
                 if(gapcnt%2==1){
-                    addConnector(gap.begin, 0, 'barrel',false,randId0); 
-                    addConnector(gap.end, 0, 'barrel_screw', true,randId0 ) 
+                    addConnector(gap.begin, 0, 'barrel_qlatch',false,randId0); 
+                    addConnector(gap.end, 0, 'barrel_screw_qlatch', true,randId0 ) 
                 }
             }
             if(conNum>1){
@@ -285,16 +287,16 @@ function loadDefaultConnectorSettings(){
                     let offset;
                     offset = r.width/(3*(i+1));
                     if(gapcnt%2==0){
-                        addConnector(gap.begin,offset , 'barrel_screw',false,randId0);
-                        addConnector(gap.end, offset, 'barrel', true,randId0);
-                        addConnector(gap.begin, -offset, 'barrel_screw',false,randId1);
-                        addConnector(gap.end, -offset, 'barrel', true,randId1);
+                        addConnector(gap.begin,offset , 'barrel_screw_qlatch',false,randId0);
+                        addConnector(gap.end, offset, 'barrel_qlatch', true,randId0);
+                        addConnector(gap.begin, -offset, 'barrel_screw_qlatch',false,randId1);
+                        addConnector(gap.end, -offset, 'barrel_qlatch', true,randId1);
                     }
                     if(gapcnt%2==1){
-                        addConnector(gap.begin,offset , 'barrel',false,randId0);
-                        addConnector(gap.end, offset, 'barrel_screw',true,randId0);
-                        addConnector(gap.begin, -offset, 'barrel',false,randId1);
-                        addConnector(gap.end, -offset, 'barrel_screw',true,randId1);
+                        addConnector(gap.begin,offset , 'barrel_qlatch',false,randId0);
+                        addConnector(gap.end, offset, 'barrel_screw_qlatch',true,randId0);
+                        addConnector(gap.begin, -offset, 'barrel_qlatch',false,randId1);
+                        addConnector(gap.end, -offset, 'barrel_screw_qlatch',true,randId1);
                     }
                 }
             } 
