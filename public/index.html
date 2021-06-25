@@ -19,6 +19,7 @@
 	<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
 	<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js" ></script>
 
+	<script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
 
 	<!--script src="https://cdn.jsdelivr.net/npm/three-gltf-loader@1.111.0/index.min.js"></script-->
 	<!--script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'></script-->
@@ -34,6 +35,11 @@
 </header-->
 <canvas class='webgl' id='three'></canvas>
 <body>
+	<form action="?" method="POST">
+		<div class="g-recaptcha" data-sitekey="825ee9947f2c4cc173505a09f49b05d4ee1fc5a1"></div>
+		<br/>
+		<input type="submit" value="Submit">
+	  </form>
 	<section class="disable_select">
 		<!--div style="position: absolute; top:100px; left:100px;">
 			<div style='float:left'>Radius</div>
