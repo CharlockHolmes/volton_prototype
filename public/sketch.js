@@ -324,7 +324,7 @@ function loadDefaultGapSettings(nb = 2, type = 'barrel'){
         addRingGap(angle, gapOffset, type);
     }
 }
-
+//
 function addConnector(angle = 0, offset = 0, t = 'barrel', flipped = false,id=10) {
     r.addConnector({
         angle: angle,
