@@ -38,17 +38,25 @@
 </header-->
 <canvas class='webgl' id='three'></canvas>
 <body>
-	<script>
-		function onClick(e) {
-      		e.preventDefault();
+	<!--script>
+		
 			grecaptcha.enterprise.ready(function() {
         	grecaptcha.enterprise.execute('6Ld05UwbAAAAACikqGC49Y8kDJEekhzQcbqRlenm', {action: 'homepage'}).then(function(token) {
             	// Add your logic to submit to your backend server here.
         });
-      });
-	}
+    
+	});
 
-	</script>
+	</script-->
+	
+	  <script>
+		grecaptcha.enterprise.ready(function() {
+			grecaptcha.enterprise.execute('6Ld05UwbAAAAACikqGC49Y8kDJEekhzQcbqRlenm', {action: 'homepage'}).then(function(token) {
+
+			});
+		});
+		</script>
+	
 	<section class="disable_select">
 		<!--div style="position: absolute; top:100px; left:100px;">
 			<div style='float:left'>Radius</div>
