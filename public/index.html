@@ -19,7 +19,10 @@
 	<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
 	<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js" ></script>
 
-	
+
+		<script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld05UwbAAAAACikqGC49Y8kDJEekhzQcbqRlenm"></script>
+		
+	  
 
 	<!--script src="https://cdn.jsdelivr.net/npm/three-gltf-loader@1.111.0/index.min.js"></script-->
 	<!--script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'></script-->
@@ -35,7 +38,17 @@
 </header-->
 <canvas class='webgl' id='three'></canvas>
 <body>
-	
+	<script>
+		function onClick(e) {
+      		e.preventDefault();
+			grecaptcha.enterprise.ready(function() {
+        	grecaptcha.enterprise.execute('6Ld05UwbAAAAACikqGC49Y8kDJEekhzQcbqRlenm', {action: 'homepage'}).then(function(token) {
+            	// Add your logic to submit to your backend server here.
+        });
+      });
+	}
+
+	</script>
 	<section class="disable_select">
 		<!--div style="position: absolute; top:100px; left:100px;">
 			<div style='float:left'>Radius</div>
