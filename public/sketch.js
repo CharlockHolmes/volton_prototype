@@ -845,6 +845,18 @@ function generateURL(ring = r){
     console.log(ur.toString());
     const encoded = ur.toString();
     navigator.clipboard.writeText(encoded);
+////////////////////////////////////////////////////////////////
+
+    const data = {url:encoded, id:1}
+    const options = {
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(data)
+    }
+    console.log('This will be send on email'+options)
+    fetch('/api', options);
     //window.location.replace(encoded)
     // window.location.search = str;
 }
