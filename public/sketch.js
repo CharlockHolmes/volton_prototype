@@ -36,7 +36,7 @@ let deltaMove;
 
 let loaderCount = 0; // Used in the GUI
 let inverseConnectors = false;
-let gui = new dat.GUI();
+//let gui = new dat.GUI();
 
 const dcmpts =100000;
 
@@ -85,10 +85,10 @@ function addLight(...pos) {
     light.position.set(...pos);
     scene.add(light);
 
-    const tl = gui.addFolder('Light'+Math.random());
-    tl.add(light.position, 'x').min(-5).max(5).step(0.01);
-    tl.add(light.position, 'y').min(-5).max(5).step(0.01);
-    tl.add(light.position, 'z').min(-5).max(5).step(0.01);
+    //const tl = gui.addFolder('Light'+Math.random());
+    //tl.add(light.position, 'x').min(-5).max(5).step(0.01);
+    //tl.add(light.position, 'y').min(-5).max(5).step(0.01);
+    //tl.add(light.position, 'z').min(-5).max(5).step(0.01);
 }
 function loadBasicGUI(gltf, num, name) {
 
@@ -114,7 +114,7 @@ function loadTerminal(offsetZ, radius, angle = Math.PI / 2,name = 'bornier', rot
     const loader = new THREE.GLTFLoader();
     loader.load('ressources/'+name+'.glb', //'ressources/bornier.glb',
         (gltf) => {
-            loadBasicGUI(gltf, num, name);
+            //loadBasicGUI(gltf, num, name);
             //angle-=Math.PI/2;
     
             gltf.scene.scale.x = 0.0125;
@@ -174,7 +174,7 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
     const loader = new THREE.GLTFLoader();
     loader.load('ressources/' + name + '.glb', //'ressources/bornier.glb',
         (gltf) => {
-            loadBasicGUI(gltf, num, name);
+            //loadBasicGUI(gltf, num, name);
             //angle-=Math.PI/2;
             if (flipped) gltf.scene.scale.x = -0.01;
             else gltf.scene.scale.x = 0.01;
@@ -468,8 +468,8 @@ function initGlobals(){
     while (scene.children.length > 0) {
         scene.remove(scene.children[0]);
     }
-    gui.destroy();
-    gui = new dat.GUI();
+    //gui.destroy();
+    //gui = new dat.GUI();
     groupGlobal = new THREE.Group();
     groupConnectors = new THREE.Group();
 }
@@ -496,7 +496,7 @@ function loadCustomItem() {
     addLight(-2, 20, 10);
     //addLight(2, -20, 3);
     addLight(10, -40, -10)
-    gui.hide();
+    //gui.hide();
     //Ring material
     const {
         positions,
@@ -696,9 +696,9 @@ document.getElementById('submitbutton').onclick = () =>{
 /**
  * Triggererd when the load button is pressed, currently loads the values into the menu.
  */
-document.getElementById('loadbutton').onclick = () =>{
-    loadMenuThings();
-}
+// document.getElementById('loadbutton').onclick = () =>{
+//     loadMenuThings();
+// }
 /**
  * Triggered when the gap button submit is pressed.
  */
@@ -717,9 +717,9 @@ document.getElementById('submitgapbutton').onclick = () =>{
 /**
  * Triggered when load gap is pressed. 
  */
-document.getElementById('loadgapbutton').onclick = () =>{
-    loadMenuThings();
-}
+// document.getElementById('loadgapbutton').onclick = () =>{
+//     loadMenuThings();
+// }
 /**
  * Triggered when defaultRing is pressed.
  */
@@ -790,7 +790,7 @@ function loadRing(ringImport){
 function loadMenuThings(){
     document.getElementById('ringwidth').value = (r.width*inchPerUnit).toFixed(2);
     document.getElementById('ringdiameter').value = (r.radius*2*inchPerUnit).toFixed(2);
-    document.getElementById('ringgap').value = 'not implemented';
+    //document.getElementById('ringgap').value = 'not implemented';
     document.getElementById('ringresolution').value = r.resolution;
     document.getElementById('gapwidth').value = Math.abs(r.gaps[0].begin-r.gaps[0].end)*360/(2*PI);
     document.getElementById('gapangle').value = (r.gaps[0].begin+r.gaps[0].end)/2*360/(2*PI);

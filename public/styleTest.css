@@ -1,6 +1,15 @@
 
 /* Dropdown menu */
+#p5holder{
+    position:absolute;
+    background-color:rgb(232, 235, 247);
+    left: 20%;
+    top:50px;
+    float:right;
+}
 ul {
+    position:static;
+    top:0;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -25,7 +34,7 @@ ul {
   }
   
   li.dropdown {
-    display: inline-block;
+    display: block;
   }
   
   .dropdown-content {
@@ -71,7 +80,6 @@ ul {
   }
   .draggables {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: rgb(91, 219, 79);
   }
 
 
@@ -105,8 +113,8 @@ ul {
   /* Draggable Ring box*/
   #ringboxdrag {
     position: absolute;
-    top:60%;
-    left:0px;
+    top:60px;
+    left:7px;
     z-index: 9;
     background-color: #f1f1f1;
     border: 1px solid #d3d3d3;
@@ -115,17 +123,19 @@ ul {
   }
   
   #ringboxdragheader {
+    text-align: left;
     padding: 10px;
     cursor: move;
     z-index: 10;
     color: #fff;
+    background-color: #04AA6D;
   }
 
   /* Draggable Selected Hole box*/
   #selectedholeboxdrag {
     position: absolute;
-    top:60%;
-    left: 200px;
+    top:218px;
+    left: 7px;
     z-index: 9;
     background-color: #f1f1f1;
     border: 1px solid #d3d3d3;
@@ -134,16 +144,18 @@ ul {
   }
   
   #selectedholeboxdragheader {
+      text-align: left;
     padding: 10px;
     cursor: move;
     z-index: 10;
     color: #fff;
+    background-color: #04AA6D;
   }
   /* Draggable Selected Connector box*/
   #selectedconboxdrag {
     position: absolute;
-    top:60%;
-    left: 400px;
+    top:450px;
+    left: 7px;
     z-index: 9;
     background-color: #f1f1f1;
     border: 1px solid #d3d3d3;
@@ -151,16 +163,18 @@ ul {
     width:200px;
   }
   #selectedconboxdragheader {
+    text-align: left;
     padding: 10px;
     cursor: move;
     z-index: 10;
     color: #fff;
+    background-color: #04AA6D;
   }
   /* Draggable Gap box*/
   #gapboxdrag {
     position: absolute;
-    top:60%;
-    left: 600px;
+    top:450px;
+    left: 410px;
     z-index: 9;
     background-color: #f1f1f1;
     border: 1px solid #d3d3d3;
@@ -168,16 +182,18 @@ ul {
     width:400px;
   }
   #gapboxdragheader {
+    text-align: left;
     padding: 10px;
     cursor: move;
     z-index: 10;
     color: #fff;
+    background-color: #04AA6D;
   }
   /* Draggable Gap box*/
   #powerboxdrag {
     position: absolute;
-    top:60%;
-    left: 1000px;
+    top:450px;
+    left: 210px;
     z-index: 9;
     background-color: #f1f1f1;
     border: 1px solid #d3d3d3;
@@ -185,25 +201,29 @@ ul {
     width:200px;
   }
   #powerboxdragheader {
+    text-align: left;
     padding: 10px;
     cursor: move;
     z-index: 10;
     color: #fff;
+    background-color: #04AA6D;
   }
 
   /* Collapsible stuff*/
-  .collapsible {
-    /*background-color: #777;*/
-    color: white;
+  span.collapsible {
+    position:absolute;
+    top:-10px;
+    right:-5px;
     cursor: pointer;
     padding: 18px;
-    width: 100%;
     border: none;
-    text-align: left;
     outline: none;
     font-size: 15px;
   }
-  
+  span.collapsible:hover{
+    color: red;
+    cursor:pointer;
+  } 
   /* .active, .collapsible:hover {
     background-color: #555;
   } */

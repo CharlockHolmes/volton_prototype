@@ -6,15 +6,27 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="styleTest.css">
-</head>
 
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"
+		integrity="sha512-LF8ZB1iTwi4Qvkm4pekHG4a437Y9Af5ZuwbnW4GTbAWQeR2E4KW8WF+xH8b9psevV7wIlDMx1MH9YfPqgKhA/Q=="
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
+	<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js" ></script>
+	<script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld05UwbAAAAACikqGC49Y8kDJEekhzQcbqRlenm"></script>
+	<link rel='icon' href='https://www.volton.com/gx/favicon/favicon.ico?v=2'>
+
+	<title>Volton Prototype</title>
+</head>
 <body>
-    <ul>
+    
+    <ul id="navbar">
         <li><a href="#home">Home</a></li>
         <li class="dropdown">
           <a href="" class="dropbtn">File</a>
           <div class="dropdown-content">
-            <a href="#">Save <span class="shortcut-text">ctrl+s</span></a>
+            <a id="save">Save <span class="shortcut-text">ctrl+s</span></a>
             <a href="#">Submit</a>
             <a href="#">Form</a>
             <a href="#">Import</a>
@@ -24,18 +36,19 @@
           <a href="" class="dropbtn">Edit</a>
           <div class="dropdown-content">
             <a href="#">Reset</a>
-            <a href="#">Demo</a>
+            <a id="exportholes">Export Holes</a>
+            <a id="defaultring">Demo</a>
             <a href="#">Undo <span class="shortcut-text">ctrl+z</span></a>
           </div>
         </li>
         <li class="dropdown">
           <a href="" class="dropbtn">View</a>
           <div class="dropdown-content">
-            <a href="#">Plan</a>
-            <a href="#">Ring Clock</a>
-            <a href="#">Measurements</a>
+            <a id="drawing">Plan</a>
+            <a id="selectall">Measurements</a>
+            <a id="clocktoggle">Ring Clock</a>
             <a href="#">Toolbar</a>
-            <a href="#">Reset Camera</a>
+            <a id="resetcamera">Reset Camera</a>
           </div>
         </li>
         <li class="dropdown">
@@ -52,129 +65,130 @@
           </div>
         </li>
     </ul>
-    <div id="ringboxdrag" class = 'draggables'>
-        <div id="ringboxdragheader" class = "collapsible">Ring Info</div>
-        <table class="ring-info" class="content" id="ringboxdrag">
-            <!--tr id="ringboxdragheader">
-                <th>Ring</th>
-                <th class="collapse-box" id="ring-collapse"></th>
-            </tr-->
-            <tr class = "ring-content">
-                <td>Width</td>
-                <td><input class="input-data"> in</td>
-            </tr>
-            <tr class = "ring-content">
-                <td>Diameter</td>
-                <td><input class="input-data"> in</td>
-            </tr>
-            <tr class = "ring-content">
-                <td>Resolution</td>
-                <td><input class="input-data"> vrx</td>
-            </tr>
-        </table>
+    <div id="main">
+        <div id="ringboxdrag" class = 'draggables'>
+            <div id="ringboxdragheader" >Ring Info <span class = "collapsible">-</span></div>
+            <table class="ring-info" class="content">
+                <tr>
+                    <td>Width</td>
+                    <td><input class="input-data" id="ringwidth"> in</td>
+                </tr>
+                <tr>
+                    <td>Diameter</td>
+                    <td><input class="input-data"id='ringdiameter'> in</td>
+                </tr>
+                <tr>
+                    <td>Resolution</td>
+                    <td><input class="input-data"id='ringresolution'> vrx</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button id='submitbutton'> submit</td>
+                </tr>
+            </table>
+        </div>
+        <div id="selectedholeboxdrag" class = 'draggables'>
+            <div id="selectedholeboxdragheader">Selected Hole <span class = "collapsible">-</span></div>
+            <table class="ring-info" >
+                <tr>
+                    <td>Angle</td>
+                    <td><input class="input-data"id='h_angle'> deg</td>
+                </tr>
+                <tr>
+                    <td>Offset</td>
+                    <td><input class="input-data"id='h_offset'> in</td>
+                </tr>
+                <tr>
+                    <td>Height</td>
+                    <td><input class="input-data"id='h_height'> in</td>
+                </tr>
+                <tr>
+                    <td>Width</td>
+                    <td><input class="input-data"id='h_width'> in</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td id='submitholebutton'>Submit</td>
+                </tr>
+            </table>
+        </div>
+        <div id="selectedconboxdrag" class = 'draggables'>
+            <div id="selectedconboxdragheader">Selected Connector <span class = "collapsible">-</span></div>
+            <table class="ring-info">
+                <tr>
+                    <td>Angle</td>
+                    <td><input class="input-data"> deg</td>
+                </tr>
+                <tr>
+                    <td>Offset</td>
+                    <td><input class="input-data"> in</td>
+                </tr>
+                <tr>
+                    <td>Rotation</td>
+                    <td><select id="h_rotation" name="Direction">
+                        <option value="0">0</option>
+                        <option value="90">90</option>
+                        <option value="180">180</option>
+                        <option value="270">270</option>
+                    </select>	</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Submit</td>
+                </tr>
+            </table>
+        </div>
+        <div id="powerboxdrag" class = 'draggables'>
+            <div id="powerboxdragheader">Power Rating <span class = "collapsible">-</span></div>
+            <table class="ring-info">
+                <tr>
+                    <td>Power</td>
+                    <td><input class="input-data"id='powerasked'value='500'> W</td>
+                </tr>
+                <tr>
+                    <td>Voltage</td>
+                    <td><input class="input-data"id='voltage'value = '120'> V</td>
+                </tr>
+                <tr>
+                    <td>Density</td>
+                    <td><input class="input-data"id='powerpersqrinch'> W/In^2</td>
+                </tr>
+                <tr>
+                    <td>Current</td>
+                    <td><input class="input-data"id='current'> A</td>
+                </tr>
+            </table>
+        </div>
+        <div id="gapboxdrag" class = 'draggables'>
+            <div id="powerboxdragheader">Gaps <span class = "collapsible">-</span></div>
+            <table class="ring-info" style="width:400px;">
+                <tr>
+                    <td>#</td>
+                    <td>Angle</td>
+                    <td>Arc</td>
+                    <td>Width</td>
+                    <td>Type</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><input class="input-data"id='gapangle'> deg</td>
+                    <td><input class="input-data"id='gapwidth'> deg</td>
+                    <td><input class="input-data"> in</td>
+                    <td>Type</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><input class="input-data"> deg</td>
+                    <td><input class="input-data"> deg</td>
+                    <td><input class="input-data"> in</td>
+                    <td>Type</td>
+                </tr>
+                <tr>
+                    <td id='submitgapbutton'>submit</td>
+                </tr>
+            </table>
+        </div>
     </div>
-    <table class="ring-info" id="selectedholeboxdrag">
-        <tr id="selectedholeboxdragheader">
-            <th>Selected</th>
-            <th>Hole</th>
-        </tr>
-        <tr>
-            <td>Angle</td>
-            <td><input class="input-data"> deg</td>
-        </tr>
-        <tr>
-            <td>Offset</td>
-            <td><input class="input-data"> in</td>
-        </tr>
-        <tr>
-            <td>Height</td>
-            <td><input class="input-data"> in</td>
-        </tr>
-        <tr>
-            <td>Width</td>
-            <td><input class="input-data"> in</td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>Submit</td>
-        </tr>
-        </table>
-    </table>
-
-    <table class="ring-info" id="selectedconboxdrag">
-        <tr id="selectedconboxdragheader">
-            <th>Selected</th>
-            <th>Connector</th>
-        </tr>
-        <tr>
-            <td>Angle</td>
-            <td><input class="input-data"> deg</td>
-        </tr>
-        <tr>
-            <td>Offset</td>
-            <td><input class="input-data"> in</td>
-        </tr>
-        <tr>
-            <td>Rotation</td>
-            <td><input class="input-data"> in</td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>Submit</td>
-        </tr>
-    </table>
-    <table class="ring-info" id="powerboxdrag">
-        <tr id="powerboxdragheader">
-            <th>Power</th>
-            <th>Rating</th>
-        </tr>
-        <tr>
-            <td>Power</td>
-            <td><input class="input-data"> W</td>
-        </tr>
-        <tr>
-            <td>Voltage</td>
-            <td><input class="input-data"> V</td>
-        </tr>
-        <tr>
-            <td>Density</td>
-            <td><input class="input-data"> W/In^2</td>
-        </tr>
-        <tr>
-            <td>Current</td>
-            <td><input class="input-data"> A</td>
-        </tr>
-    </table>
-    <table class="ring-info" id="gapboxdrag">
-        <tr id="gapboxdragheader">
-            <th>+</th>
-            <th>Gaps</th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-        <tr>
-            <td>#</td>
-            <td>Angle</td>
-            <td>Arc</td>
-            <td>Width</td>
-            <td>Type</td>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td><input class="input-data"> deg</td>
-            <td><input class="input-data"> deg</td>
-            <td><input class="input-data"> in</td>
-            <td>Type</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td><input class="input-data"> deg</td>
-            <td><input class="input-data"> deg</td>
-            <td><input class="input-data"> in</td>
-            <td>Type</td>
-        </tr>
-    </table>
     <script>
         var coll = document.getElementsByClassName("collapsible");
         var i;
@@ -182,8 +196,8 @@
         for (i = 0; i < coll.length; i++) {
         coll[i].addEventListener("click", function() {
             this.classList.toggle("active");
-            var content = this.nextElementSibling;
-            if (content.style.display === "table") {
+            const content = this.parentElement.nextElementSibling;
+            if (content.style.display !== "none") {
             content.style.display = "none";
             } else {
             content.style.display = "table";
@@ -240,5 +254,26 @@
           }
         }
         </script>
+
+<canvas class='webgl' id='three'></canvas>
+<div id="p5holder"></div>
+    <script>
+        function getParameter(parameterName){
+            let parameters = new URLSearchParams( window.location.search)
+            return parameters.get( parameterName)
+        }
+        </script>
+
+<script src="globalConst.js"></script>
+<script src="globalVar.js"></script>
+
+<script src="conversion.js"></script>
+<script src="ring.js"></script>
+<script src="sketch.js"></script>
+<script src="p5sketch.js"></script>
+<script src="forms.js"></script>
+
+<!--
+    -->
 </body>
 </html>

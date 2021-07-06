@@ -33,7 +33,7 @@ const toDeg = 360/pwidth;
 const toRad = 2*PI/pwidth;
 
 let seeAll = false; 
-const STARTHIDDEN = true;
+const STARTHIDDEN = false;
 let hidden = STARTHIDDEN;
 
 let shapes = [];
@@ -628,9 +628,9 @@ document.getElementById('exportholes').onclick = ()=>{
     holeExport();  
 }
 
-document.getElementById('importholes').onclick = ()=>{
-    holeImport();
-}
+// document.getElementById('importholes').onclick = ()=>{
+//     holeImport();
+// }
 
 
 function selectHole(hole){
