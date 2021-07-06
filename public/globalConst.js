@@ -125,6 +125,9 @@ const STANDARD_GAP_SCREW = [
         }
     },
 ]
+/**
+ * Standard barrel nut values for width
+ */
 const STANDARD_BARREL_NUM = [
     {width:0,   num:1},
     {width:2.5, num:2},
