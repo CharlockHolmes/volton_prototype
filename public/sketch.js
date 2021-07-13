@@ -214,14 +214,17 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
 loadSavedValues();
 function loadSavedValues(){
     const ur = new URL (window.location)
-    const decoded = ur.toString();
+    const decoded = unpact(ur.toString());
     const decodedURL = new URL(decoded)
+    console.log(decoded)
 
     const tr = decodedURL.searchParams.get('ring');
     if(tr!=null){
         console.log('saved from link')
-        const ring = JSON.parse(tr);
+        let ring = JSON.parse(tr);
+        // ring = compressData(ring, true)
         r = new Ring(ring.radius, ring.width, ring.resolution,ring.holes, ring.gaps, ring.terminals, ring.connectors, ring.thickness);
+        console.log(r)
         const tc = decodedURL.searchParams.get('camera')
         if(tc!=null){
             loadCamera(tc)
@@ -649,11 +652,7 @@ document.getElementById('resetcamera').onclick = () => {
         ty: (endMove.ty - beginMove.ty)/repeatMove,
         tz: (endMove.tz - beginMove.tz)/repeatMove,
     }
-
     countMove = 0;
-    
-    
-
 }
 /**
  * Functions that is triggered in the submit button in the customization menu.
@@ -662,7 +661,7 @@ document.getElementById('submitbutton').onclick = () =>{
     let proceed = true; 
     let twidth = document.getElementById('ringwidth').value;
     let tdiameter = document.getElementById('ringdiameter').value;
-    document.getElementById('ringgap').value = 'not implemented';
+    //document.getElementById('ringgap').value = 'not implemented';
     let tresolution = document.getElementById('ringresolution').value;
     console.log(twidth, tdiameter, tresolution);
 
@@ -755,24 +754,23 @@ function saveRing(ring=r){
 /** Converts all ring angles to degrees*/
 function ringAnglesToDeg(ring = r){
     ring.holes.forEach(h=>{  
-        h.angle = Math.round(h.angle*dcmpts)/dcmpts
-        h.r.w = Math.round(dcmpts*h.r.w)/dcmpts
-        h.r.h = Math.round(dcmpts*h.r.h)/dcmpts
-        if(h.r.w==undefined&&h.r.h==undefined)h.r = Math.round(dcmpts*h.r)/dcmpts
+        h.angle = Math.round(h.angle*dcmpts)/dcmpts;
+        h.r.w = Math.round(dcmpts*h.r.w)/dcmpts;
+        h.r.h = Math.round(dcmpts*h.r.h)/dcmpts;
+        if(h.r.w==undefined&&h.r.h==undefined)h.r = Math.round(dcmpts*h.r)/dcmpts;
     })
     ring.connectors.forEach(h=>{ 
-        
-        h.angle = Math.round(h.angle*dcmpts)/dcmpts
-        h.rotation = Math.round(h.rotation*1000/1000)
+        h.angle = Math.round(h.angle*dcmpts)/dcmpts;
+        h.rotation = Math.round(h.rotation*1000/1000);
         
     })
     ring.terminals.forEach(h=>{
-        h.angle = Math.round(h.angle*dcmpts)/dcmpts
-        h.rotation = Math.round(h.rotation*1000)/1000
+        h.angle = Math.round(h.angle*dcmpts)/dcmpts;
+        h.rotation = Math.round(h.rotation*1000)/1000;
     })
     ring.gaps.forEach(h=>{
-        h.begin = Math.round(h.begin*dcmpts)/dcmpts
-        h.end = Math.round(h.end*dcmpts)/dcmpts
+        h.begin = Math.round(h.begin*dcmpts)/dcmpts;
+        h.end = Math.round(h.end*dcmpts)/dcmpts;
     })
     
 }
@@ -829,25 +827,27 @@ function generateURL(ring = r){
     const position = {position:{x : camera.position.x, y:camera.position.y, z:camera.position.z},rotation:{_x: camera.rotation._x, _y:camera.rotation._y, _z:camera.rotation._z}, target:{x:controls.target.x, y:controls.target.y, z:controls.target.z}}
     const camt = JSON.stringify(position);
     ringAnglesToDeg();
-    const ringt = JSON.stringify(ring);
+    let ringt = JSON.stringify(ring);
     let str = '?';
     str+= 'ring=' + ringt;
     str+= '&camera='+camt;
-
-    const hostname = window.location.host;
-    const urltemp = 'http://'+hostname+'/'+str;
+    // const hostname = window.location.host;
+    // const urltemp = 'http://'+hostname+'/'+str;
     //const encode = encodeURI(urltemp);
     //console.log(urltemp)
     //navigator.clipboard.writeText(encode);
     let ur = new URL(window.location);
     ur.searchParams.set('ring', ringt);
+
     //ur.searchParams.set('camera', camt);
-    console.log(ur.toString());
     const encoded = ur.toString();
-    navigator.clipboard.writeText(encoded);
+    let compressed = compact(encoded);
+    console.log(compressed)
+
+    navigator.clipboard.writeText(compressed);
 ////////////////////////////////////////////////////////////////
 
-    const data = {url:encoded, id:1}
+    const data = {url:compressed, id:1}
     const options = {
         method:'POST',
         headers:{
@@ -856,7 +856,8 @@ function generateURL(ring = r){
         body: JSON.stringify(data)
     }
     console.log('This will be send on email'+options)
-    fetch('/api', options);
+    //fetch('/api', options);
+    
     //window.location.replace(encoded)
     // window.location.search = str;
 }

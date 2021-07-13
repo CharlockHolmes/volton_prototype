@@ -1,12 +1,28 @@
+/* Variables */
+:root{
+  --infoWidth: 160px;
+  --inputWidth: 30px;
+}
+/* Canvas */
 
-/* Dropdown menu */
 #p5holder{
     position:absolute;
     background-color:rgb(232, 235, 247);
-    left: 20%;
-    top:50px;
+    left: 171px;
+    top:61px;
     float:right;
 }
+#p5holderheader{
+    width:inherit;
+    position:relative;
+    height:20px;
+    font-size: small;
+    text-align: center;
+    background-color: #04AA6D;
+    min-width: 500px;
+    color:honeydew;
+}
+/* Dropdown menu */
 ul {
     position:static;
     top:0;
@@ -41,7 +57,7 @@ ul {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 160px;
+    min-width: var(--infoWidth);
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 10;
   }
@@ -76,10 +92,12 @@ ul {
   .ring-info {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    width:200px;
+    width:var(--infoWidth);
+    font-size: smaller;
   }
   .draggables {
     font-family: Arial, Helvetica, sans-serif;
+    font-size: smaller;
   }
 
 
@@ -106,7 +124,9 @@ ul {
     color: white;
   }
   .input-data {
-      width:30px;
+      width:var(--inputWidth);
+      font-size: smaller;
+      user-select: all;
   }
 
 
@@ -119,7 +139,7 @@ ul {
     background-color: #f1f1f1;
     border: 1px solid #d3d3d3;
     text-align: center;
-    width:200px;
+    width:var(--infoWidth);
   }
   
   #ringboxdragheader {
@@ -134,13 +154,13 @@ ul {
   /* Draggable Selected Hole box*/
   #selectedholeboxdrag {
     position: absolute;
-    top:218px;
+    top:231px;
     left: 7px;
     z-index: 9;
     background-color: #f1f1f1;
     border: 1px solid #d3d3d3;
     text-align: center;
-    width:200px;
+    width:var(--infoWidth);
   }
   
   #selectedholeboxdragheader {
@@ -154,13 +174,13 @@ ul {
   /* Draggable Selected Connector box*/
   #selectedconboxdrag {
     position: absolute;
-    top:450px;
+    top:435px;
     left: 7px;
     z-index: 9;
     background-color: #f1f1f1;
     border: 1px solid #d3d3d3;
     text-align: center;
-    width:200px;
+    width:var(--infoWidth);
   }
   #selectedconboxdragheader {
     text-align: left;
@@ -173,13 +193,13 @@ ul {
   /* Draggable Gap box*/
   #gapboxdrag {
     position: absolute;
-    top:450px;
-    left: 410px;
+    top:604px;
+    left: 170px;
     z-index: 9;
     background-color: #f1f1f1;
     border: 1px solid #d3d3d3;
     text-align: center;
-    width:400px;
+    width:320px;
   }
   #gapboxdragheader {
     text-align: left;
@@ -192,13 +212,13 @@ ul {
   /* Draggable Gap box*/
   #powerboxdrag {
     position: absolute;
-    top:450px;
-    left: 210px;
+    top:604px;
+    left: 7px;
     z-index: 9;
     background-color: #f1f1f1;
     border: 1px solid #d3d3d3;
     text-align: center;
-    width:200px;
+    width:var(--infoWidth);
   }
   #powerboxdragheader {
     text-align: left;
@@ -208,17 +228,16 @@ ul {
     color: #fff;
     background-color: #04AA6D;
   }
-
   /* Collapsible stuff*/
   span.collapsible {
     position:absolute;
-    top:-10px;
+    top:-20px;
     right:-5px;
     cursor: pointer;
     padding: 18px;
     border: none;
     outline: none;
-    font-size: 15px;
+    font-size: 20px;
   }
   span.collapsible:hover{
     color: red;

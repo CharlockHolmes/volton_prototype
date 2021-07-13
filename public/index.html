@@ -14,12 +14,14 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
 	<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js" ></script>
-	<script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld05UwbAAAAACikqGC49Y8kDJEekhzQcbqRlenm"></script>
+
+    <!--script id="lzutf8" src="https://cdn.jsdelivr.net/npm/lzutf8/build/production/lzutf8.min.js"></script-->
+	<!--script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld05UwbAAAAACikqGC49Y8kDJEekhzQcbqRlenm"></script-->
 	<link rel='icon' href='https://www.volton.com/gx/favicon/favicon.ico?v=2'>
 
 	<title>Volton Prototype</title>
 </head>
-<body>
+<body style="user-select: none;">
     
     <ul id="navbar">
         <li><a href="#home">Home</a></li>
@@ -83,7 +85,7 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td><button id='submitbutton'> submit</td>
+                    <td><div id='submitbutton'> Submit</div></td>
                 </tr>
             </table>
         </div>
@@ -150,7 +152,7 @@
                     <td><input class="input-data"id='voltage'value = '120'> V</td>
                 </tr>
                 <tr>
-                    <td>Density</td>
+                    <td>W Density</td>
                     <td><input class="input-data"id='powerpersqrinch'> W/In^2</td>
                 </tr>
                 <tr>
@@ -160,13 +162,13 @@
             </table>
         </div>
         <div id="gapboxdrag" class = 'draggables'>
-            <div id="powerboxdragheader">Gaps <span class = "collapsible">-</span></div>
-            <table class="ring-info" style="width:400px;">
+            <div id="gapboxdragheader">Gaps <span class = "collapsible">-</span></div>
+            <table class="ring-info" style="width:320px;">
                 <tr>
                     <td>#</td>
                     <td>Angle</td>
                     <td>Arc</td>
-                    <td>Width</td>
+                    <td>Length</td>
                     <td>Type</td>
                 </tr>
                 <tr>
@@ -189,6 +191,22 @@
             </table>
         </div>
     </div>
+
+    <canvas class='webgl' id='three'></canvas>
+    <div>
+        <div id="p5holder" class ="draggables">
+            <div id="p5holderheader">
+                Planner <span class="collapsible">-</span>
+            </div>
+        </div>
+    </div>
+    <script>
+    checkInfoPosition();
+    function checkInfoPosition(){
+
+    }    
+    </script>
+    <!-- Collapsed script-->
     <script>
         var coll = document.getElementsByClassName("collapsible");
         var i;
@@ -205,13 +223,16 @@
         });
 }
     </script>
+    <!-- Dragged elements script-->
     <script>
+        let infoBoxFlag = false;
         //Make the DIV element draggagle:
         dragElement(document.getElementById("ringboxdrag"));
         dragElement(document.getElementById("selectedholeboxdrag"));
         dragElement(document.getElementById("selectedconboxdrag"));
         dragElement(document.getElementById("gapboxdrag"));
         dragElement(document.getElementById("powerboxdrag"));
+        dragElement(document.getElementById("p5holder"));
         
         function dragElement(elmnt) {
           var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -224,6 +245,7 @@
           }
         
           function dragMouseDown(e) {
+            infoBoxFlag = true;
             e = e || window.event;
             e.preventDefault();
             // get the mouse cursor position at startup:
@@ -249,20 +271,20 @@
         
           function closeDragElement() {
             /* stop moving when mouse button is released:*/
+            infoBoxFlag = false;
             document.onmouseup = null;
             document.onmousemove = null;
           }
         }
-        </script>
+    </script>
 
-<canvas class='webgl' id='three'></canvas>
-<div id="p5holder"></div>
+    <!-- Get URL parameter name -->
     <script>
         function getParameter(parameterName){
             let parameters = new URLSearchParams( window.location.search)
             return parameters.get( parameterName)
         }
-        </script>
+    </script>
 
 <script src="globalConst.js"></script>
 <script src="globalVar.js"></script>

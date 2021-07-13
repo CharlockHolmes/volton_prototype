@@ -12,10 +12,10 @@ let lrlength = loadedRing.radius * 2 * Math.PI;
 let aspectRatio = lrwidth / lrlength;
 let centerResize = false; 
 
-let canvasWidth = window.innerWidth*0.75; 
+let canvasWidth = window.innerWidth*0.85; 
 let canvasHeight = canvasWidth*aspectRatio+400;
 if(canvasHeight >= window.innerHeight*0.8)canvasHeight = window.innerHeight*0.8;
-let mtop = 75;
+let mtop = 25;
 let mleft = 25;
 let mright = 25;
 let mbot = 25;
@@ -276,6 +276,7 @@ function calculatePower(){
     else document.getElementById('current').style = 'color:red';
 }
 function keyPressed() {
+    
     if (keyCode === DELETE) shapes.forEach((shape) => {
         if (shape.selected) {
             const ind = shapes.indexOf(shape);
@@ -355,85 +356,87 @@ function doubleClicked() {
 }
 
 function mousePressed() {
-    if(mouseX > 0 && mouseX < width &&mouseY>0 && mouseY<height){
-        shapes.forEach(shape => {
-            shape.unSelect();
-        });
-        scrollbar.selected =false;
-        let makeNew = false;
-        let oneClicked = false; 
-        demoShapes.forEach(shape =>{
-            if(shape.isInOuterBoundary(mouseX,mouseY)){
-                if(shape.t=='rect'){
-                    add_z_save();
-                    //console.log('make new rectangle')
-                    if(lastClick.show){
-                        shapes.push(new Rectangle(lastClick.x,lastClick.y, 50,50))
+    if(!infoBoxFlag){
+        if(mouseX > 0 && mouseX < width &&mouseY>0 && mouseY<height){
+            shapes.forEach(shape => {
+                shape.unSelect();
+            });
+            scrollbar.selected =false;
+            let makeNew = false;
+            let oneClicked = false; 
+            demoShapes.forEach(shape =>{
+                if(shape.isInOuterBoundary(mouseX,mouseY)){
+                    if(shape.t=='rect'){
+                        add_z_save();
+                        //console.log('make new rectangle')
+                        if(lastClick.show){
+                            shapes.push(new Rectangle(lastClick.x,lastClick.y, 50,50))
+                        }
+                        else {
+                            shapes.push(new Rectangle(50,50, 50,50))
+                        }
                     }
-                    else {
-                        shapes.push(new Rectangle(50,50, 50,50))
+                    if(shape.t=='circle'){
+                        add_z_save();
+                        //console.log('make new circle')
+                        if(lastClick.show){
+                            shapes.push(new Circle(lastClick.x,lastClick.y, 50))
+                        }
+                        else {
+                            shapes.push(new Circle(50,50, 50))
+                        }
                     }
+                    if(shape.t=='v_slot'){
+                        add_z_save();
+                        //console.log('make new v_slot')
+                        if(lastClick.show){
+                            shapes.push(new Vertical_Slot(lastClick.x,lastClick.y, 50,50))
+                        }
+                        else shapes.push(new Vertical_Slot(50,50,50,50))
+                    }
+                    if(shape.t=='h_slot'){
+                        add_z_save();
+                        //console.log('make new h_slot')
+                        if(lastClick.show){
+                            shapes.push(new Horizontal_Slot(lastClick.x,lastClick.y, 50,50))
+                        }
+                        else shapes.push(new Horizontal_Slot(50,50,50,50))
+                    }
+                    oneClicked = true;
                 }
-                if(shape.t=='circle'){
+            })
+            lastClick.show = false;
+            shapes.some(shape => {
+                const mx = mouseX - mleft-xtrans;
+                const my = mouseY - mtop;
+                if(!oneClicked&&shape.isInOuterBoundary(mx,my)){
                     add_z_save();
-                    //console.log('make new circle')
-                    if(lastClick.show){
-                        shapes.push(new Circle(lastClick.x,lastClick.y, 50))
-                    }
-                    else {
-                        shapes.push(new Circle(50,50, 50))
-                    }
+                    shape.select(mx, my);
+                    oneClicked = true;
                 }
-                if(shape.t=='v_slot'){
-                    add_z_save();
-                    //console.log('make new v_slot')
-                    if(lastClick.show){
-                        shapes.push(new Vertical_Slot(lastClick.x,lastClick.y, 50,50))
-                    }
-                    else shapes.push(new Vertical_Slot(50,50,50,50))
-                }
-                if(shape.t=='h_slot'){
-                    add_z_save();
-                    //console.log('make new h_slot')
-                    if(lastClick.show){
-                        shapes.push(new Horizontal_Slot(lastClick.x,lastClick.y, 50,50))
-                    }
-                    else shapes.push(new Horizontal_Slot(50,50,50,50))
-                }
-                oneClicked = true;
-            }
-        })
-        lastClick.show = false;
-        shapes.some(shape => {
-            const mx = mouseX - mleft-xtrans;
-            const my = mouseY - mtop;
-            if(!oneClicked&&shape.isInOuterBoundary(mx,my)){
-                add_z_save();
-                shape.select(mx, my);
-                oneClicked = true;
-            }
-        });
-        /* Puts selected shape in front and at the begining of the array */
-        shapes.sort((a,b)=>{
-            if(a.selected)return -1;
-            if(b.selected)return 1;
-            return 0;
-        })
+            });
+            /* Puts selected shape in front and at the begining of the array */
+            shapes.sort((a,b)=>{
+                if(a.selected)return -1;
+                if(b.selected)return 1;
+                return 0;
+            })
 
-        if(scrollbar.isInArrowBoxes(mouseX, mouseY))scrollbar.clickArrowBoxes(mouseX, mouseY);
+            if(scrollbar.isInArrowBoxes(mouseX, mouseY))scrollbar.clickArrowBoxes(mouseX, mouseY);
 
-        else if(mouseY>height-mbot){
-            if(scrollbar.isInOuterBoundary(mouseX,mouseY)){
-                scrollbar.selected = true;
-                oneClicked = true; 
+            else if(mouseY>height-mbot){
+                if(scrollbar.isInOuterBoundary(mouseX,mouseY)){
+                    scrollbar.selected = true;
+                    oneClicked = true; 
+                }
+            }
+            else if(!oneClicked){
+                lastClick.x = mouseX - mleft - xtrans;
+                lastClick.y = mouseY - mtop;
+                lastClick.show = true;
             }
         }
-        else if(!oneClicked){
-            lastClick.x = mouseX - mleft - xtrans;
-            lastClick.y = mouseY - mtop;
-            lastClick.show = true;
-        }
-    }
+}
 }
 function mouseReleased(){
     scrollbar.selected = false;
@@ -441,21 +444,23 @@ function mouseReleased(){
     
 }
 function mouseDragged() {
-    if(mouseX > 0 && mouseX < width &&mouseY>0 && mouseY<height){
-        shapes.forEach(shape => {
-            const mx = this.mouseX - mleft-xtrans;
-            const my = this.mouseY - mtop ;
-            if (shape.selected) {
-                shape.dragged(mx,my);
-            }
-        });
-        
+    if(!infoBoxFlag){
+        if(mouseX > 0 && mouseX < width &&mouseY>0 && mouseY<height){
+            shapes.forEach(shape => {
+                const mx = this.mouseX - mleft-xtrans;
+                const my = this.mouseY - mtop ;
+                if (shape.selected) {
+                    shape.dragged(mx,my);
+                }
+            });
+            
+        }
+        if(scrollbar.selected){
+            scrollbar.dragged(mouseX);
+            //scrollbar.x = mouseX;
+            //xtrans = pwidth-(mouseX/width*(pwidth-(canvasWidth-mleft-mright)/2))-pwidth+(canvasWidth-mleft-mright)/2;
+        }
     }
-    if(scrollbar.selected){
-        scrollbar.dragged(mouseX);
-        //scrollbar.x = mouseX;
-        //xtrans = pwidth-(mouseX/width*(pwidth-(canvasWidth-mleft-mright)/2))-pwidth+(canvasWidth-mleft-mright)/2;
-     }
 
 }
 function mouseWheel(event){
