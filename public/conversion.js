@@ -42,6 +42,7 @@ function addType(t){
     }
     if(!flagt)allTypes.push(t);
 }
+/*
 const conversionTable={
     angle:'a',
     begin:'b',
@@ -104,14 +105,17 @@ const typeRev = {
     ws:'wire_spring',
     wt:'wire_tress',
 }
+*/
 
 const compT= [
     [
-        'angle', 'begin', 'connectors', 'end', 'flipped', 'gaps', 'holes', 'id', 'length', 'offset', 'radius', 'resolution', 'rotation', 'sections', 'terminals', 'thickness', 'width'
+        'armaturebx_h','armaturebx_v','barrel_qlatch','barrel_screw_qlatch','barrel','boitier','bornier','wire_spring','wire_tress'
+        ,'angle', 'begin', 'connectors', 'end', 'flipped', 'gaps', 'holes', 'length', 'offset', 'radius', 'resolution', 'rotation', 'sections', 'terminals', 'thickness', 'width'
         ,"%22%", "%2C%", "22",   "%3A%", '3A',   '7D', '~!', '%7B%','@2C%!', "!undefined@"
     ],
     [
-        'a', 'b', 'c', 'e','f','g','h','i','l','o','ra','re','ro','s', 'te','th','w' 
+        'aH','aV','bQ','bS','bA','bO','bR','wS','wT'         //type converts
+        ,'aN', 'bE', 'cO', 'eN','fL','gA','hO','lE','oF','rA','rE','rO','sE', 'tE','tH','wI'  //obj name conv
         ,'@',    '~',    '!',    '_',    '*',    ')' ,  '(', '+'   , '$' ,   ';'
     ]
 ]
