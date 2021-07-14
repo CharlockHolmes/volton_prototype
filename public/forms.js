@@ -132,8 +132,12 @@ class Shape {
     getArea() {
         return (this.w * toInch) * (this.h * toInch);
     }
-    isUnder(x, y) {
-        if (x > this.x - this.w / 2 && x < this.x + this.w / 2 + 35 && this.y - this.h / 2 > y && (this.selected || seeAll)) return this.y - this.h / 2;
+    // isUnder(x, y) {
+    //     if (x > this.x - this.w / 2 && x < this.x + this.w / 2 + 35 && this.y - this.h / 2 > y && (this.selected || seeAll)) return this.y - this.h / 2;
+    //     return false;
+    // }
+    isOver(x,y){
+        if(this.x+this.w/2+15>x&&this.x-this.w/2-15<x&&this.y<y&&(this.selected||seeAll))return {x:this.x, y:this.y}
         return false;
     }
     updateValues(x, y, w, h, rotation) {
@@ -179,13 +183,25 @@ class Rectangle extends Shape {
             const h = abs(this.h);
             let below = pheight;
             /* Top down arrow, insert the inch offset here */
-            shapes.forEach(shape => {
-                let temp = shape.isUnder(this.x + this.w / 2 + 15, this.y);
-                if (temp != false && temp < below) below = temp;
-                // if(below!= false)console.log(below)
+            // shapes.forEach(shape => {
+            //     let temp = shape.isOver(this.x + this.w / 2 + 15, this.y);
+            //     if (temp != false && temp < below) below = temp;
+            //     // if(below!= false)console.log(below)
+            // })
+            let overClear = true;
+            shapes.forEach(s=>{
+                const o = s.isOver(this.x+this.w/2+10, this.y);
+                if(o===false);
+                else{
+                    overClear=false;
+                     drawArrow(this.x+this.w/2+15, (this.y-o.y)/2+o.y, this.y-o.y, 15, false, (this.y-o.y)*toInch)
+                }
             })
+            if(overClear)drawArrow(this.x+this.w/2+15, (this.y-this.h/2)/2, this.y-this.h/2, 15, false, (this.y-this.h/2)*toInch)
+
+
             const offsetVal = (below - this.y - h / 2) / below * loadedRing.width * inchPerUnit;
-            drawArrow(this.x + this.w / 2 + 15, this.y + h / 2 + (below - this.y - h / 2) / 2, below - this.y - h / 2, 5, false, offsetVal)
+            //drawArrow(this.x + this.w / 2 + 15, this.y + h / 2 + (below - this.y - h / 2) / 2, below - this.y - h / 2, 5, false, offsetVal)
             push()
             strokeWeight(1);
             stroke(50);
@@ -193,15 +209,15 @@ class Rectangle extends Shape {
             pop();
 
             //text('x = ' + this.x + '\ny = ' + this.y, this.x, this.y)
-            line(this.x + (w / 2), this.y, this.x + (w / 2), -35);
-            line(this.x - (w / 2), this.y, this.x - (w / 2), -35);
+            //line(this.x + (w / 2), this.y, this.x + (w / 2), -35);
+            //line(this.x - (w / 2), this.y, this.x - (w / 2), -35);
             line(this.x, this.y + (h / 2), this.x + w / 2 + 20, this.y + (h / 2));
             line(this.x, this.y - (h / 2), this.x + w / 2 + 20, this.y - (h / 2));
             let a = w / pheight * lrwidth * inchPerUnit;
             //console.log(a);
             let b = h / pheight * lrwidth * inchPerUnit;
             //console.log(b);
-            drawArrow(this.x, -30, w, 10, true, a);
+            drawArrow(this.x, this.y+this.h/2+10, w, 10, true, a);
             drawArrow(this.x + w / 2 + 15, this.y, h, 10, false, b);
             textSize(TEXTSIZE);
             textAlign(CENTER, BOTTOM);
@@ -210,6 +226,10 @@ class Rectangle extends Shape {
     }
     copySelf(x){
         return new Rectangle(x, this.y, this.w, this.h)   
+    }
+    isOver(x,y){
+        if(this.x+this.w/2+20>x&&this.x-this.w/2<x&&this.y<y&&(this.selected||seeAll))return {x:this.x, y:this.y+this.h/2}
+        return false;
     }
 
 }
@@ -232,7 +252,7 @@ class Circle extends Shape {
             let below = pheight;
             /* Top down arrow, insert the inch offset here */
             shapes.forEach(shape => {
-                let temp = shape.isUnder(this.x + this.w / 2 + 15, this.y);
+                let temp = shape.isOver(this.x + this.w / 2 + 15, this.y);
                 if (temp != false && temp < below) below = temp;
                 // if(below!= false)console.log(below)
             })
@@ -269,7 +289,7 @@ class Circle extends Shape {
 class Vertical_Slot extends Rectangle {
     constructor(x, y, w, h) {
         super(x, y, w, h);
-        this.t = 'v_slot';
+        this.t = 'vslot';
     }
     draw() {
         push();
@@ -329,7 +349,7 @@ class Vertical_Slot extends Rectangle {
 class Horizontal_Slot extends Rectangle {
     constructor(x, y, w, h) {
         super(x, y, w, h);
-        this.t = 'h_slot';
+        this.t = 'hslot';
     }
     draw() {
         push();

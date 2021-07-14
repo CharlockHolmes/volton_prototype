@@ -107,16 +107,22 @@ const typeRev = {
 }
 */
 
+
+
 const compT= [
     [
-        'armaturebx_h','armaturebx_v','barrel_qlatch','barrel_screw_qlatch','barrel','boitier','bornier','wire_spring','wire_tress'
+        'true', 'false', "undefined"
+        ,'circle', 'rect', 'vslot' , 'hslot'
+        ,'armaturebx_h','armaturebx_v','barrel_qlatch','barrel_screw_qlatch','barrel','boitier','bornier','wire_spring','wire_tress'
         ,'angle', 'begin', 'connectors', 'end', 'flipped', 'gaps', 'holes', 'length', 'offset', 'radius', 'resolution', 'rotation', 'sections', 'terminals', 'thickness', 'width'
-        ,"%22%", "%2C%", "22",   "%3A%", '3A',   '7D', '~!', '%7B%','@2C%!', "!undefined@"
+        ,"%22%", "%2C%", "22",   "%3A%", '3A',   '7D', '~!', '%7B%','@2C%!', '~7B%!','oF@*'
     ],
     [
-        'aH','aV','bQ','bS','bA','bO','bR','wS','wT'         //type converts
+        'tR', 'fA','uN'
+        ,'cI', 'rC', 'vS', 'hS'
+        ,'aH','aV','bQ','bS','bA','bO','bR','wS','wT'         //type converts
         ,'aN', 'bE', 'cO', 'eN','fL','gA','hO','lE','oF','rA','rE','rO','sE', 'tE','tH','wI'  //obj name conv
-        ,'@',    '~',    '!',    '_',    '*',    ')' ,  '(', '+'   , '$' ,   ';'
+        ,'@',    '~',    '!',    '_',    '*',    ')' ,  '(', '+'   , '$' ,   ';'  , "'"      
     ]
 ]
 

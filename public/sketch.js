@@ -841,7 +841,8 @@ function generateURL(ring = r){
 
     //ur.searchParams.set('camera', camt);
     const encoded = ur.toString();
-    let compressed = compact(encoded);
+    const compressed = compact(encoded);
+    console.log(encoded)
     console.log(compressed)
 
     navigator.clipboard.writeText(compressed);
@@ -856,7 +857,7 @@ function generateURL(ring = r){
         body: JSON.stringify(data)
     }
     console.log('This will be send on email'+options)
-    //fetch('/api', options);
+    fetch('/api', options);
     
     //window.location.replace(encoded)
     // window.location.search = str;

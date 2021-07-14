@@ -386,7 +386,7 @@ function mousePressed() {
                             shapes.push(new Circle(50,50, 50))
                         }
                     }
-                    if(shape.t=='v_slot'){
+                    if(shape.t=='vslot'){
                         add_z_save();
                         //console.log('make new v_slot')
                         if(lastClick.show){
@@ -394,7 +394,7 @@ function mousePressed() {
                         }
                         else shapes.push(new Vertical_Slot(50,50,50,50))
                     }
-                    if(shape.t=='h_slot'){
+                    if(shape.t=='hslot'){
                         add_z_save();
                         //console.log('make new h_slot')
                         if(lastClick.show){
@@ -543,7 +543,7 @@ function pointArrow(hole,txt){
                 y = hole.y - Math.sin(PI*1/4)*hole.w/2;
             }
             break;
-        case 'v_slot':
+        case 'vslot':
             if(hole.arrowIndex==0){
                 x = hole.x + Math.cos(PI*3/4)*hole.w/2;
                 y = hole.y -hole.h/2- Math.sin(PI*3/4)*hole.w/2;
@@ -561,7 +561,7 @@ function pointArrow(hole,txt){
                 y = hole.y -hole.h/2- Math.sin(PI*1/4)*hole.w/2;
             }
             break;
-        case 'h_slot':
+        case 'hslot':
             if(hole.arrowIndex==0){
                 x = hole.x - hole.w/2+ Math.cos(PI*3/4)*hole.h/2;
                 y = hole.y - Math.sin(PI*3/4)*hole.h/2;
@@ -716,14 +716,14 @@ function holeExport(){
                 t: shape.t,
             })
         }
-        else if(shape.t === 'v_slot'){
+        else if(shape.t === 'vslot'){
             randID = (Math.random()*10000).toFixed(0);
             holes.push({
                 r: {w:shape.w/2/(pheight)*(lrwidth), h:shape.h/2/(pheight)*(lrwidth)},
                 offset:yoff,
                 angle: shape.x*toRad,
                 t: 'rect',
-                id:'v_slot'+randID
+                id:'vslot'+randID
             })
             holes.push({
                 r: shape.w/2/(pheight)*(lrwidth),
@@ -731,38 +731,38 @@ function holeExport(){
                 angle: shape.x*toRad,
 
                 t: 'circle',
-                id:'v_slot'+randID
+                id:'vslot'+randID
             })
             holes.push({
                 r: shape.w/2/(pheight)*(lrwidth),
                 offset:Math.round(((shape.y-shape.h/2)/pheight*lrwidth- lrwidth/2)*DECI)/DECI,
                 angle: shape.x*toRad,
                 t: 'circle',
-                id:'v_slot'+randID
+                id:'vslot'+randID
             })
         }
-        else if(shape.t === 'h_slot'){
+        else if(shape.t === 'hslot'){
             randID = (Math.random()*10000).toFixed(0);
             holes.push({
                 r: {w:shape.w/2/(pheight)*(lrwidth), h:shape.h/2/(pheight)*(lrwidth)},
                 offset:yoff,
                 angle: shape.x*toRad,
                 t: 'rect',
-                id:'h_slot'+randID
+                id:'hslot'+randID
             })
             holes.push({
                 r: shape.h/2/(pheight)*(lrwidth),
                 offset:yoff,
                 angle: (shape.x+shape.w/2)*2*PI/pwidth,
                 t: 'circle',
-                id:'h_slot'+randID
+                id:'hslot'+randID
             })
             holes.push({
                 r: shape.h/2/(pheight)*(lrwidth),
                 offset:yoff,
                 angle:(shape.x-shape.w/2)*2*PI/pwidth,
                 t: 'circle',
-                id:'h_slot'+randID
+                id:'hslot'+randID
             })
         }
         else if(shape.t=='barrel'||shape.t=='barrel_screw'||shape.t=='barrel_qlatch'||shape.t=='barrel_screw_qlatch'){ /* if its a connector */
@@ -852,7 +852,7 @@ function add_z_save(obj = shapes){
                     t:shape.t
                 })
             }
-            else if(shape.t == 'v_slot'||shape.t == 'h_slot'||shape.t == 'rect'){
+            else if(shape.t == 'vslot'||shape.t == 'hslot'||shape.t == 'rect'){
                 temp.push({
                     x: shape.x,
                     y:shape.y,
@@ -893,8 +893,8 @@ function get_z_save(){
         restore.forEach(c=>{
             if(c.t=='circle')shapes.push(new Circle(c.x, c.y, c.d))
             else if(c.t=='rect')shapes.push(new Rectangle(c.x, c.y, c.w, c.h))
-            else if(c.t=='v_slot')shapes.push(new Vertical_Slot(c.x, c.y, c.w, c.h))
-            else if(c.t=='h_slot')shapes.push(new Horizontal_Slot(c.x, c.y, c.w, c.h))
+            else if(c.t=='vslot')shapes.push(new Vertical_Slot(c.x, c.y, c.w, c.h))
+            else if(c.t=='hslot')shapes.push(new Horizontal_Slot(c.x, c.y, c.w, c.h))
             else if(c.t=='barrel'||c.t=='barrel_screw'||c.t=='barrel_qlatch'||c.t=='barrel_screw_qlatch')shapes.push(new Connector(c.x, c.y, c.flipped,c.t,undefined,c.id))
             else shapes.push(new Terminal(c.x, c.y, c.flipped,c.t,c.rotation))
         })
