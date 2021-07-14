@@ -163,7 +163,7 @@
         </div>
         <div id="gapboxdrag" class = 'draggables'>
             <div id="gapboxdragheader">Gaps <span class = "collapsible">-</span></div>
-            <table class="ring-info" style="width:320px;">
+            <table class="ring-info" style="width:340px;">
                 <tr>
                     <td>#</td>
                     <td>Angle</td>
@@ -176,7 +176,11 @@
                     <td><input class="input-data"id='gapangle'> deg</td>
                     <td><input class="input-data"id='gapwidth'> deg</td>
                     <td><input class="input-data"> in</td>
-                    <td>Type</td>
+                    <td><select id="h_rotation" name="Direction" style="width:50px;">
+                        <option value="gap">Gap</option>
+                        <option value="hinge">Hinge</option>
+                        <option value="partial">Partial</option>
+                    </select></td>
                 </tr>
                 <tr>
                     <td>2</td>

@@ -97,7 +97,6 @@ function setup() {
     holeImport();
     itemImport();
 }
-
 function draw() {
     xtrans = scrollbar.mapTo(scrollbar.x);
     drawBand();

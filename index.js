@@ -52,7 +52,7 @@ function sendMail(text = 'nothing was inserted'){
         from: 'testvolton2021@gmail.com',
         to: 'charles.simon1999@hotmail.com',
         subject: 'Sending Email using Node.js',
-        html: '<a href="'+text+'">'+text+'</a><p>Click on the attatchment and open link</p>',
+        html: '<a href="'+text+'">'+"https://voltondesign.com"+'</a><p>Click on the attatchment and open link</p>',
         // attachments: {   // utf-8 string as an attachment
         //     filename: 'link.html',
         //     content: '<a href="'+text+'">link</a>'
