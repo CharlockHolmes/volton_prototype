@@ -37,6 +37,7 @@ let deltaMove;
 let loaderCount = 0; // Used in the GUI
 let inverseConnectors = false;
 //let gui = new dat.GUI();
+let gapTable
 
 const dcmpts =100000;
 
@@ -542,6 +543,9 @@ function loadCustomItem() {
         makeInstance(geometry, 0x81878c, 0),
     ];
     requestAnimationFrame(render);
+
+    gapTable = new DomTable(r.gaps.length);
+    gapTable.uploadTableData();
 }
 
 /**
@@ -698,21 +702,7 @@ document.getElementById('submitbutton').onclick = () =>{
 // document.getElementById('loadbutton').onclick = () =>{
 //     loadMenuThings();
 // }
-/**
- * Triggered when the gap button submit is pressed.
- */
-document.getElementById('submitgapbutton').onclick = () =>{
-    let twidth = document.getElementById('gapwidth').value;
-    let tangle = document.getElementById('gapangle').value;
-    console.log(twidth, tangle)
-    if(!Number.isFinite(twidth)&&!Number.isFinite(tangle)){
-        r.gaps = [];
-        r.addGap(undefined, undefined, 'barrel', {position:tangle*2*PI/360, angle:twidth*2*PI/360});
-        saveRing();
-    }
-    else console.log('angle entries are invalid')
 
-}
 /**
  * Triggered when load gap is pressed. 
  */
@@ -790,8 +780,8 @@ function loadMenuThings(){
     document.getElementById('ringdiameter').value = (r.radius*2*inchPerUnit).toFixed(2);
     //document.getElementById('ringgap').value = 'not implemented';
     document.getElementById('ringresolution').value = r.resolution;
-    document.getElementById('gapwidth').value = Math.abs(r.gaps[0].begin-r.gaps[0].end)*360/(2*PI);
-    document.getElementById('gapangle').value = (r.gaps[0].begin+r.gaps[0].end)/2*360/(2*PI);
+    //document.getElementById('gapwidth').value = Math.abs(r.gaps[0].begin-r.gaps[0].end)*360/(2*PI);
+    //document.getElementById('gapangle').value = (r.gaps[0].begin+r.gaps[0].end)/2*360/(2*PI);
 }
 /**
  * Loads ring holes, used to only update the ring holes then to save the item.

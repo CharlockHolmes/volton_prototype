@@ -161,7 +161,8 @@
                 </tr>
             </table>
         </div>
-        <div id="gapboxdrag" class = 'draggables'>
+        <div id="gapdiv"></div>
+        <!--div id="gapboxdrag" class = 'draggables'>
             <div id="gapboxdragheader">Gaps <span class = "collapsible">-</span></div>
             <table class="ring-info" style="width:340px;">
                 <tr>
@@ -193,7 +194,7 @@
                     <td id='submitgapbutton'>submit</td>
                 </tr>
             </table>
-        </div>
+        </div-->
     </div>
 
     <canvas class='webgl' id='three'></canvas>
@@ -213,9 +214,8 @@
     <!-- Collapsed script-->
     <script>
         var coll = document.getElementsByClassName("collapsible");
-        var i;
 
-        for (i = 0; i < coll.length; i++) {
+        for (let i = 0; i < coll.length; i++) {
         coll[i].addEventListener("click", function() {
             this.classList.toggle("active");
             const content = this.parentElement.nextElementSibling;
@@ -234,7 +234,7 @@
         dragElement(document.getElementById("ringboxdrag"));
         dragElement(document.getElementById("selectedholeboxdrag"));
         dragElement(document.getElementById("selectedconboxdrag"));
-        dragElement(document.getElementById("gapboxdrag"));
+        
         dragElement(document.getElementById("powerboxdrag"));
         dragElement(document.getElementById("p5holder"));
         
