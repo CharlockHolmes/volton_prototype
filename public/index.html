@@ -216,16 +216,22 @@
         var coll = document.getElementsByClassName("collapsible");
 
         for (let i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            const content = this.parentElement.nextElementSibling;
+            coll[i].addEventListener("click", function() {
+                addCollapse(this);
+            });
+        }
+        let plannerBoxFlag = true;
+        function addCollapse(item) {
+            item.classList.toggle("active");
+            const content = item.parentElement.nextElementSibling;
             if (content.style.display !== "none") {
-            content.style.display = "none";
+                content.style.display = "none";
+                plannerBoxFlag = false;
             } else {
-            content.style.display = "table";
+                content.style.display = "table";
+                plannerBoxFlag = true; 
             }
-        });
-}
+        }
     </script>
     <!-- Dragged elements script-->
     <script>

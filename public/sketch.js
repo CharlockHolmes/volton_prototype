@@ -182,8 +182,16 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
             gltf.scene.scale.y = 0.01;
             gltf.scene.scale.z = 0.01;
 
-            gltf.scene.position.x = Math.cos(angle) * radius*1.0064;
-            gltf.scene.position.y = Math.sin(angle) * radius*1.0064;
+            if(name=='penture'){
+                gltf.scene.position.x = Math.cos(angle) * radius*r.thickness;
+                gltf.scene.position.y = Math.sin(angle) * radius*r.thickness;
+                //gltf.scene.scale.y *=(r.radius*inchPerUnit*2+5)/10;
+                gltf.scene.scale.x *= (r.radius*inchPerUnit*2+5)/10;
+            }
+            else{
+                gltf.scene.position.x = Math.cos(angle) * radius*1.0064;
+                gltf.scene.position.y = Math.sin(angle) * radius*1.0064;
+            }
             gltf.scene.position.z = offsetZ;
             if(flipped && (name=='barrel'||name=='barrel_qlatch'))angle +=CONNECTOR_ANGLE_OFFSET/r.radius;
             else if(name=='barrel'||name=='barrel_qlatch')angle-=CONNECTOR_ANGLE_OFFSET/r.radius;
@@ -200,6 +208,9 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
                     o.material.color = {r:0.99, g:0.7,b:0.5};
                 }
             })
+            if(name=='penture'){
+                gltf.scene.scale.z = 0.01*r.width*1.3;
+            }
             scene.add(gltf.scene);
             //console.log(name,gltf.scene)/////////////////////////////////
             //console.log("A " + name + " was Added to scene");
@@ -269,21 +280,24 @@ function defaultRing() {
 function loadDefaultConnectorSettings(){
     const data = getStandardData(r.width*inchPerUnit, r.radius*2*inchPerUnit, 'barrel')
     connectors = [];
+    r.connectors = [];
     let gapcnt = 0;
     r.gaps.forEach(gap => {
         const randId0 = (Math.random()*10000000).toFixed();
         const randId1 = (Math.random()*10000000).toFixed();
-        if (gap.t == 'barrel') {
+        let ext = '';
+        if(gap.t=='qlatch')ext = '_qlatch'
+        if (gap.t == 'barrel'||gap.t == 'qlatch') {
             const conNum = data.num;
             console.log(conNum)
             if(conNum%2==1){
                 if(gapcnt%2==0){
-                    addConnector(gap.begin, 0, 'barrel_screw_qlatch',false,randId0); 
-                    addConnector(gap.end, 0, 'barrel_qlatch', true,randId0) 
+                    addConnector(gap.begin, 0, 'barrel_screw'+ext,false,randId0); 
+                    addConnector(gap.end, 0, 'barrel'+ext, true,randId0) 
                 }
                 if(gapcnt%2==1){
-                    addConnector(gap.begin, 0, 'barrel_qlatch',false,randId0); 
-                    addConnector(gap.end, 0, 'barrel_screw_qlatch', true,randId0 ) 
+                    addConnector(gap.begin, 0, 'barrel'+ext,false,randId0); 
+                    addConnector(gap.end, 0, 'barrel_screw'+ext, true,randId0 ) 
                 }
             }
             if(conNum>1){
@@ -291,21 +305,22 @@ function loadDefaultConnectorSettings(){
                     let offset;
                     offset = r.width/(3*(i+1));
                     if(gapcnt%2==0){
-                        addConnector(gap.begin,offset , 'barrel_screw_qlatch',false,randId0);
-                        addConnector(gap.end, offset, 'barrel_qlatch', true,randId0);
-                        addConnector(gap.begin, -offset, 'barrel_screw_qlatch',false,randId1);
-                        addConnector(gap.end, -offset, 'barrel_qlatch', true,randId1);
+                        addConnector(gap.begin,offset , 'barrel_screw'+ext,false,randId0);
+                        addConnector(gap.end, offset, 'barrel'+ext, true,randId0);
+                        addConnector(gap.begin, -offset, 'barrel_screw'+ext,false,randId1);
+                        addConnector(gap.end, -offset, 'barrel'+ext, true,randId1);
                     }
                     if(gapcnt%2==1){
-                        addConnector(gap.begin,offset , 'barrel_qlatch',false,randId0);
-                        addConnector(gap.end, offset, 'barrel_screw_qlatch',true,randId0);
-                        addConnector(gap.begin, -offset, 'barrel_qlatch',false,randId1);
-                        addConnector(gap.end, -offset, 'barrel_screw_qlatch',true,randId1);
+                        addConnector(gap.begin,offset , 'barrel'+ext,false,randId0);
+                        addConnector(gap.end, offset, 'barrel_screw'+ext,true,randId0);
+                        addConnector(gap.begin, -offset, 'barrel'+ext,false,randId1);
+                        addConnector(gap.end, -offset, 'barrel_screw'+ext,true,randId1);
                     }
                 }
             } 
             gapcnt++;
         }
+        if(gap.t=='hinge')addConnector((gap.begin+gap.end)/2, 0, 'penture',false,randId0)
     });
 }
 function loadDefaultBorniersSettings(){
@@ -544,7 +559,7 @@ function loadCustomItem() {
     ];
     requestAnimationFrame(render);
 
-    gapTable = new DomTable(r.gaps.length);
+    gapTable = new DomTable(5);
     gapTable.uploadTableData();
 }
 
@@ -554,31 +569,32 @@ function loadCustomItem() {
  */
 function render(time) {
     time *= 0.001; // the callback sets the time value
-
-    if (resizeRendererToDisplaySize(renderer)) {
-        const canvas = renderer.domElement;
-        camera.aspect = canvas.clientWidth / canvas.clientHeight;
-        camera.updateProjectionMatrix();
-    }
-    renderer.render(scene, camera);
-    
-    if(countMove<=repeatMove){
-        camera.position.x += deltaMove.px;
-        camera.position.y += deltaMove.py;
-        camera.position.z += deltaMove.pz;
-        controls.target.x += deltaMove.tx;
-        controls.target.y += deltaMove.ty;
-        controls.target.z += deltaMove.tz;
+    if(!plannerBoxFlag){ //Only renders if planner menu is hidden, fixes framerate issues
+        if (resizeRendererToDisplaySize(renderer)) {
+            const canvas = renderer.domElement;
+            camera.aspect = canvas.clientWidth / canvas.clientHeight;
+            camera.updateProjectionMatrix();
+        }
+        renderer.render(scene, camera);
         
-        camera.rotation._x += deltaMove.rx;
-        camera.rotation._y += deltaMove.ry;
-        camera.rotation._z += deltaMove.rz; 
-        countMove++
-        camera.updateProjectionMatrix();
-        camera.updateMatrix();
+        if(countMove<=repeatMove){
+            camera.position.x += deltaMove.px;
+            camera.position.y += deltaMove.py;
+            camera.position.z += deltaMove.pz;
+            controls.target.x += deltaMove.tx;
+            controls.target.y += deltaMove.ty;
+            controls.target.z += deltaMove.tz;
+            
+            camera.rotation._x += deltaMove.rx;
+            camera.rotation._y += deltaMove.ry;
+            camera.rotation._z += deltaMove.rz; 
+            countMove++
+            camera.updateProjectionMatrix();
+            camera.updateMatrix();
+        }
+        
+        controls.update(); // Needs to be after the camera movement to update properly
     }
-    
-    controls.update(); // Needs to be after the camera movement to update properly
     requestAnimationFrame(render);
 }
 

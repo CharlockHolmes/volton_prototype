@@ -67,7 +67,6 @@ function preload(){
     rightarrow_img = loadImage('ressources/2dtextures/rightarrow.png');
     leftarrow_img = loadImage('ressources/2dtextures/leftarrow.png');
 }
-
 function setup() {
     p5canvas = createCanvas(canvasWidth, canvasHeight);
     p5canvas.parent('p5holder');
@@ -190,7 +189,6 @@ function drawDegrees(){
     }
     pop();
 }
-
 function drawContour(){
     push();
     noStroke();
@@ -355,7 +353,7 @@ function doubleClicked() {
 }
 
 function mousePressed() {
-    if(!infoBoxFlag){
+    if(!infoBoxFlag && plannerBoxFlag){
         if(mouseX > 0 && mouseX < width &&mouseY>0 && mouseY<height){
             shapes.forEach(shape => {
                 shape.unSelect();
@@ -435,7 +433,7 @@ function mousePressed() {
                 lastClick.show = true;
             }
         }
-}
+    }
 }
 function mouseReleased(){
     scrollbar.selected = false;
@@ -443,7 +441,7 @@ function mouseReleased(){
     
 }
 function mouseDragged() {
-    if(!infoBoxFlag){
+    if(!infoBoxFlag && plannerBoxFlag){
         if(mouseX > 0 && mouseX < width &&mouseY>0 && mouseY<height){
             shapes.forEach(shape => {
                 const mx = this.mouseX - mleft-xtrans;
@@ -463,7 +461,7 @@ function mouseDragged() {
 
 }
 function mouseWheel(event){
-    if(!hidden){
+    if(!hidden&&plannerBoxFlag){
         if(mouseX>0&&mouseX<width&&mouseY>0&&mouseY<height)
             return false;
     }
@@ -764,7 +762,7 @@ function holeExport(){
                 id:'hslot'+randID
             })
         }
-        else if(shape.t=='barrel'||shape.t=='barrel_screw'||shape.t=='barrel_qlatch'||shape.t=='barrel_screw_qlatch'){ /* if its a connector */
+        else if(shape.t=='barrel'||shape.t=='barrel_screw'||shape.t=='barrel_qlatch'||shape.t=='barrel_screw_qlatch'||shape.t=='penture'){ /* if its a connector */
             tring.connectors.push({
                 angle: shape.x*toRad,
                 flipped: shape.flipped,

@@ -563,15 +563,17 @@ class Terminal extends Shape {
         if(this.selected||seeAll){
             this.showDirection();
             let overClear = true;
+            let overClosest = {x:10000, y:-10000};
             shapes.forEach(s=>{
                 const o = s.isOver(this.x+this.w/2+10, this.y);
                 if(o===false);
                 else{
                     overClear=false;
-                    drawArrow(this.x+this.w/2+10, (this.y-o.y)/2+o.y, this.y-o.y, 10, false, (this.y-o.y)*toInch)
+                    if(o.y>overClosest.y)overClosest.y = o.y;
                 }
             })
             if(overClear)drawArrow(this.x+this.w/2+10, this.y/2, this.y, 10, false, this.y*toInch)
+            else drawArrow(this.x+this.w/2+10, (this.y-overClosest.y)/2+overClosest.y, this.y-overClosest.y, 10, false, (this.y-overClosest.y)*toInch)
         }
     }
     isOver(x,y){
@@ -659,17 +661,20 @@ class Connector extends Terminal {
         if(this.selected||seeAll){
             //this.showDirection();
             let overClear = true;
+            let overClosest = {x:10000, y:-10000};
             shapes.forEach(s=>{
                 const o = s.isOver(this.x+this.w/2+10, this.y);
                 if(o===false);
                 else{
                     overClear=false;
-                    if(this.flipped) drawArrow(this.tx+this.w/2+10, (this.y-o.y)/2+o.y, this.y-o.y, 10, false, (this.y-o.y)*toInch)
-                    if(!this.flipped) drawArrow(this.tx-this.w/2-10, (this.y-o.y)/2+o.y, this.y-o.y, 10, false, (this.y-o.y)*toInch)
+                    if(o.y>overClosest.y)overClosest.y = o.y;
+                    
                 }
             })
             if(overClear&&this.flipped)drawArrow(this.tx+this.w/2+10, this.y/2, this.y, 10, false, this.y*toInch)
-            if(overClear&&!this.flipped)drawArrow(this.tx-this.w/2-10, this.y/2, this.y, 10, false, this.y*toInch)
+            else if(overClear&&!this.flipped)drawArrow(this.tx-this.w/2-10, this.y/2, this.y, 10, false, this.y*toInch)
+            else if(this.flipped) drawArrow(this.tx+this.w/2+10, (this.y-overClosest.y)/2+overClosest.y, this.y-overClosest.y, 10, false, (this.y-overClosest.y)*toInch)
+            else if(!this.flipped) drawArrow(this.tx-this.w/2-10, (this.y-overClosest.y)/2+overClosest.y, this.y-overClosest.y, 10, false, (this.y-overClosest.y)*toInch)
         }
     }
     mirror(){
