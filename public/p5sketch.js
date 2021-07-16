@@ -640,7 +640,7 @@ function selectHole(hole){
     document.getElementById('h_height').value = (hole.h*toInch).toFixed(3);    
     document.getElementById('h_width').value = (hole.w*toInch).toFixed(3);    
     document.getElementById('h_offset').value = (hole.y*toInch).toFixed(3); 
-    if(hole.rotation!=null)document.getElementById('h_rotation').value =Math.round(hole.rotation*360/(2*PI));
+    if(hole.rotation!=null)document.getElementById('h_rotation').value = Math.round(hole.rotation*360/(2*PI));
 }  
 
 document.getElementById('submitholebutton').onclick = ()=>{
@@ -660,12 +660,12 @@ function itemImport(){
     let con = loadedRing.connectors
     let ter = loadedRing.terminals
     con.forEach(c=>{
-        let pos = rad_to_XY_pixels(c.angle, c.offset);
+        let pos = rad_to_XY_pixels(c.angle, -c.offset);
         shapes.push(new Connector(pos.x, pos.y, c.flipped,c.t,undefined,c.id))
     })
     ter.forEach(t=>{
-        let pos= rad_to_XY_pixels(t.angle, t.offset);
-        shapes.push(new Terminal(pos.x, pos.y, t.flipped,t.t,t.rotation))
+        let pos= rad_to_XY_pixels(t.angle, -t.offset);
+        shapes.push(new Terminal(pos.x, pos.y, t.flipped,t.t,2*PI-t.rotation))
     })
     attachConnectors();
 }
@@ -696,7 +696,7 @@ function holeExport(){
     tring.terminals = [];
     tring.connectors = [];
     shapes.forEach(shape => {
-        const yoff = Math.round((shape.y/pheight*lrwidth- lrwidth/2)*DECI)/DECI;
+        const yoff = Math.round((lrwidth/2-shape.y/pheight*lrwidth )*DECI)/DECI;
         if(shape.t === 'circle'){
             holes.push({
                 r: shape.w/2/(pheight)*(lrwidth),
@@ -724,7 +724,7 @@ function holeExport(){
             })
             holes.push({
                 r: shape.w/2/(pheight)*(lrwidth),
-                offset:Math.round(((shape.y+shape.h/2)/pheight*lrwidth- lrwidth/2)*DECI)/DECI,
+                offset:Math.round((lrwidth/2-(shape.y+shape.h/2)/pheight*lrwidth)*DECI)/DECI,
                 angle: shape.x*toRad,
 
                 t: 'circle',
@@ -732,7 +732,7 @@ function holeExport(){
             })
             holes.push({
                 r: shape.w/2/(pheight)*(lrwidth),
-                offset:Math.round(((shape.y-shape.h/2)/pheight*lrwidth- lrwidth/2)*DECI)/DECI,
+                offset:Math.round((lrwidth/2-(shape.y-shape.h/2)/pheight*lrwidth)*DECI)/DECI,
                 angle: shape.x*toRad,
                 t: 'circle',
                 id:'vslot'+randID
@@ -776,7 +776,7 @@ function holeExport(){
                 angle: shape.x*toRad,
                 offset:yoff,
                 t:shape.t,
-                rotation:shape.rotation,
+                rotation:2*PI-shape.rotation,
             })
         }
     })
@@ -788,7 +788,7 @@ function holeImport(){
     let holes = loadedRing.holes;
     shapes = [];
     holes.forEach(hole =>{
-        const pos = rad_to_XY_pixels(hole.angle, hole.offset);
+        const pos = rad_to_XY_pixels(hole.angle, -hole.offset);
 
         if(hole.id==undefined){
             if(hole.t=='circle'){

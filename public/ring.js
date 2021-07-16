@@ -273,7 +273,7 @@ class Ring {
      * @param {*} t Screw or barrel
      * @param {*} options Enter a 'position' for angle begining and a 'angle' for the gap angle
      */
-    addGap(begin, end, t = 'screws',options) {
+    addGap(begin=0, end=0, t = 'screws',options=undefined) {
         if(options!==undefined&&options.position!==undefined&&options.angle!==undefined){
             this.gaps.push({
                 begin: options.position - options.angle/2,

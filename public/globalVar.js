@@ -1,7 +1,9 @@
 class DomTable {
     constructor(rows) {
         this.rows = rows;
-        this.build(rows)
+        this.ref;
+        this.pos = null; 
+        this.build(rows);
         
     }
     /**
@@ -16,9 +18,19 @@ class DomTable {
 
         let ref = document.getElementById('gapdiv');
         ref.innerHTML += this.createTable(num);
-        dragElement(document.getElementById("gapboxdrag"));
+        
+        this.ref = document.getElementById("gapboxdrag")
+        dragElement(this.ref);
+        if(this.pos==null)this.pos={top:this.ref.style.top, left:this.ref.style.left}
+        else{
+            this.ref.style.top = this.pos.top;
+            this.ref.style.left = this.pos.left;
+        }
         document.getElementById('submitgapbutton').onclick = ()=>this.loadTableData();
+        document.getElementById('addgapbutton').onclick = ()=>{this.pos={top:this.ref.style.top, left:this.ref.style.left};this.build(this.rows+1)};
+        document.getElementById('removegapbutton').onclick = ()=>{if(this.rows>1){this.pos={top:this.ref.style.top, left:this.ref.style.left};this.build(this.rows-1);}};
         document.getElementById('gapspan').addEventListener("click", function() {addCollapse(this);});
+        this.uploadTableData();
     }
     adjustRingGaps(num){
         while(r.gaps.length!=num){
@@ -29,12 +41,12 @@ class DomTable {
     }
     createTable(rows) {
         let firstPart = "<div id='gapboxdrag' class = 'draggables'><div id='gapboxdragheader'>Gaps <span id='gapspan'class = 'collapsible'>-</span></div><table class='ring-info' style='width:340px;'><tr><td>#</td><td>Angle</td><td>Arc</td><td>Length</td><td>Type</td></tr>"
-        let lastPart = "<tr><td id='submitgapbutton'>submit</td></tr></table></div>"
+        let lastPart = "<tr><td id='submitgapbutton'>submit</td><td id='addgapbutton'>add</td><td id='removegapbutton'>remove</td></tr></table></div>"
         let middle='';
         for (let i = 0; i < rows; i++) {
             middle += "<tr><td>" + i + "</td><td><input class='input-data'id='gapangle" + i + "'> deg</td><td><input class='input-data'id='gapwidth" + i + "'> deg</td><td><input class='input-data'id='gaparc" + i + "'> in</td><td><select id='gaptype" + i + "' name='type' style='width:50px;'><option value='barrel'>B-Nut</option><option value='qlatch'>Q-latch</option><option value='screws'>Tabs</option><option value='hinge'>Hinge</option><option value='partial'>Partial</option></select></td></tr>"
         }
-        console.log(firstPart + middle + lastPart)
+        //console.log(firstPart + middle + lastPart)
         return firstPart + middle + lastPart;
     }
     loadTableData(){
