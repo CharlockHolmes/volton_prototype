@@ -492,7 +492,7 @@ class Terminal extends Shape {
     constructor(x, y, flipped, t = 'Object', rotation = 0) {
         super(x, y);
         this.connectors = ['borne', 'armature_bx_vertical', 'armature_bx_horizontal']
-        this.rotation = 0;
+        this.rotation = rotation;
         this.t = t;
         if (t == 'barrel' || t == 'barrel_screw'||t=='barrel_screw_qlatch') {
             this.flipped = flipped;
@@ -576,6 +576,7 @@ class Terminal extends Shape {
             else drawArrow(this.x+this.w/2+10, (this.y-overClosest.y)/2+overClosest.y, this.y-overClosest.y, 10, false, (this.y-overClosest.y)*toInch)
         }
     }
+
     isOver(x,y){
         if(this.tx+this.w/2+15>x&&this.tx-this.w/2-15<x&&this.y<y&&(this.selected||seeAll))return {x:this.tx, y:this.y}
         return false;
@@ -585,20 +586,25 @@ class Terminal extends Shape {
         const x = this.tx;
         const y = this.y;
         const off = this.w/2;
-        if(Math.round(this.rotation*360/(2*PI)) == 0 && !this.flipped){
+        const rot = Math.round(this.rotation*360/(2*PI));
+        if(rot >= 350 || rot<=10&&!this.flipped){
+            this.rotation = 0;
             line(x+(10+off/2), y, x+(5+off/2), y-5)
             line(x+(10+off/2), y, x+(5+off/2), y+5)
         }
-        if(Math.round(this.rotation*360/(2*PI)) == 90){
+        if(rot >= 80 && rot<=100 ){
+            this.rotation = PI/2;
             line(x, y-(10+off/2), x+5, y-(5+off/2))
             line(x, y-(10+off/2), x-5, y-(5+off/2))
             
         }
-        if(Math.round(this.rotation*360/(2*PI)) ==180 || this.flipped){
+        if(rot >= 170 && rot<=190  || this.flipped){
+            this.rotation = PI;
             line(x-(10+off/2), y, x-(5+off/2), y-5)
             line(x-(10+off/2), y, x-(5+off/2), y+5)
         }
-        if(Math.round(this.rotation*360/(2*PI)) ==270){
+        if(rot >= 260 && rot<=280 ){
+            this.rotation = PI*3/2;
             line(x, y+(10+off/2), x-5, y+(5+off/2))
             line(x, y+(10+off/2), x+5, y+(5+off/2))
         }

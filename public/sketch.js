@@ -330,6 +330,9 @@ function loadDefaultBorniersSettings(){
     addTerminal(Math.PI / 4*3, -r.width/4,'wire_tress')
     addTerminal(Math.PI / 5*3, -r.width/4,'wire_spring')
     addTerminal(undefined, -r.width/4, 'armaturebx_v',3*PI/2)
+    addTerminal(Math.PI*7/4, -r.width/3, 'eurov',3*PI/2)
+    addTerminal(Math.PI*7/4, r.width/3, 'euroh',3*PI/2)
+    addTerminal(Math.PI*7/4, r.width/3, 'tressh',3*PI/2)
     addTerminal(Math.PI / 3, -r.width/4)
 }
 /**
@@ -651,7 +654,7 @@ document.getElementById('resetcamera').onclick = () => {
     endMove = {
         px:0,
         py:0,
-        pz:(cameraPositionZ*defaultRadius).toFixed(10),
+        pz:-(cameraPositionZ*defaultRadius).toFixed(10),
         rx:0,
         ry:0,
         rz:0,
