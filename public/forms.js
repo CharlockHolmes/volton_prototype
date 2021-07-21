@@ -140,12 +140,13 @@ class Shape {
         if(this.x+this.w/2+15>x&&this.x-this.w/2-15<x&&this.y<y&&(this.selected||seeAll))return {x:this.x, y:this.y}
         return false;
     }
-    updateValues(x, y, w, h, rotation) {
+    updateValues(x, y, w, h, rotation,type=undefined) {
         this.x = x;
         this.y = y;
-        this.w = w;
-        this.h = h;
+        if(w!=undefined)this.w = w;
+        if(h!=undefined)this.h = h;
         this.rotation = rotation;
+        if(type!=undefined)this.t=type;
     }
     center(){
         this.y = pheight/2;

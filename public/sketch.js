@@ -562,7 +562,7 @@ function loadCustomItem() {
     ];
     requestAnimationFrame(render);
 
-    gapTable = new DomTable(5);
+    gapTable = new DomTable(r.gaps.length);
     gapTable.uploadTableData();
 }
 

@@ -636,13 +636,44 @@ document.getElementById('exportholes').onclick = ()=>{
 
 
 function selectHole(hole){
-    document.getElementById('h_angle').value = (hole.x*toDeg).toFixed();    
-    document.getElementById('h_height').value = (hole.h*toInch).toFixed(3);    
-    document.getElementById('h_width').value = (hole.w*toInch).toFixed(3);    
-    document.getElementById('h_offset').value = (hole.y*toInch).toFixed(3); 
-    if(hole.rotation!=null)document.getElementById('h_rotation').value = Math.round(hole.rotation*360/(2*PI));
+    if(hole.t=='vslot'||hole.t=='hslot'||hole.t=='rect'||hole.t=='circle'){
+
+        document.getElementById('h_angle').value = (hole.x*toDeg).toFixed();    
+        document.getElementById('h_height').value = (hole.h*toInch).toFixed(3);    
+        document.getElementById('h_width').value = (hole.w*toInch).toFixed(3);    
+        document.getElementById('h_offset').value = (hole.y*toInch).toFixed(3); 
+    }else{
+        document.getElementById('c_angle').value = (hole.x*toDeg).toFixed();    
+        document.getElementById('c_offset').value = (hole.y*toInch).toFixed(3); 
+        document.getElementById('c_type').value = hole.t; 
+        if(hole.rotation!=null)document.getElementById('c_rotation').value = Math.round(hole.rotation*360/(2*PI));
+    }
 }  
 
+document.getElementById('c_type').onchange =()=>changeConnector();
+document.getElementById('c_rotation').onchange =()=>changeConnector();
+document.getElementById('c_angle').onchange =()=>changeConnector();
+document.getElementById('c_offset').onchange =()=>changeConnector();
+function changeConnector(){
+    shapes.forEach(hole=>{
+        if(hole.selected){
+            if(hole.t!='vslot'||hole.t!='hslot'||hole.t!='rect'||hole.t!='circle'){ 
+                let x = 1/toDeg* document.getElementById('c_angle').value;
+                let y = 1/toInch* document.getElementById('c_offset').value;
+                let rotation = document.getElementById('c_rotation').value *2*PI/360;
+                let type = document.getElementById('c_type').value;
+                if(type!='boitier'){
+                    hole.h = 0.7 / (lrwidth * inchPerUnit) * pheight;
+                    hole.w = 0.7 / (lrlength * inchPerUnit) * pwidth;
+                }else{
+                    hole.h = 1.5 / (lrwidth * inchPerUnit) * pheight;
+                    hole.w = 1.5 / (lrlength * inchPerUnit) * pwidth;
+                }
+                hole.updateValues(x,y,undefined,undefined,rotation,type);
+            }
+        }
+    })
+}
 document.getElementById('submitholebutton').onclick = ()=>{
     shapes.forEach(hole=>{
         if(hole.selected){

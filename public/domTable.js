@@ -44,7 +44,7 @@ class DomTable {
         let lastPart = "<tr><td id='submitgapbutton'>submit</td><td id='addgapbutton'>add</td><td id='removegapbutton'>remove</td></tr></table></div>"
         let middle='';
         for (let i = 0; i < rows; i++) {
-            middle += "<tr><td>" + i + "</td><td><input class='input-data'id='gapangle" + i + "'> deg</td><td><input class='input-data'id='gapwidth" + i + "'> deg</td><td><input class='input-data'id='gaparc" + i + "'> in</td><td><select id='gaptype" + i + "' name='type' style='width:50px;'><option value='barrel'>B-Nut</option><option value='qlatch'>Q-latch</option><option value='screws'>Tabs</option><option value='hinge'>Hinge</option><option value='partial'>Partial</option></select></td></tr>"
+            middle += "<tr><td>" + i + "</td><td><input class='input-data'id='gapangle" + i + "'> deg</td><td><input class='input-data'id='gapwidth" + i + "'> deg</td><td><input class='input-data'id='gaparc" + i + "'> in</td><td><select id='gaptype" + i + "' name='type' style='width:50px;'><option value='barrel'>B-Nut</option><option value='qlatch'>Q-latch</option><option value='screws'>Tabs</option><option value='hinge'>Hinge</option><option value='partial'>Partial</option><option value='strap'>Strap</option></select></td></tr>"
         }
         //console.log(firstPart + middle + lastPart)
         return firstPart + middle + lastPart;

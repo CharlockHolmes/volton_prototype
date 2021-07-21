@@ -119,15 +119,15 @@
             <table class="ring-info">
                 <tr>
                     <td>Angle</td>
-                    <td><input class="input-data"> deg</td>
+                    <td><input class="input-data" id="c_angle"> deg</td>
                 </tr>
                 <tr>
                     <td>Offset</td>
-                    <td><input class="input-data"> in</td>
+                    <td><input class="input-data" id="c_offset"> in</td>
                 </tr>
                 <tr>
                     <td>Rotation</td>
-                    <td><select id="h_rotation" name="Direction">
+                    <td><select id="c_rotation" name="Direction">
                         <option value="0">0</option>
                         <option value="90">90</option>
                         <option value="180">180</option>
@@ -135,9 +135,25 @@
                     </select>	</td>
                 </tr>
                 <tr>
+                    <td>Type</td>
+                    <td><select id="c_type" name="Type" >
+                        <option value="armaturebx_h">BX_Hori</option>
+                        <option value="armaturebx_v">BX_Vert</option>
+                        <option value="boitier">Boitier</option>
+                        <option value="bornier">Bornier</option>
+                        <option value="wire_spring">Spring</option>
+                        <option value="wire_tress">Trs_Inox_V</option>
+                        <option value="tressh">Trs_Inox_H</option>
+                        <option value="eurov">Euro_V</option>
+                        <option value="euroh">Euro_H</option>
+                        <option value="latch">Latch</option>
+                        <option value="thermo">Thermo</option>
+                    </select>	</td>
+                </tr>
+                <!--tr>
                     <td></td>
                     <td>Submit</td>
-                </tr>
+                </tr-->
             </table>
         </div>
         <div id="powerboxdrag" class = 'draggables'>
@@ -297,8 +313,7 @@
     </script>
 
 <script src="globalConst.js"></script>
-<script src="globalVar.js"></script>
-
+<script src="domTable.js"></script>
 <script src="conversion.js"></script>
 <script src="ring.js"></script>
 <script src="sketch.js"></script>
