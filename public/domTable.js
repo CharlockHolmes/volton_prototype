@@ -116,9 +116,6 @@ class DomTable {
     setGapWidth(index){
         const length = document.getElementById('gaplength'  + index).value;
         const radius = this.ringRadius*inchPerUnit;
-        console.log(length)
-        console.log(radius)
-        console.log(length)
         let angle = Math.acos(((radius*radius*2)-(length*length))/(2*radius*radius));
         document.getElementById('gapwidth'  + index).value=(angle*360/(2*PI)).toFixed(1);
     }
