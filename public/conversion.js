@@ -123,7 +123,7 @@ const compT= [
         ,'cI', 'rC', 'vS', 'hS'
         ,'aH','aV','bQ','bS','bW','bA','bO','bR','wS','wT'         //type converts
         ,'aN', 'bE', 'cO', 'eN','fL','gA','hO','lE','oF','rA','rE','rO','sE', 'tE','tH','wI'  //obj name conv
-        ,')',    '~',    "cG",    'cH',    '*' ,  ')', 'cD'   , "cE" /* ,  ';'  , "" */   //@  _ $
+        ,'(',    '~',    "cG",    'cH',    '*' ,  ')', 'cD'   , "cE" /* ,  ';'  , "" */   //@  _ $
         ,'sS','cF'
     ]
 ]
