@@ -115,19 +115,21 @@ const compT= [
         ,'circle', 'rect', 'vslot' , 'hslot'
         ,'armaturebx_h','armaturebx_v','barrel_qlatch','barrel_screw_qlatch','barrel_screw','barrel','boitier','bornier','wire_spring','wire_tress'
         ,'angle', 'begin', 'connectors', 'end', 'flipped', 'gaps', 'holes', 'length', 'offset', 'radius', 'resolution', 'rotation', 'sections', 'terminals', 'thickness', 'width'
-        ,"%22%", "%2C%", "22",   "%3A%", '3A',   '7D', '%7B%','@2C%$'/*, '~7B%!','oF@*'*/
-        ,'screws','~7B%$aN)*'
+        ,"%22%", "%2C%", "22",   "%3A%", '3A',   '7D', '%7B%'/*, '~7B%!','oF@*'*/
+        ,'screws','qlatch','latch', 'partial','penture','hinge'
+        ,'(2C%cGrO(*','~cGt(*%cG','%cGaN'
     ],
     [
-        'tR', 'fA','uN', 'eV', 'eH','tS','nL'
+        'oR', 'fA','uN', 'eV', 'eH','oS','nL'
         ,'cI', 'rC', 'vS', 'hS'
         ,'aH','aV','bQ','bS','bW','bA','bO','bR','wS','wT'         //type converts
-        ,'aN', 'bE', 'cO', 'eN','fL','gA','hO','lE','oF','rA','rE','rO','sE', 'tE','tH','wI'  //obj name conv
-        ,'(',    '~',    "cG",    'cH',    '*' ,  ')', 'cD'   , "cE" /* ,  ';'  , "" */   //@  _ $
-        ,'sS','cF'
+        ,'aN', 'bE', 'cO', 'eN','fL','gA','hO','lE','oF','rA','rE','rO','sE', 'oE','oH','wI'  //obj name conv
+        ,'(',    '~',    "cG",    'cH',    '*' ,  ')', 'cD' /* ,  ';'  , "" */   //@ $ _ 
+        ,'sS','qA','lA', 'pA', 'pE','hI'
+        ,'cF','cK', 'cJ'
     ]
 ]
-const version = '(intergrated'
+const version = '(intergrated4'
 function compact(str){
     console.log(str);
     for(let i=0; i<compT[0].length; i++){
