@@ -117,7 +117,7 @@ const compT= [
         ,'angle', 'begin', 'connectors', 'end', 'flipped', 'gaps', 'holes', 'length', 'offset', 'radius', 'resolution', 'rotation', 'sections', 'terminals', 'thickness', 'width'
         ,"%22%", "%2C%", "22",   "%3A%", '3A',   '7D', '%7B%'/*, '~7B%!','oF@*'*/
         ,'screws','qlatch','latch', 'partial','penture','hinge'
-        ,'(2C%cGrO(*','~cGt(*%cG','%cGaN','%5B', '%5D', '2C%','%)~7BcJ(*' 
+        ,'(2C%cGrO(*','~cGt(*%cG','%cGaN','%5B', '%5D', '2C%','%)~7BcJ(*','%' 
     ],
     [
         'oR', 'fA','uN', 'eV', 'eH','oS','nL'
@@ -126,10 +126,10 @@ const compT= [
         ,'aN', 'bE', 'cO', 'eN','fL','gA','hO','lE','oF','rA','rE','rO','sE', 'oE','oH','wI'  //obj name conv
         ,'(',    '~',    "cG",    'cH',    '*' ,  ')', 'cD' /* ,  ';'  , "" */   //@ $ _ 
         ,'sS','qA','lA', 'pA', 'pE','hI'
-        ,'cF','cK', 'cJ', 'zA','zB','zC','zD'
+        ,'cF','cK', 'cJ', 'zA','zB','zC','zD','Z'
     ]
 ]
-const version = 'intergrated_Z_0'
+const version = 'intergrated_unique_Z_0'
 function compact(str){
     console.log(str);
     for(let i=0; i<compT[0].length; i++){
