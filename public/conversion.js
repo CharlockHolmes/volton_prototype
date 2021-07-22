@@ -127,7 +127,7 @@ const compT= [
         ,'sS','cF'
     ]
 ]
-
+const version = '(intergrated'
 function compact(str){
     console.log(str);
     for(let i=0; i<compT[0].length; i++){
