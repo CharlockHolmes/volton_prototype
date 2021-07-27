@@ -55,7 +55,6 @@ function createRenderer(){
         antialias: true
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
-
 }
 
 // Scene and camera
@@ -252,7 +251,7 @@ function loadSavedValues(){
         loadRing(localStorage.getItem('ring'));
         defaultRadius = r.radius;
         camera.position.z = cameraPositionZ*defaultRadius;
-        if(localStorage.getItem('camera')!='null')resetToDefaultView();
+        if(localStorage.getItem('camera')==null)resetToDefaultView();
         loadCustomItem();
     }
     else {

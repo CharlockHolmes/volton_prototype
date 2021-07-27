@@ -294,6 +294,7 @@ class Vertical_Slot extends Rectangle {
     }
     draw() {
         push();
+        rectMode(CENTER)
         noStroke();
         fill(0);
         rect(this.x, this.y, this.w, this.h);
