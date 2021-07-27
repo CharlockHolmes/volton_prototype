@@ -18,7 +18,7 @@
     height:20px;
     font-size: small;
     text-align: center;
-    background-color: #04AA6D;
+    background-color: #1A4082;
     min-width: 500px;
     color:honeydew;
 }
@@ -46,7 +46,7 @@ ul {
   }
   
   li a:hover, .dropdown:hover .dropbtn {
-    background-color: red;
+    background-color: rgb(75, 77, 202);
   }
   
   li.dropdown {
@@ -117,7 +117,7 @@ ul {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: #04AA6D;
+    background-color: #1A4082;
     color: white;
   }
   .input-data {
@@ -144,7 +144,7 @@ ul {
     cursor: move;
     z-index: 10;
     color: #fff;
-    background-color: #04AA6D;
+    background-color: #1A4082;/*04AA6D*/
   }
 
   /* Draggable Selected Hole box*/
@@ -165,7 +165,7 @@ ul {
     cursor: move;
     z-index: 10;
     color: #fff;
-    background-color: #04AA6D;
+    background-color: #1A4082;
   }
   /* Draggable Selected Connector box*/
   #selectedconboxdrag {
@@ -184,7 +184,7 @@ ul {
     cursor: move;
     z-index: 10;
     color: #fff;
-    background-color: #04AA6D;
+    background-color: #1A4082;
   }
   /* Draggable Gap box*/
   #gapboxdrag {
@@ -203,7 +203,7 @@ ul {
     cursor: move;
     z-index: 10;
     color: #fff;
-    background-color: #04AA6D;
+    background-color: #1A4082;
   }
   /* Draggable Gap box*/
   #powerboxdrag {
@@ -222,7 +222,7 @@ ul {
     cursor: move;
     z-index: 10;
     color: #fff;
-    background-color: #04AA6D;
+    background-color: #1A4082;
   }
   /* Collapsible stuff*/
   span.collapsible {
@@ -248,3 +248,50 @@ ul {
     display: none;
     overflow: hidden;
   }
+
+
+
+
+  /* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding:0;
+  /*border-bottom: 1px dotted black;  If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 2px;
+  border-radius: 6px;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 15;
+  top:0px;
+  right:107%;
+
+  opacity: 0;
+  transition: opacity 2s;
+  transition-delay: 1s;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity:1;
+}
+
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  left: 100%; /* To the right of the tooltip */
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent black;
+}

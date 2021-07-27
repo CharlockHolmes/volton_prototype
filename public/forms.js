@@ -490,9 +490,9 @@ class ScrollBar extends Shape {
     }
 }
 class Terminal extends Shape {
-    constructor(x, y, flipped, t = 'Object', rotation = 0) {
+    constructor(x, y, flipped, t = 'bornier', rotation = 0) {
         super(x, y);
-        this.connectors = ['borne', 'armature_bx_vertical', 'armature_bx_horizontal']
+        this.connectors = ['bornier', 'armature_bx_vertical', 'armature_bx_horizontal']
         this.rotation = rotation;
         this.t = t;
         if (t == 'barrel' || t == 'barrel_screw'||t=='barrel_screw_qlatch') {

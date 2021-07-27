@@ -252,6 +252,7 @@ function loadSavedValues(){
         loadRing(localStorage.getItem('ring'));
         defaultRadius = r.radius;
         camera.position.z = cameraPositionZ*defaultRadius;
+        if(localStorage.getItem('camera')!='null')resetToDefaultView();
         loadCustomItem();
     }
     else {
@@ -639,7 +640,9 @@ document.getElementById('clocktoggle').onclick = () => {
 /**
  * Triggered when reeset camera is pressed. Initiates the values to do the resetcamera position.
  */
-document.getElementById('resetcamera').onclick = () => {
+document.getElementById('resetcamera').onclick = resetToDefaultView; 
+
+function resetToDefaultView(){
     beginMove = {
         px:camera.position.x.toFixed(10),
         py:camera.position.y.toFixed(10),
@@ -712,6 +715,7 @@ document.getElementById('submitbutton').onclick = () =>{
     if(proceed){
         defaultRadius = tdiameter/inchPerUnit/2;
         camera.position.z = cameraPositionZ*defaultRadius;
+        loadDefaultConnectorSettings();
         saveRing(); 
     }
 }

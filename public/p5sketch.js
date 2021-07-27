@@ -71,10 +71,10 @@ function setup() {
     p5canvas = createCanvas(canvasWidth, canvasHeight);
     p5canvas.parent('p5holder');
 
-    demoShapes.push(new DemoRectangle(10, 10, 15,15));
-    demoShapes.push(new DemoCircle(30, 10, 15));
-    demoShapes.push(new DemoVertical_Slot(50, 10, 15,10));
-    demoShapes.push(new DemoHorizontal_Slot(80, 10, 15,10));
+    // demoShapes.push(new DemoRectangle(10, 10, 15,15));
+    // demoShapes.push(new DemoCircle(30, 10, 15));
+    // demoShapes.push(new DemoVertical_Slot(50, 10, 15,10));
+    // demoShapes.push(new DemoHorizontal_Slot(80, 10, 15,10));
 
     /* Scrollbar init */
     scrollbar = new ScrollBar(canvasWidth/2, canvasHeight-mbot/2);
@@ -687,6 +687,42 @@ document.getElementById('submitholebutton').onclick = ()=>{
     })
 }
 
+document.getElementById('tasksave').onclick = ()  =>{holeExport();}
+document.getElementById('taskcircle').onclick = ()=>{addhole('circle')}
+document.getElementById('taskrect').onclick = ()  =>{addhole('rect')}
+document.getElementById('taskvslot').onclick = ()  =>{addhole('vslot')}
+document.getElementById('taskhslot').onclick = ()  =>{addhole('hslot')}
+document.getElementById('taskterminal').onclick = ()  =>{addhole('terminal')}
+document.getElementById('taskmirror').onclick = ()  =>{itemKeyOperation('m')}
+document.getElementById('taskcenter').onclick = ()  =>{itemKeyOperation('c')}
+
+
+function addhole(type){
+    if(lastClick.show){
+        add_z_save();
+        switch (type) {
+            case 'circle':
+                shapes.push(new Circle(lastClick.x,lastClick.y, 50))
+                break;
+            case 'rect':
+                shapes.push(new Rectangle(lastClick.x,lastClick.y, 50,50))
+                break;
+            case 'vslot':
+                shapes.push(new Vertical_Slot(lastClick.x,lastClick.y, 50,50))
+                break;
+            case 'hslot':
+                shapes.push(new Horizontal_Slot(lastClick.x,lastClick.y, 50,50))
+                break;
+            case 'terminal':
+                shapes.push(new Terminal(lastClick.x,lastClick.y))
+                break;
+            default:
+                break;
+        }
+        lastClick.show = false
+    }
+
+}
 function itemImport(){
     let con = loadedRing.connectors
     let ter = loadedRing.terminals

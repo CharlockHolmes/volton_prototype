@@ -23,7 +23,7 @@
 </head>
 <body style="user-select: none;">
     
-    <ul id="navbar">
+    <ul id="navbar" style="background-image: url(https://www.volton.com/gx/m/banniereInt_default.jpg);">
         <li><a href="#home">Home</a></li>
         <li class="dropdown">
           <a href="" class="dropbtn">File</a>
@@ -68,6 +68,18 @@
         </li>
     </ul>
     <div id="main">
+        <div id='taskbar'style='position:fixed; z-index: 12; background-color:#F2F2F2 ;top:60px;right:5px; width:40px;'>
+            <div id="taskbarheader"style='width:40px;height:15px; background-color: #1A4082;float:left'></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons1.png'style="width:40px;height:40px;float:right" id="taskcircle"><span class='tooltiptext'>Circle</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons2.png'style="width:40px;height:40px;float:right" id="taskrect"><span class='tooltiptext'>Rectangle</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons3.png'style="width:40px;height:40px;float:right" id="taskhslot"><span class='tooltiptext'>Vertical Slot</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons4.png'style="width:40px;height:40px;float:right" id="taskvslot"><span class='tooltiptext'>Horizontal Slot</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons6.png'style="width:40px;height:40px;float:right" id="taskterminal"><span class='tooltiptext'>Terminal</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons5.png'style="width:40px;height:40px;float:right" id="taskimport"><span class='tooltiptext'>Import</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons7.png'style="width:40px;height:40px;float:right" id="tasksave"><span class='tooltiptext'>Save</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons8.png'style="width:40px;height:40px;float:right" id="taskcenter"><span class='tooltiptext'>Center</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons9.png'style="width:40px;height:40px;float:right" id="taskmirror"><span class='tooltiptext'>Mirror</span></div>
+        </div>
         <div id="ringboxdrag" class = 'draggables'>
             <div id="ringboxdragheader" >Ring Info <span class = "collapsible">-</span></div>
             <table class="ring-info" class="content">
@@ -146,7 +158,6 @@
                         <option value="tressh">Trs_Inox_H</option>
                         <option value="eurov">Euro_V</option>
                         <option value="euroh">Euro_H</option>
-                        <option value="latch">Latch</option>
                         <option value="thermo">Thermo</option>
                     </select>	</td>
                 </tr>
@@ -217,7 +228,7 @@
     <div>
         <div id="p5holder" class ="draggables">
             <div id="p5holderheader">
-                Planner <span class="collapsible">-</span>
+                Planner <span class="collapsible"id='isplan'>-</span>
             </div>
         </div>
     </div>
@@ -242,10 +253,10 @@
             const content = item.parentElement.nextElementSibling;
             if (content.style.display !== "none") {
                 content.style.display = "none";
-                plannerBoxFlag = false;
+                if(item.id=='isplan')plannerBoxFlag = false;
             } else {
                 content.style.display = "table";
-                plannerBoxFlag = true; 
+                if(item.id=='isplan')plannerBoxFlag = true; 
             }
         }
     </script>
@@ -259,11 +270,13 @@
         
         dragElement(document.getElementById("powerboxdrag"));
         dragElement(document.getElementById("p5holder"));
+        dragElement(document.getElementById("taskbar"));
         
         function dragElement(elmnt) {
           var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
           if (document.getElementById(elmnt.id + "header")) {
             /* if present, the header is where you move the DIV from:*/
+            if(elmnt.id!='p5holder')document.getElementById(elmnt.id).onmousedown = ()=>{infoBoxFlag = true;document.onmouseup= closeDragElement};  
             document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
           } else {
             /* otherwise, move the DIV from anywhere inside the DIV:*/
