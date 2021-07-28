@@ -54,7 +54,7 @@ class DomTable {
     }
     
     createTable(rows) {
-        let firstPart = "<div id='gapboxdrag' class = 'draggables'><div id='gapboxdragheader'>Gap / Sections <span id='gapspan'class = 'collapsible'>-</span></div><table class='ring-info' style='width:340px;'><tr><td>#</td><td>Angle</td><td>Arc</td><td>Length</td><td>Type</td></tr>"
+        let firstPart = "<div id='gapboxdrag'class='dragpos' class = 'draggables'><div id='gapboxdragheader'>Gap / Sections <span id='gapspan'class = 'collapsible'>-</span></div><table class='ring-info' style='width:360px;'><tr><td>#</td><td>Angle</td><td>Arc</td><td>Length</td><td>Type</td></tr>"
         let lastPart = "<tr><td id='submitgapbutton'>submit</td><td id='addgapbutton'>add</td><td id='removegapbutton'>remove</td></tr></table></div>"
         let middle='';
         for (let i = 0; i < rows; i++) {

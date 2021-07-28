@@ -16,7 +16,7 @@
     width:inherit;
     position:relative;
     height:20px;
-    font-size: small;
+    font-size: medium;
     text-align: center;
     background-color: #1A4082;
     min-width: 500px;
@@ -122,7 +122,7 @@ ul {
   }
   .input-data {
       width:var(--inputWidth);
-      font-size: smaller;
+      font-size: x-small;
       user-select: all;
   }
 
@@ -137,7 +137,7 @@ ul {
     text-align: center;
     width:var(--infoWidth);
   }
-  
+
   #ringboxdragheader {
     text-align: left;
     padding: 10px;
@@ -195,7 +195,7 @@ ul {
     background-color: #f1f1f1;
     border: 1px solid #d3d3d3;
     text-align: center;
-    width:340px;
+    width:360px;
   }
   #gapboxdragheader {
     text-align: left;
@@ -224,6 +224,25 @@ ul {
     color: #fff;
     background-color: #1A4082;
   }
+  /* Text field box*/
+  #textdrag {
+    position: absolute;
+    top:758px;
+    left: 373px;
+    z-index: 9;
+    background-color: #f1f1f1;
+    border: 1px solid #d3d3d3;
+    text-align: center;
+    width:400px;
+  }
+  #textdragheader {
+    text-align: left;
+    padding: 10px;
+    cursor: move;
+    z-index: 10;
+    color: #fff;
+    background-color: #1A4082;
+  }
   /* Collapsible stuff*/
   span.collapsible {
     position:absolute;
@@ -233,7 +252,7 @@ ul {
     padding: 6px;
     border: none;
     outline: none;
-    font-size: 20px;
+    font-size: medium;
   }
   span.collapsible:hover{
     color: red;
@@ -277,8 +296,8 @@ ul {
   right:107%;
 
   opacity: 0;
-  transition: opacity 2s;
-  transition-delay: 1s;
+  /*transition: opacity 2s;
+  transition-delay: 1s;*/
 }
 .tooltip:hover .tooltiptext {
   visibility: visible;

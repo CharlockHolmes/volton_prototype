@@ -684,6 +684,7 @@ function resetToDefaultView(){
  */
 document.getElementById('submitbutton').onclick = () =>{
     let proceed = true; 
+    let adjustGaps = false;
     let twidth = document.getElementById('ringwidth').value;
     let tdiameter = document.getElementById('ringdiameter').value;
     let tresolution = document.getElementById('ringresolution').value;
@@ -697,6 +698,7 @@ document.getElementById('submitbutton').onclick = () =>{
         console.log('Error: variable width is not a number')
     }
     if(!Number.isFinite(tdiameter)){
+        if(tdiameter/inchPerUnit/2!=r.radius)adjustGaps = true;
         if(!r.setRadius(tdiameter/2/inchPerUnit))proceed = false;
     }
     else {
@@ -711,6 +713,7 @@ document.getElementById('submitbutton').onclick = () =>{
         proceed = false; 
     }
     if(proceed){
+        if(adjustGaps)r.gaps.forEach(g=>normalizeGap(g))
         defaultRadius = tdiameter/inchPerUnit/2;
         camera.position.z = cameraPositionZ*defaultRadius;
         loadDefaultConnectorSettings();
@@ -742,6 +745,16 @@ document.getElementById('save').onclick = () =>{
     generateURL();
 }
 
+document.getElementById('textfield').onchange = saveTextField;
+function saveTextField(){
+    let tempTxt = document.getElementById('textfield').value;
+    localStorage.setItem('textfield', tempTxt)
+}
+function loadTextField(){
+    let tempTxt = localStorage.getItem('textfield')
+    document.getElementById('textfield').value = tempTxt;
+}
+
 
 /* Saving functions  */
 
@@ -755,6 +768,7 @@ function saveRing(ring=r){
     ringAnglesToDeg(ring);
     localStorage.setItem('camera', JSON.stringify(position));
     localStorage.setItem('ring', JSON.stringify(ring));
+    localStorage.setItem('shapesZ','[]')
     reloadCount++;
     if(reloadCount>reloadValue){
         if(enableLinkModification&&window.location.search.length>10)window.location.search = ''

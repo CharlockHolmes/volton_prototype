@@ -24,9 +24,9 @@
 <body style="user-select: none;">
     
     <ul id="navbar" style="background-image: url(https://www.volton.com/gx/m/banniereInt_default.jpg);">
-        <li><a href="#home">Home</a></li>
+        <li><a href="">Home</a></li>
         <li class="dropdown">
-          <a href="" class="dropbtn">File</a>
+          <a class="dropbtn">File</a>
           <div class="dropdown-content">
             <a id="save">Save <span class="shortcut-text">ctrl+s</span></a>
             <a href="#">Submit</a>
@@ -35,7 +35,7 @@
           </div>
         </li>
         <li class="dropdown">
-          <a href="" class="dropbtn">Edit</a>
+          <a class="dropbtn">Edit</a>
           <div class="dropdown-content">
             <a href="#">Reset</a>
             <a id="exportholes">Export Holes</a>
@@ -44,7 +44,7 @@
           </div>
         </li>
         <li class="dropdown">
-          <a href="" class="dropbtn">View</a>
+          <a class="dropbtn">View</a>
           <div class="dropdown-content">
             <a id="drawing">Plan</a>
             <a id="selectall">Measurements</a>
@@ -54,24 +54,24 @@
           </div>
         </li>
         <li class="dropdown">
-          <a href="" class="dropbtn">Help</a>
+          <a class="dropbtn">Help</a>
           <div class="dropdown-content">
             <a href="#">Shortcuts</a>
             <a href="#">Report</a>
           </div>
         </li>
         <li class="dropdown">
-          <a href="" class="dropbtn">About</a>
+          <a class="dropbtn">About</a>
           <div class="dropdown-content">
             <a href="ressources/DemoPage">Info</a>
           </div>
         </li>
     </ul>
     <div id="main">
-        <div id='taskbar'style='position:fixed; z-index: 12; background-color:#F2F2F2 ;top:80px;right:5px; width:40px;'>
+        <div id='taskbar' class='dragpos'style='position:fixed; z-index: 12; background-color:#F2F2F2 ;top:80px;right:5px; width:40px;'>
             <div id="taskbarheader"style='width:40px;height:15px; background-color: #1A4082;float:left;'></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons1.png'style="width:40px;height:40px;float:right" id="taskcircle"><span class='tooltiptext'>Circle</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons2.png'style="width:40px;height:40px;float:right" id="taskrect"><span class='tooltiptext'>Rectangle</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons1.png'style="width:40px;height:40px;float:right" id="taskcircle"><span class='tooltiptext'>Circular Hole</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons2.png'style="width:40px;height:40px;float:right" id="taskrect"><span class='tooltiptext'>Rectangular Hole</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons3.png'style="width:40px;height:40px;float:right" id="taskhslot"><span class='tooltiptext'>Vertical Slot</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons4.png'style="width:40px;height:40px;float:right" id="taskvslot"><span class='tooltiptext'>Horizontal Slot</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons6.png'style="width:40px;height:40px;float:right" id="taskterminal"><span class='tooltiptext'>Terminal</span></div>
@@ -80,8 +80,8 @@
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons8.png'style="width:40px;height:40px;float:right" id="taskcenter"><span class='tooltiptext'>Center</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons9.png'style="width:40px;height:40px;float:right" id="taskmirror"><span class='tooltiptext'>Mirror</span></div>
         </div>
-        <div id="ringboxdrag" class = 'draggables'>
-            <div id="ringboxdragheader" >Ring Info <span class = "collapsible">-</span></div>
+        <div id="ringboxdrag"class='dragpos' class = 'draggables'>
+            <div id="ringboxdragheader" >RING INFO <span class = "collapsible">-</span></div>
             <table class="ring-info" class="content">
                 <tr>
                     <td>Width</td>
@@ -101,7 +101,7 @@
                 </tr>
             </table>
         </div>
-        <div id="selectedholeboxdrag" class = 'draggables'>
+        <div id="selectedholeboxdrag"class='dragpos' class = 'draggables'>
             <div id="selectedholeboxdragheader">Selected Hole <span class = "collapsible">-</span></div>
             <table class="ring-info" >
                 <tr>
@@ -122,7 +122,7 @@
                 </tr>
             </table>
         </div>
-        <div id="selectedconboxdrag" class = 'draggables'>
+        <div id="selectedconboxdrag"class='dragpos' class = 'draggables'>
             <div id="selectedconboxdragheader">Selected Connector <span class = "collapsible">-</span></div>
             <table class="ring-info">
                 <tr>
@@ -163,7 +163,7 @@
                 </tr-->
             </table>
         </div>
-        <div id="powerboxdrag" class = 'draggables'>
+        <div id="powerboxdrag"class='dragpos' class = 'draggables'>
             <div id="powerboxdragheader">Power Rating <span class = "collapsible">-</span></div>
             <table class="ring-info">
                 <tr>
@@ -218,22 +218,22 @@
                 </tr>
             </table>
         </div-->
+    
+        <div id="textdrag"class='dragpos' class = 'draggables'>
+            <div id="textdragheader">Additional notes <span class = "collapsible">-</span></div>
+            <textarea id="textfield" name="notes" rows="10" cols='50'></textarea>
+        </div>
+    
     </div>
 
     <canvas class='webgl' id='three'></canvas>
     <div>
-        <div id="p5holder" class ="draggables">
+        <div id="p5holder"class='dragpos' class ="draggables">
             <div id="p5holderheader">
                 Planner <span class="collapsible"id='isplan'>-</span>
             </div>
         </div>
     </div>
-    <script>
-    checkInfoPosition();
-    function checkInfoPosition(){
-
-    }    
-    </script>
     <!-- Collapsed script-->
     <script>
         var coll = document.getElementsByClassName("collapsible");
@@ -251,7 +251,7 @@
                 content.style.display = "none";
                 if(item.id=='isplan')plannerBoxFlag = false;
             } else {
-                content.style.display = "table";
+                content.style.display = "block";
                 if(item.id=='isplan')plannerBoxFlag = true; 
             }
         }
@@ -267,6 +267,7 @@
         dragElement(document.getElementById("powerboxdrag"));
         dragElement(document.getElementById("p5holder"));
         dragElement(document.getElementById("taskbar"));
+        dragElement(document.getElementById("textdrag"));
         
         function dragElement(elmnt) {
           var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -309,6 +310,7 @@
             infoBoxFlag = false;
             document.onmouseup = null;
             document.onmousemove = null;
+            layout.update();
           }
         }
     </script>
@@ -328,6 +330,7 @@
 <script src="sketch.js"></script>
 <script src="p5sketch.js"></script>
 <script src="forms.js"></script>
+<script src="layout.js"></script>
 
 <!--
     -->
