@@ -21,6 +21,10 @@ class Shape {
     draw() {
 
     }
+    translateTo(mx,my){
+        this.x = mx;
+        this.y = my;
+    }
     rectFill(color) {
         this.color = color;
     }
@@ -446,6 +450,7 @@ class ScrollBar extends Shape {
         this.SELECTPADDING = 3 / 5;
         this.arrowIndex = 0;
     }
+    translateTo(mx,my){}
     draw() {
         imageMode(CENTER);
         image(scrollbar_img,this.x, this.y, this.w, this.h)
@@ -481,13 +486,19 @@ class ScrollBar extends Shape {
         if(y<height&&y>height - mbot){
             if(x>0&&x<width){
                 if(x<mleft){
-                    this.dragged(this.x-3)
+                    this.moveLeft()
                 }
                 if(x>width-mright){
-                    this.dragged(this.x+3)
+                    this.moveRight()
                 }
             }
         }
+    }
+    moveRight(){
+        this.dragged(this.x+3)
+    }
+    moveLeft(){
+        this.dragged(this.x-3)
     }
 }
 class Terminal extends Shape {
@@ -628,7 +639,7 @@ class Connector extends Terminal {
     appendCon(conn) {
         this.conn = conn;
     }
-
+    translateTo(mx,my){}
     draw() {
         push();
         fill(50, 168, 135)
@@ -702,4 +713,6 @@ class Connector extends Terminal {
         this.y = pheight/2; 
         this.conn.y = this.y;
     }  
+    /** Do nothing to snap to grid */
+    snapToGrid(){}
 }

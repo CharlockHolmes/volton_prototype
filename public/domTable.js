@@ -41,10 +41,18 @@ class DomTable {
     adjustRingGaps(num){
         while(r.gaps.length!=num){
             let gl = r.gaps.length;
-            if(gl<num)r.addGap();
+            if(gl<num){
+                let cg = r.addGap();
+                normalizeGap(cg);
+                this.buffer[0].push((Math.abs(cg.begin-cg.end)*360/(2*PI)).toFixed(1));
+                this.buffer[1].push(Math.round((cg.begin+cg.end)/2*360/(2*PI)));
+                this.buffer[2].push(cg.t);
+                console.log(r.gaps)
+            }
             if(gl>num)r.gaps.pop();
         }
     }
+    
     createTable(rows) {
         let firstPart = "<div id='gapboxdrag' class = 'draggables'><div id='gapboxdragheader'>Gap / Sections <span id='gapspan'class = 'collapsible'>-</span></div><table class='ring-info' style='width:340px;'><tr><td>#</td><td>Angle</td><td>Arc</td><td>Length</td><td>Type</td></tr>"
         let lastPart = "<tr><td id='submitgapbutton'>submit</td><td id='addgapbutton'>add</td><td id='removegapbutton'>remove</td></tr></table></div>"

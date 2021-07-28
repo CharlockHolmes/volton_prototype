@@ -250,7 +250,7 @@ function loadSavedValues(){
         loadCamera(localStorage.getItem('camera'));
         loadRing(localStorage.getItem('ring'));
         defaultRadius = r.radius;
-        camera.position.z = cameraPositionZ*defaultRadius;
+        camera.position.z = -cameraPositionZ*defaultRadius;
         if(localStorage.getItem('camera')==null)resetToDefaultView();
         loadCustomItem();
     }
@@ -686,7 +686,6 @@ document.getElementById('submitbutton').onclick = () =>{
     let proceed = true; 
     let twidth = document.getElementById('ringwidth').value;
     let tdiameter = document.getElementById('ringdiameter').value;
-    //document.getElementById('ringgap').value = 'not implemented';
     let tresolution = document.getElementById('ringresolution').value;
     console.log(twidth, tdiameter, tresolution);
 

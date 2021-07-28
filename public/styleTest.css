@@ -1,6 +1,6 @@
 /* Variables */
 :root{
-  --infoWidth: 160px;
+  --infoWidth: 180px;
   --inputWidth: 30px;
 }
 /* Canvas */
@@ -8,7 +8,7 @@
 #p5holder{
     position:absolute;
     background-color:rgb(232, 235, 247);
-    left: 171px;
+    left: 191px;
     top:61px;
     float:right;
 }
@@ -170,7 +170,7 @@ ul {
   /* Draggable Selected Connector box*/
   #selectedconboxdrag {
     position: absolute;
-    top:435px;
+    top:406px;
     left: 7px;
     z-index: 9;
     background-color: #f1f1f1;
@@ -189,8 +189,8 @@ ul {
   /* Draggable Gap box*/
   #gapboxdrag {
     position: absolute;
-    top:684px;
-    left: 170px;
+    top:758px;
+    left: 7px;
     z-index: 9;
     background-color: #f1f1f1;
     border: 1px solid #d3d3d3;
@@ -208,7 +208,7 @@ ul {
   /* Draggable Gap box*/
   #powerboxdrag {
     position: absolute;
-    top:604px;
+    top:585px;
     left: 7px;
     z-index: 9;
     background-color: #f1f1f1;

@@ -4,7 +4,7 @@
 
 const inchPerUnit = 3;
 const MAX_MIN_TYPES = 'inch'
-const MAX_WIDTH = 12; 
+const MAX_WIDTH = 20; 
 const MIN_WIDTH = 1;
 const MIN_DIAMETER = 1;
 const MAX_CIRCOMFERENCE_PER_SECTION = 96;
@@ -146,7 +146,13 @@ const STANDARD_TAB_NUM = [
     {width:15,  num:7},
     {width:18,  num:8},
 ]
-
+/**
+ * 
+ * @param {*} width     in INCH 
+ * @param {*} diameter  in INCH
+ * @param {*} type      gap type;
+ * @returns a {gap, screw, num} object
+ */
 function getStandardData(width, diameter, type){
     let gap;
     let num; 
@@ -179,4 +185,19 @@ function getStandardData(width, diameter, type){
         return {gap:gap, screw:screw, num:num};
     }
     return false;
+}
+function normalizeGap(g){
+    let std = 0;
+    if(g.t=='tab') std = getStandardData(r.width*inchPerUnit, r.radius*2*inchPerUnit,  'tab')
+    else std = getStandardData(r.width*inchPerUnit, r.radius*2*inchPerUnit,  'barrel')
+    if(g.begin>2*PI)g.begin-=2*PI;
+    if(g.end>2*PI)g.begin-=2*PI;
+    let gcenter = (g.begin+g.end)/2;
+    let length = 0; 
+    if(r.gaps.length>1)length = std.gap.multiple;
+    else length = std.gap.single;
+    const radius = r.radius*inchPerUnit;
+    let gawidth = Math.acos(((radius*radius*2)-(length*length))/(2*radius*radius));
+    g.begin = gcenter-gawidth/2;
+    g.end = gcenter+gawidth/2;
 }

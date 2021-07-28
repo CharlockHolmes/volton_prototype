@@ -288,6 +288,7 @@ class Ring {
                 t: t
             });
         }
+        return this.gaps[this.gaps.length-1]
     }
     /**
      * Loads a connector into the ring

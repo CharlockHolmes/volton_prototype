@@ -12,9 +12,10 @@ let lrlength = loadedRing.radius * 2 * Math.PI;
 let aspectRatio = lrwidth / lrlength;
 let centerResize = false; 
 
-let canvasWidth = window.innerWidth*0.85; 
+let canvasWidth = window.innerWidth*0.84; 
 let canvasHeight = canvasWidth*aspectRatio+400;
 if(canvasHeight >= window.innerHeight*0.8)canvasHeight = window.innerHeight*0.8;
+if(canvasHeight <= window.innerHeight*0.6)canvasHeight = window.innerHeight*0.6;
 let mtop = 25;
 let mleft = 25;
 let mright = 25;
@@ -291,7 +292,8 @@ function ctrlKeyOperation(key){
     }
 }
 function itemKeyOperation(key) {
-    if (key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'e' || key == 'q' || key=='r' || key =='f'|| key =='c'|| key =='m') {
+    console.log(key)
+    if (plannerBoxFlag&&(key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'e' || key == 'q' || key=='r' || key =='f'|| key =='c'|| key =='m' || key=='t')) {
         shapes.forEach((shape) => {
             if (shape.selected) {
                 add_z_save();
@@ -328,12 +330,29 @@ function itemKeyOperation(key) {
                             shapes.push(...shape.mirror());
                         else shapes.push(shape.mirror());
                         break;
+                    case 't':
+                        shapes.forEach(s=>{
+                            const mx = mouseX - mleft-xtrans;
+                            const my = mouseY - mtop;
+                            if(s.selected){s.translateTo(mx,my)}
+                        })
+                        break;
                     default:
                         break;
                 }
             }
         })
+    }else if(!plannerBoxFlag&&(key=='o')){
+        switch (key) {
+            case 'o':
+                resetToDefaultView();
+                break;
+        
+            default:
+                break;
+        }
     }
+
 }
 
 function doubleClicked() {
@@ -361,7 +380,7 @@ function mousePressed() {
             scrollbar.selected =false;
             let makeNew = false;
             let oneClicked = false; 
-            demoShapes.forEach(shape =>{
+            /*demoShapes.forEach(shape =>{
                 if(shape.isInOuterBoundary(mouseX,mouseY)){
                     if(shape.t=='rect'){
                         add_z_save();
@@ -401,7 +420,7 @@ function mousePressed() {
                     }
                     oneClicked = true;
                 }
-            })
+            }) */
             lastClick.show = false;
             shapes.some(shape => {
                 const mx = mouseX - mleft-xtrans;
@@ -427,6 +446,7 @@ function mousePressed() {
                     oneClicked = true; 
                 }
             }
+            /** Red pointer select */
             else if(!oneClicked){
                 lastClick.x = mouseX - mleft - xtrans;
                 lastClick.y = mouseY - mtop;
@@ -463,6 +483,8 @@ function mouseDragged() {
 function mouseWheel(event){
     if(!hidden&&plannerBoxFlag){
         if(mouseX>0&&mouseX<width&&mouseY>0&&mouseY<height)
+            if(event.delta>0)scrollbar.moveLeft()
+            else scrollbar.moveRight()
             return false;
     }
 }
@@ -649,7 +671,7 @@ function selectHole(hole){
         if(hole.rotation!=null)document.getElementById('c_rotation').value = Math.round(hole.rotation*360/(2*PI));
     }
 }  
-
+/** This is the automatic changing of Terminals according to the entry in the table */
 document.getElementById('c_type').onchange =()=>changeConnector();
 document.getElementById('c_rotation').onchange =()=>changeConnector();
 document.getElementById('c_angle').onchange =()=>changeConnector();
@@ -674,15 +696,20 @@ function changeConnector(){
         }
     })
 }
-document.getElementById('submitholebutton').onclick = ()=>{
+
+/** This is the automatic changing of Holes according to the entry in the table */
+document.getElementById('h_angle').onchange =()=>changeHole();
+document.getElementById('h_height').onchange =()=>changeHole();
+document.getElementById('h_width').onchange =()=>changeHole();
+document.getElementById('h_offset').onchange =()=>changeHole();
+function changeHole(){
     shapes.forEach(hole=>{
         if(hole.selected){
             let x = 1/toDeg* document.getElementById('h_angle').value;
             let h = 1/toInch* document.getElementById('h_height').value;
             let w = 1/toInch*document.getElementById('h_width').value;
             let y = 1/toInch* document.getElementById('h_offset').value;
-            let rotation = document.getElementById('h_rotation').value *2*PI/360;
-            hole.updateValues(x,y,w,h,rotation);
+            hole.updateValues(x,y,w,h);
         }
     })
 }
@@ -700,25 +727,29 @@ document.getElementById('taskcenter').onclick = ()  =>{itemKeyOperation('c')}
 function addhole(type){
     if(lastClick.show){
         add_z_save();
+        let t;
         switch (type) {
             case 'circle':
-                shapes.push(new Circle(lastClick.x,lastClick.y, 50))
+                t = new Circle(lastClick.x,lastClick.y, 50)
                 break;
             case 'rect':
-                shapes.push(new Rectangle(lastClick.x,lastClick.y, 50,50))
+                t = new Rectangle(lastClick.x,lastClick.y, 50,50)
                 break;
             case 'vslot':
-                shapes.push(new Vertical_Slot(lastClick.x,lastClick.y, 50,50))
+                t = new Vertical_Slot(lastClick.x,lastClick.y, 50,50)
                 break;
             case 'hslot':
-                shapes.push(new Horizontal_Slot(lastClick.x,lastClick.y, 50,50))
+                t = new Horizontal_Slot(lastClick.x,lastClick.y, 50,50)
                 break;
             case 'terminal':
-                shapes.push(new Terminal(lastClick.x,lastClick.y))
+                t = new Terminal(lastClick.x,lastClick.y)
                 break;
             default:
                 break;
         }
+        t.selected = true;
+        shapes.push(t);
+        selectHole(t)
         lastClick.show = false
     }
 
@@ -906,7 +937,7 @@ function add_z_save(obj = shapes){
         
         let temp = [];
         obj.forEach(shape =>{
-            if(shape.t=='barrel'||shape.t=='barrel_screw'||shape.t=='barrel_qlatch'||shape.t=='barrel_screw_qlatch'){ /* if its a connector */
+            if(shape.t=='barrel'||shape.t=='barrel_screw'||shape.t=='barrel_qlatch'||shape.t=='barrel_screw_qlatch'||shape.t=='hinge'){ /* if its a connector */
                 temp.push({
                     x: shape.x,
                     flipped: shape.flipped,
