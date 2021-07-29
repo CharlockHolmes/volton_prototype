@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang='en'>
-
+<!--div style="background-color: blue;position:fixed;width:100%;height: 100%;z-index: 20;"></div>
+<div style="background-color: white;z-index: 21;position:fixed">Wait</div-->
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -69,7 +70,7 @@
     </ul>
     <div id="main">
         <div id='taskbar' class='dragpos'style='position:fixed; z-index: 12; background-color:#F2F2F2 ;top:80px;right:5px; width:40px;'>
-            <div id="taskbarheader"style='width:40px;height:15px; background-color: #1A4082;float:left;'></div>
+            <div id="taskbarheader"style='cursor:move;width:40px;height:15px; background-color: #1A4082;float:left;'></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons1.png'style="width:40px;height:40px;float:right" id="taskcircle"><span class='tooltiptext'>Circular Hole</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons2.png'style="width:40px;height:40px;float:right" id="taskrect"><span class='tooltiptext'>Rectangular Hole</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons3.png'style="width:40px;height:40px;float:right" id="taskhslot"><span class='tooltiptext'>Vertical Slot</span></div>
@@ -79,9 +80,11 @@
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons7.png'style="width:40px;height:40px;float:right" id="tasksave"><span class='tooltiptext'>Save</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons8.png'style="width:40px;height:40px;float:right" id="taskcenter"><span class='tooltiptext'>Center</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons9.png'style="width:40px;height:40px;float:right" id="taskmirror"><span class='tooltiptext'>Mirror</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons10.png'style="width:40px;height:40px;float:right" id="tasksendmail"><span class='tooltiptext'>Submit Project</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menueyes1.png'style="width:40px;height:40px;float:right" id="taskview"><span class='tooltiptext'>Show/Hide UI</span></div>
         </div>
         <div id="ringboxdrag"class='dragpos' class = 'draggables'>
-            <div id="ringboxdragheader" >RING INFO <span class = "collapsible">-</span></div>
+            <div id="ringboxdragheader" >Ring size <span class = "collapsible">-</span></div>
             <table class="ring-info" class="content">
                 <tr>
                     <td>Width</td>
@@ -102,7 +105,7 @@
             </table>
         </div>
         <div id="selectedholeboxdrag"class='dragpos' class = 'draggables'>
-            <div id="selectedholeboxdragheader">Selected Hole <span class = "collapsible">-</span></div>
+            <div id="selectedholeboxdragheader">Hole <span class = "collapsible">-</span></div>
             <table class="ring-info" >
                 <tr>
                     <td>Angle</td>
@@ -123,7 +126,7 @@
             </table>
         </div>
         <div id="selectedconboxdrag"class='dragpos' class = 'draggables'>
-            <div id="selectedconboxdragheader">Selected Connector <span class = "collapsible">-</span></div>
+            <div id="selectedconboxdragheader">Item <span class = "collapsible">-</span></div>
             <table class="ring-info">
                 <tr>
                     <td>Angle</td>
@@ -223,6 +226,18 @@
             <div id="textdragheader">Additional notes <span class = "collapsible">-</span></div>
             <textarea id="textfield" name="notes" rows="10" cols='50'></textarea>
         </div>
+
+        <div id="tutorialdrag"class='dragpos' class = 'draggables'>
+            <div id="tutorialdragheader">Tutorial: <span class = "collapsible">-</span></div>
+            <div>
+                
+                <div id="tutorialnext"style='background-color: rgb(13, 42, 97);width:20%;position:relative;left:80%;color:cornsilk;cursor:pointer;float:left'>next</div>
+                <div id="tutoriallast"style='background-color: rgb(13, 42, 97);width:20%;position:relative;right:80%;color:cornsilk;cursor:pointer;float:right'>last</div>
+                <span id="tutorialcontent">Error tutorial</span>
+                <div>_________________________________________</div>
+            </div>
+            <!--textarea id="textfield" name="notes" rows="1" cols='50'></textarea-->
+        </div>
     
     </div>
 
@@ -254,6 +269,7 @@
                 content.style.display = "block";
                 if(item.id=='isplan')plannerBoxFlag = true; 
             }
+            layout.update();
         }
     </script>
     <!-- Dragged elements script-->
@@ -268,12 +284,14 @@
         dragElement(document.getElementById("p5holder"));
         dragElement(document.getElementById("taskbar"));
         dragElement(document.getElementById("textdrag"));
+        dragElement(document.getElementById("tutorialdrag"));
         
         function dragElement(elmnt) {
           var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
           if (document.getElementById(elmnt.id + "header")) {
             /* if present, the header is where you move the DIV from:*/
             if(elmnt.id!='p5holder')document.getElementById(elmnt.id).onmousedown = ()=>{infoBoxFlag = true;document.onmouseup= closeDragElement};  
+            if(elmnt.id=='textdrag')document.getElementById(elmnt.id).onmousedown = ()=>{infoBoxFlag = true;clearSelect();document.onmouseup= closeDragElement};  
             document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
           } else {
             /* otherwise, move the DIV from anywhere inside the DIV:*/
@@ -331,6 +349,7 @@
 <script src="p5sketch.js"></script>
 <script src="forms.js"></script>
 <script src="layout.js"></script>
+<script src="tutorial.js"></script>
 
 <!--
     -->

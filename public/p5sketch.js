@@ -2,6 +2,8 @@
  * Note:
  * Design decision:
  */
+let layout;
+
 const TEXTSIZE = 10;
 let mode = '';
 let p5canvas;
@@ -12,27 +14,37 @@ let lrlength = loadedRing.radius * 2 * Math.PI;
 let aspectRatio = lrwidth / lrlength;
 let centerResize = false; 
 
-let canvasWidth = window.innerWidth*0.84; 
-let canvasHeight = canvasWidth*aspectRatio+400;
-if(canvasHeight >= window.innerHeight*0.7)canvasHeight = window.innerHeight*0.7;
-if(canvasHeight <= window.innerHeight*0.6)canvasHeight = window.innerHeight*0.6;
 let mtop = 25;
 let mleft = 25;
 let mright = 25;
 let mbot = 25;
 //let pwidth = canvasWidth - mleft - mright; 
-let pheight = canvasHeight - mtop - mbot;
-let pwidth = pheight/aspectRatio; 
 let pHeightConversionUnit = 2;
 let pUnitType = 'inch';
 let pRadius = 1; 
 
 let xtrans = 0;
 
-const toInch = 1/pheight*lrwidth*inchPerUnit;
-const toDeg = 360/pwidth;
-const toRad = 2*PI/pwidth;
+let canvasWidth; 
+let canvasHeight;
+let pheight;
+let pwidth; 
+let toInch;
+let toDeg;
+let toRad;
+function letInit(){
+    canvasWidth = window.innerWidth*0.84; 
+    canvasHeight = canvasWidth*aspectRatio+400;
+    if(canvasHeight >= window.innerHeight*0.7)canvasHeight = window.innerHeight*0.7;
+    if(canvasHeight <= window.innerHeight*0.6)canvasHeight = window.innerHeight*0.6;
 
+    pheight = canvasHeight - mtop - mbot;
+    pwidth = pheight/aspectRatio;
+    toInch = 1/pheight*lrwidth*inchPerUnit;
+    toDeg = 360/pwidth;
+    toRad = 2*PI/pwidth;
+}
+letInit();
 let seeAll = false; 
 const STARTHIDDEN = false;
 let hidden = STARTHIDDEN;
@@ -72,11 +84,6 @@ function setup() {
     p5canvas = createCanvas(canvasWidth, canvasHeight);
     p5canvas.parent('p5holder');
 
-    // demoShapes.push(new DemoRectangle(10, 10, 15,15));
-    // demoShapes.push(new DemoCircle(30, 10, 15));
-    // demoShapes.push(new DemoVertical_Slot(50, 10, 15,10));
-    // demoShapes.push(new DemoHorizontal_Slot(80, 10, 15,10));
-
     /* Scrollbar init */
     scrollbar = new ScrollBar(canvasWidth/2, canvasHeight-mbot/2);
     scrollbar.w = (canvasWidth-mleft-mright)/pwidth*canvasWidth;
@@ -96,6 +103,8 @@ function setup() {
     document.getElementById('selectall').onclick = () => seeAll = !seeAll; 
     holeImport();
     itemImport();
+
+    layout = new LayoutHandler();
 }
 function draw() {
     xtrans = scrollbar.mapTo(scrollbar.x);
@@ -483,13 +492,11 @@ function mouseDragged() {
 function mouseWheel(event){
     if(!hidden&&plannerBoxFlag){
         if(mouseX>0&&mouseX<width&&mouseY>0&&mouseY<height)
-            if(event.delta>0)scrollbar.moveLeft()
-            else scrollbar.moveRight()
+            if(event.delta>0)for(let i=0;i<3;i++)scrollbar.moveLeft()
+            else for(let i=0;i<3;i++)scrollbar.moveRight()
             return false;
     }
 }
-
-
 function drawArrow(x, y, l, w, horizontal = true, txt = '') {
     
     if (l < 0) l = l * -1;
@@ -1011,4 +1018,9 @@ function clear_begining_of_array(array,maxLength = 25){
         else tpv = false;
     }
     return array
+}
+function clearSelect(){
+    shapes.forEach(s=>{
+        s.selected = false;
+    })
 }

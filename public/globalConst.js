@@ -14,7 +14,6 @@ const MIN_HOLE_OFFSET = 1/16;
 const INCH_PER_UNIT = 3;
 const PI = Math.PI;
 const CONNECTOR_ANGLE_OFFSET = 0.1;
-
 const STANDARD_GAP_SCREW = [
     {   /* First STD */
         diameter:{

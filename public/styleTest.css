@@ -3,6 +3,9 @@
   --infoWidth: 180px;
   --inputWidth: 30px;
 }
+html{
+  font-family: Courier, Arial, Helvetica, sans-serif;
+}
 /* Canvas */
 
 #p5holder{
@@ -21,6 +24,7 @@
     background-color: #1A4082;
     min-width: 500px;
     color:honeydew;
+    cursor:move;
 }
 /* Dropdown menu */
 ul {
@@ -88,10 +92,10 @@ ul {
 
   /*  table data    */
   .ring-info {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Courier, Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width:var(--infoWidth);
-    font-size: smaller;
+    font-size: 11px;
   }
 
   .draggables {
@@ -135,7 +139,7 @@ ul {
     background-color: #f1f1f1;
     border: 1px solid #d3d3d3;
     text-align: center;
-    width:var(--infoWidth);
+    width:165px;
   }
 
   #ringboxdragheader {
@@ -156,7 +160,7 @@ ul {
     background-color: #f1f1f1;
     border: 1px solid #d3d3d3;
     text-align: center;
-    width:var(--infoWidth);
+    width:140px;
   }
   
   #selectedholeboxdragheader {
@@ -242,6 +246,26 @@ ul {
     z-index: 10;
     color: #fff;
     background-color: #1A4082;
+  }
+  #tutorialdrag {
+    position: absolute;
+    top:10px;
+    left: 373px;
+    z-index: 9;
+    background-color: #f1f1f1;
+    border: 1px solid #d3d3d3;
+    text-align: center;
+    width:400px;
+  }
+  #tutorialdragheader {
+    text-align: left;
+    padding: 10px;
+    cursor: move;
+    z-index: 10;
+    color: #fff;
+    background-color: #1A4082;
+    height:10px;
+    color:rgb(255, 233, 233);
   }
   /* Collapsible stuff*/
   span.collapsible {
