@@ -7,7 +7,7 @@ class TutorialHandler{
         this.next = document.getElementById('tutorialnext');
         this.content = document.getElementById('tutorialcontent');
         if(localStorage.getItem('tutorialStep')=='null')localStorage.setItem('tutorialStep',0);
-        this.update();
+        setTimeout(()=>this.update(),100);
         this.last.onclick = ()=> this.lastStep()
         this.next.onclick = ()=> this.nextStep()
     }
