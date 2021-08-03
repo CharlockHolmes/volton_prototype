@@ -277,6 +277,15 @@ function defaultRing() {
     // Loading the item
     loadCustomItem();
 }
+function blankRing(){
+    console.log('blank ring')
+    createRing(1,1,1000);
+    clearObjectArrays();
+    loadDefaultGapSettings(1, 'screws')
+    saveRing();
+}
+document.getElementById('blankring').onclick = ()=>blankRing();
+document.getElementById('practicering').onclick = ()=>{localStorage.setItem('tutorialStep',14);blankRing();}
 function loadDefaultConnectorSettings(){
     const data = getStandardData(r.width*inchPerUnit, r.radius*2*inchPerUnit, 'barrel')
     connectors = [];

@@ -6,6 +6,10 @@ class LayoutHandler{
         this.manageVariables();
         this.hidden = false;
         document.getElementById('taskview').onclick = ()=>this.toggleDisplay();
+        document.getElementById('tutoriallayout').onclick = ()=>this.setTutorialLayout();
+        document.getElementById('defaultlayout').onclick = ()=>this.setDefaultLayout();
+        document.getElementById('savelayout').onclick = ()=>this.saveButtonLayout();
+        document.getElementById('loadlayout').onclick = ()=>this.loadButtonLayout();
     }
     layoutToBuffer(){
         let tempBuff = localStorage.getItem('layoutbuff');
@@ -14,7 +18,27 @@ class LayoutHandler{
             this.bufferToLayout();
         }
         else {
-            localStorage.setItem('layoutbuff', JSON.stringify(defaultLayout))
+            this.setTutorialLayout();
+        }
+        this.manageVariables();
+    }
+    setTutorialLayout(){
+        localStorage.setItem('tutorialStep', 0)
+        tutorial.update()
+        localStorage.setItem('layoutbuff', JSON.stringify(defaultLayout))
+        this.layoutToBuffer();
+    }
+    setDefaultLayout(){
+        localStorage.setItem('layoutbuff', JSON.stringify(defaultLayoutnoTutorial))
+        this.layoutToBuffer();
+    }
+    saveButtonLayout(){
+        localStorage.setItem('layoutsave', JSON.stringify(this.buffer))
+    }
+    loadButtonLayout(){
+        let temp = JSON.parse(localStorage.getItem('layoutsave'))
+        if(temp!=null){
+            localStorage.setItem('layoutbuff', JSON.stringify())
             this.layoutToBuffer();
         }
     }
@@ -70,4 +94,5 @@ class LayoutHandler{
 }
 
 
-const defaultLayout = [{"top":299,"left":1151,"id":"taskbar","display":""},{"top":59,"left":6,"id":"ringboxdrag","display":"none"},{"top":58,"left":178,"id":"selectedholeboxdrag","display":"none"},{"top":58,"left":324,"id":"selectedconboxdrag","display":"none"},{"top":57,"left":508,"id":"powerboxdrag","display":"none"},{"top":57,"left":691,"id":"gapboxdrag","display":"none"},{"top":56,"left":1052,"id":"textdrag","display":"none"},{"top":298,"left":746,"id":"tutorialdrag","display":"block"},{"top":101,"left":8,"id":"p5holder","display":"none"}]
+const defaultLayout = [{"top":227,"left":1464,"id":"taskbar","display":""},{"top":58,"left":7,"id":"ringboxdrag","display":"none"},{"top":58,"left":360,"id":"selectedholeboxdrag","display":"none"},{"top":57,"left":504,"id":"selectedconboxdrag","display":"none"},{"top":58,"left":176,"id":"powerboxdrag","display":"none"},{"top":57,"left":691,"id":"gapboxdrag","display":"none"},{"top":57,"left":1054,"id":"textdrag","display":"none"},{"top":226,"left":1060,"id":"tutorialdrag","display":"block"},{"top":101,"left":8,"id":"p5holder","display":"none"}]
+const defaultLayoutnoTutorial = [{"top":101,"left":1622,"id":"taskbar","display":""},{"top":58,"left":7,"id":"ringboxdrag","display":"none"},{"top":58,"left":360,"id":"selectedholeboxdrag","display":"none"},{"top":57,"left":504,"id":"selectedconboxdrag","display":"none"},{"top":58,"left":176,"id":"powerboxdrag","display":"none"},{"top":57,"left":691,"id":"gapboxdrag","display":"none"},{"top":57,"left":1054,"id":"textdrag","display":"none"},{"top":57,"left":1457,"id":"tutorialdrag","display":"none"},{"top":101,"left":8,"id":"p5holder","display":"block"}]
