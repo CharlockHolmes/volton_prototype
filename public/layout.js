@@ -13,7 +13,10 @@ class LayoutHandler{
             this.buffer = JSON.parse(tempBuff);
             this.bufferToLayout();
         }
-        else this.update();
+        else {
+            localStorage.setItem('layoutbuff', JSON.stringify(defaultLayout))
+            this.layoutToBuffer();
+        }
     }
     bufferToLayout(){
         this.buffer.forEach(e=>{
@@ -65,3 +68,6 @@ class LayoutHandler{
     }
 
 }
+
+
+const defaultLayout = [{"top":299,"left":1151,"id":"taskbar","display":""},{"top":59,"left":6,"id":"ringboxdrag","display":"none"},{"top":58,"left":178,"id":"selectedholeboxdrag","display":"none"},{"top":58,"left":324,"id":"selectedconboxdrag","display":"none"},{"top":57,"left":508,"id":"powerboxdrag","display":"none"},{"top":57,"left":691,"id":"gapboxdrag","display":"none"},{"top":56,"left":1052,"id":"textdrag","display":"none"},{"top":298,"left":746,"id":"tutorialdrag","display":"block"},{"top":101,"left":8,"id":"p5holder","display":"none"}]

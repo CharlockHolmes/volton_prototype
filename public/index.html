@@ -84,7 +84,7 @@
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menueyes1.png'style="width:40px;height:40px;float:right" id="taskview"><span class='tooltiptext'>Show/Hide UI</span></div>
         </div>
         <div id="ringboxdrag"class='dragpos' class = 'draggables'>
-            <div id="ringboxdragheader" >Ring size <span class = "collapsible">-</span></div>
+            <div id="ringboxdragheader" >Band Size <span class = "collapsible">-</span></div>
             <table class="ring-info" class="content">
                 <tr>
                     <td>Width</td>
@@ -228,11 +228,11 @@
         </div>
 
         <div id="tutorialdrag"class='dragpos' class = 'draggables'>
-            <div id="tutorialdragheader">Tutorial: <span class = "collapsible">-</span></div>
+            <div id="tutorialdragheader">=============== Tutorial ============= <span class = "collapsible">-</span></div>
             <div>
                 
-                <div id="tutorialnext"style='background-color: rgb(13, 42, 97);width:20%;position:relative;left:80%;color:cornsilk;cursor:pointer;float:left'>next</div>
-                <div id="tutoriallast"style='background-color: rgb(13, 42, 97);width:20%;position:relative;right:80%;color:cornsilk;cursor:pointer;float:right'>last</div>
+                <div id="tutorialnext"class="tutob"style='background-color: rgb(13, 42, 97);width:20%;position:relative;left:80%;color:cornsilk;cursor:pointer;float:left'>next</div>
+                <div id="tutoriallast"class="tutob"style='background-color: rgb(13, 42, 97);width:20%;position:relative;right:80%;color:cornsilk;cursor:pointer;float:right'>last</div>
                 <span id="tutorialcontent">Error tutorial</span>
                 <div>_________________________________________</div>
             </div>
@@ -274,6 +274,7 @@
     </script>
     <!-- Dragged elements script-->
     <script>
+        let writingBoxFlag = false;
         let infoBoxFlag = false;
         //Make the DIV element draggagle:
         dragElement(document.getElementById("ringboxdrag"));

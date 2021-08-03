@@ -282,6 +282,12 @@ function calculatePower(){
     if(current<25)document.getElementById('current').style = 'color:black';
     else document.getElementById('current').style = 'color:red';
 }
+document.addEventListener("keydown", function (e) {
+    if([37,38,39,40].indexOf(e.keyCode) > -1){
+      e.preventDefault();
+      // Do whatever else you want with the keydown event (i.e. your navigation).
+    }
+  }, false);
 function keyPressed() {
     
     if (keyCode === DELETE) shapes.forEach((shape) => {
@@ -302,20 +308,24 @@ function ctrlKeyOperation(key){
 }
 function itemKeyOperation(key) {
     console.log(key)
-    if (plannerBoxFlag&&(key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'e' || key == 'q' || key=='r' || key =='f'|| key =='c'|| key =='m' || key=='t')) {
+    if (plannerBoxFlag&&(key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'e' || key == 'q' || key=='r' || key =='f'|| key =='c'|| key =='m' || key=='t'||key == 'ArrowUp' || key == 'ArrowLeft' || key == 'ArrowDown' || key == 'ArrowRight' )) {
         shapes.forEach((shape) => {
             if (shape.selected) {
                 add_z_save();
                 switch (key) {
+                    case "ArrowUp":
                     case "w":
                         shape.y -= 1;
                         break;
+                    case 'ArrowLeft':
                     case 'a':
                         shape.x -= 1;
                         break;
+                    case 'ArrowDown':
                     case 's':
                         shape.y += 1;
                         break;
+                    case 'ArrowRight':
                     case 'd':
                         shape.x += 1;
                         break;
