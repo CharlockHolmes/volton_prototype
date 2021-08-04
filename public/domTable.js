@@ -32,24 +32,41 @@ class DomTable {
         }
         this.create_Arc_Length_Dependency()
         document.getElementById('submitgapbutton').onclick = ()=>this.loadTableData();
-        document.getElementById('addgapbutton').onclick = ()=>{this.pos={top:this.ref.style.top, left:this.ref.style.left};this.build(this.rows+1,false)};
-        document.getElementById('removegapbutton').onclick = ()=>{if(this.rows>1){this.pos={top:this.ref.style.top, left:this.ref.style.left};this.build(this.rows-1,false);}};
+        document.getElementById('addgapbutton').onclick = ()=>{this.pos={top:this.ref.style.top, left:this.ref.style.left};if(this.rows<8)this.build(this.rows+1,false)};
+        document.getElementById('removegapbutton').onclick = ()=>{if(this.rows>1){this.pos={top:this.ref.style.top, left:this.ref.style.left};if(this.rows>1)this.build(this.rows-1,false);}};
         document.getElementById('gapspan').addEventListener("click", function() {addCollapse(this);});
         if(isNew)this.uploadTableData();
         else this.uploadFromBuffer();
     }
     adjustRingGaps(num){
+        if(num<=8)
         while(r.gaps.length!=num){
             let gl = r.gaps.length;
             if(gl<num){
                 let cg = r.addGap();
                 normalizeGap(cg);
+                if(r.gaps.length==2){
+                    normalizeGap(r.gaps[0])
+                    let ccg = r.gaps[0];
+                    this.buffer[0][0]=((Math.abs(ccg.begin-ccg.end)*360/(2*PI)).toFixed(1));
+                    this.buffer[1][0]=(Math.round((ccg.begin+ccg.end)/2*360/(2*PI)));
+                    this.buffer[2][0]=(ccg.t);
+                }
                 this.buffer[0].push((Math.abs(cg.begin-cg.end)*360/(2*PI)).toFixed(1));
                 this.buffer[1].push(Math.round((cg.begin+cg.end)/2*360/(2*PI)));
                 this.buffer[2].push(cg.t);
                 console.log(r.gaps)
             }
-            if(gl>num)r.gaps.pop();
+            if(gl>num){
+                r.gaps.pop();
+                if(r.gaps.length==1){
+                    normalizeGap(r.gaps[0])
+                    let ccg = r.gaps[0];
+                    this.buffer[0][0]=((Math.abs(ccg.begin-ccg.end)*360/(2*PI)).toFixed(1));
+                    this.buffer[1][0]=(Math.round((ccg.begin+ccg.end)/2*360/(2*PI)));
+                    this.buffer[2][0]=(ccg.t);
+                }
+            }
         }
     }
     
