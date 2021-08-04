@@ -8,12 +8,12 @@ const TEXTSIZE = 11;
 const TEXTSIZEA = 15;
 let mode = '';
 let p5canvas;
-let loadedRing = JSON.parse(localStorage.getItem('ring'));
-const lr = loadedRing;
-let lrwidth = loadedRing.width;
-let lrlength = loadedRing.radius * 2 * Math.PI;
-let aspectRatio = lrwidth / lrlength;
-let centerResize = false; 
+let loadedRing
+let lr
+let lrwidth
+let lrlength
+let aspectRatio
+let centerResize
 
 let mtop = 25;
 let mleft = 25;
@@ -34,6 +34,13 @@ let toInch;
 let toDeg;
 let toRad;
 function letInit(){
+    loadedRing = JSON.parse(localStorage.getItem('ring'));
+    lr = loadedRing;
+    lrwidth = loadedRing.width;
+    lrlength = loadedRing.radius * 2 * Math.PI;
+    aspectRatio = lrwidth / lrlength;
+    centerResize = false; 
+
     canvasWidth = window.innerWidth*0.84; 
     canvasHeight = canvasWidth*aspectRatio+400;
     if(canvasHeight >= window.innerHeight*0.7)canvasHeight = window.innerHeight*0.7;
@@ -45,7 +52,7 @@ function letInit(){
     toDeg = 360/pwidth;
     toRad = 2*PI/pwidth;
 }
-letInit();
+//letInit();
 let seeAll = false; 
 const STARTHIDDEN = false;
 let hidden = STARTHIDDEN;
