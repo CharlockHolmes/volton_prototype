@@ -509,10 +509,11 @@ function mouseDragged() {
 
 }
 function mouseWheel(event){
+    const reps = 10;
     if(!hidden&&plannerBoxFlag){
         if(mouseX>0&&mouseX<width&&mouseY>0&&mouseY<height)
-            if(event.delta>0)for(let i=0;i<3;i++)scrollbar.moveLeft()
-            else for(let i=0;i<3;i++)scrollbar.moveRight()
+            if(event.delta>0)for(let i=0;i<reps;i++)scrollbar.moveLeft()
+            else for(let i=0;i<reps;i++)scrollbar.moveRight()
             return false;
     }
 }
