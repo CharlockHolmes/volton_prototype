@@ -177,7 +177,9 @@ function drawTextSelected(){
     translate(mleft, mtop);
     translate(xtrans,0);
     shapes.forEach(shape=>{
+        push()
         shape.textSelected();
+        pop()
     })
     pop();
 }
@@ -202,7 +204,7 @@ function drawDegrees(){
 function drawContour(){
     push();
     noStroke();
-    fill('#152a4f')
+    fill('#777777')
     rectMode(CORNER);
     rect(0, 0, width, mtop);
     rect(0, 0, mleft, height);
@@ -681,11 +683,21 @@ function selectHole(hole){
         document.getElementById('h_height').value = (hole.h*toInch).toFixed(3);    
         document.getElementById('h_width').value = (hole.w*toInch).toFixed(3);    
         document.getElementById('h_offset').value = (hole.y*toInch).toFixed(3); 
+
+        document.getElementById('c_angle').value = '';    
+        document.getElementById('c_offset').value = ''; 
+        document.getElementById('c_type').value = ''; 
+        if(hole.rotation!=null)document.getElementById('c_rotation').value ='';
     }else{
         document.getElementById('c_angle').value = (hole.x*toDeg).toFixed();    
         document.getElementById('c_offset').value = (hole.y*toInch).toFixed(3); 
         document.getElementById('c_type').value = hole.t; 
         if(hole.rotation!=null)document.getElementById('c_rotation').value = Math.round(hole.rotation*360/(2*PI));
+
+        document.getElementById('h_angle').value = '';    
+        document.getElementById('h_height').value ='';    
+        document.getElementById('h_width').value ='';    
+        document.getElementById('h_offset').value = ''; 
     }
 }  
 /** This is the automatic changing of Terminals according to the entry in the table */

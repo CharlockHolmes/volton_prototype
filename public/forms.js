@@ -242,7 +242,7 @@ function degTxtFormat(){
     fill(255)
     stroke(0)
     strokeWeight(3)
-    textFont('Courier')
+    //textFont('Courier')
 }
 class Circle extends Shape {
     constructor(x, y, d = 50) {
