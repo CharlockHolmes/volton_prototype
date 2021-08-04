@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang='en'>
-<!--div style="background-color: blue;position:fixed;width:100%;height: 100%;z-index: 20;"></div>
-<div style="background-color: white;z-index: 21;position:fixed">Wait</div-->
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,13 +16,16 @@
 
     <!--script id="lzutf8" src="https://cdn.jsdelivr.net/npm/lzutf8/build/production/lzutf8.min.js"></script-->
 	<!--script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld05UwbAAAAACikqGC49Y8kDJEekhzQcbqRlenm"></script-->
-	<link rel='icon' href='https://www.volton.com/gx/favicon/favicon.ico?v=2'>
+	<link rel='icon' href='ressources/srcimg/favicon.ico'>
 
 	<title>Volton Prototype</title>
 </head>
-<body style="user-select: none;">
-    
-    <ul id="navbar" style="background-image: url(https://www.volton.com/gx/m/banniereInt_default.jpg);">
+<body style="user-select: none;"id = 'body'>
+    <div id="loadingbanner">    
+        <div style="background-color: white;position:fixed;width:100%;height: 100%;z-index: 20;top:55px;"></div>
+        <div style="background-color: white;z-index: 21;position:fixed;top:60px;">...Loading</div>
+    </div>
+    <ul id="navbar" style="background-image: url(ressources/srcimg/banner.jpg);background-size: 100% 50px;">
         <li><a href="">Home</a></li>
         <li class="dropdown">
           <a class="dropbtn">File</a>
@@ -51,10 +52,11 @@
           <div class="dropdown-content">
             <a id="drawing">Plan</a>
             <a id="selectall">Measurements</a>
-            <a id="clocktoggle">Ring Clock</a>
+            <a id="clocktoggle">Band Clock</a>
             <a href="#">Toolbar</a>
             <a id="resetcamera">Reset Camera</a>
             <a href="ressources/DemoPage">Terminals</a>
+            <a id='retro'>Retro Mode</a>
           </div>
         </li>
         <li class="dropdown">
@@ -82,7 +84,7 @@
     </ul>
     <div id="main">
         <div id='taskbar' class='dragpos'style='position:fixed; z-index: 12; background-color:#F2F2F2 ;top:80px;right:5px; width:40px;'>
-            <div id="taskbarheader"style='cursor:move;width:40px;height:15px; background-color: #1A4082;float:left;'></div>
+            <div id="taskbarheader"class="headerthing"style='cursor:move;width:40px;height:15px; background-color: #1A4082;position:relative;left:-1px;border: 1px solid #ddd;'></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons1.png'style="width:40px;height:40px;float:right" id="taskcircle"><span class='tooltiptext'>Circular Hole</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons2.png'style="width:40px;height:40px;float:right" id="taskrect"><span class='tooltiptext'>Rectangular Hole</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons3.png'style="width:40px;height:40px;float:right" id="taskhslot"><span class='tooltiptext'>Vertical Slot</span></div>
@@ -96,7 +98,7 @@
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menueyes1.png'style="width:40px;height:40px;float:right" id="taskview"><span class='tooltiptext'>Show/Hide UI</span></div>
         </div>
         <div id="ringboxdrag"class='dragpos' class = 'draggables'>
-            <div id="ringboxdragheader" >Band Size <span class = "collapsible">-</span></div>
+            <div id="ringboxdragheader" class="headerthing">Band Size <span class = "collapsible">-</span></div>
             <table class="ring-info" class="content">
                 <tr>
                     <td>Width</td>
@@ -110,14 +112,14 @@
                     <td>Resolution</td>
                     <td><input class="input-data"id='ringresolution'> vrx</td>
                 </tr>
-                <tr>
+                <tr >
                     <td></td>
-                    <td><div id='submitbutton'> Submit</div></td>
+                    <td style='background-color:rgb(177, 0, 0);color:white'><div id='submitbutton'> Submit</div></td>
                 </tr>
             </table>
         </div>
         <div id="selectedholeboxdrag"class='dragpos' class = 'draggables'>
-            <div id="selectedholeboxdragheader">Hole <span class = "collapsible">-</span></div>
+            <div id="selectedholeboxdragheader"class="headerthing">Hole <span class = "collapsible">-</span></div>
             <table class="ring-info" >
                 <tr>
                     <td>Angle</td>
@@ -138,7 +140,7 @@
             </table>
         </div>
         <div id="selectedconboxdrag"class='dragpos' class = 'draggables'>
-            <div id="selectedconboxdragheader">Item <span class = "collapsible">-</span></div>
+            <div id="selectedconboxdragheader"class="headerthing">Item <span class = "collapsible">-</span></div>
             <table class="ring-info">
                 <tr>
                     <td>Angle</td>
@@ -169,7 +171,7 @@
                         <option value="tressh">Trs_Inox_H</option>
                         <option value="eurov">Euro_V</option>
                         <option value="euroh">Euro_H</option>
-                        <option value="thermo">Thermocouple</option>
+                        <option value="thermo">Thermocpl</option>
                     </select>	</td>
                 </tr>
                 <!--tr>
@@ -179,7 +181,7 @@
             </table>
         </div>
         <div id="powerboxdrag"class='dragpos' class = 'draggables'>
-            <div id="powerboxdragheader">Power Rating <span class = "collapsible">-</span></div>
+            <div id="powerboxdragheader"class="headerthing">Power Rating <span class = "collapsible">-</span></div>
             <table class="ring-info">
                 <tr>
                     <td>Power</td>
@@ -235,12 +237,12 @@
         </div-->
     
         <div id="textdrag"class='dragpos' class = 'draggables'>
-            <div id="textdragheader">Additional notes <span class = "collapsible">-</span></div>
-            <textarea id="textfield" name="notes" rows="10" cols='50'></textarea>
+            <div id="textdragheader"class="headerthing">Additional notes <span class = "collapsible">-</span></div>
+            <textarea id="textfield" name="notes" rows="10" cols='54'></textarea>
         </div>
 
         <div id="tutorialdrag"class='dragpos' class = 'draggables'>
-            <div id="tutorialdragheader">=============== Tutorial ============= <span class = "collapsible">-</span></div>
+            <div id="tutorialdragheader"class="headerthing">=============== Tutorial ============= <span class = "collapsible">-</span></div>
             <div>
                 
                 <div id="tutorialnext"class="tutob"style='background-color: rgb(13, 42, 97);width:20%;position:relative;left:80%;color:cornsilk;cursor:pointer;float:left'>next</div>
@@ -256,7 +258,7 @@
     <canvas class='webgl' id='three'></canvas>
     <div>
         <div id="p5holder"class='dragpos' class ="draggables">
-            <div id="p5holderheader">
+            <div id="p5holderheader"class="headerthing">
                 Planner <span class="collapsible"id='isplan'>-</span>
             </div>
         </div>
@@ -281,7 +283,7 @@
                 content.style.display = "block";
                 if(item.id=='isplan')plannerBoxFlag = true; 
             }
-            layout.update();
+            build.layout.update();
         }
     </script>
     <!-- Dragged elements script-->
@@ -341,7 +343,7 @@
             infoBoxFlag = false;
             document.onmouseup = null;
             document.onmousemove = null;
-            layout.update();
+            build.layout.update();
           }
         }
     </script>
@@ -363,6 +365,7 @@
 <script src="forms.js"></script>
 <script src="layout.js"></script>
 <script src="tutorial.js"></script>
+<script src="builder.js"></script>
 
 <!--
     -->

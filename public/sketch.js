@@ -37,7 +37,7 @@ let deltaMove;
 let loaderCount = 0; // Used in the GUI
 let inverseConnectors = false;
 //let gui = new dat.GUI();
-let gapTable
+
 
 const dcmpts =100000;
 
@@ -72,8 +72,8 @@ function createScene(){
     controls = new THREE.OrbitControls(camera, renderer.domElement);
 }
 
-createRenderer();
-createScene();
+// createRenderer();///////////////////////////////////////////////////////////////////////////////////////////////////
+// createScene();
 
 
 
@@ -222,7 +222,7 @@ function loadConnector(offsetZ, radius, angle = Math.PI / 2, name, flipped = fal
         });
 }
 /** This is where we check if preexisting values exist and load them if they do. */
-loadSavedValues();
+// loadSavedValues();///////////////////////////////////////////////////////////////////////////////////////////////////////////
 function loadSavedValues(){
     const ur = new URL (window.location)
     const decoded = unpact(ur.toString());
@@ -571,8 +571,7 @@ function loadCustomItem() {
     ];
     requestAnimationFrame(render);
 
-    gapTable = new DomTable(r.gaps.length, r.radius, inchPerUnit);
-    gapTable.uploadTableData();
+    
 }
 
 /**
@@ -882,7 +881,7 @@ function generateURL(ring = r){
     navigator.clipboard.writeText(compressed);
 ////////////////////////////////////////////////////////////////
 
-    const data = {url:compressed, id:1}
+    const data = {url:compressed,power:document.getElementById('powerasked').value, voltage:document.getElementById('voltage').value,text:document.getElementById('textfield').value, id:1}
     const options = {
         method:'POST',
         headers:{

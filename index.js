@@ -27,7 +27,7 @@ app.post('/api', (request, response) => {
     const data = request.body;
     //database.insert({data}); 
     console.log(data.url);
-    sendMail(data.url)
+    sendMail(data.url,data)
     //response.json(data);
     response.end(); //bare minimum require to make it work, needs to send something back
 });
@@ -46,13 +46,13 @@ app.post('/api', (request, response) => {
 
 
 
-function sendMail(text = 'nothing was inserted'){
+function sendMail(text = 'nothing was inserted', data){
 
     var mailOptions = {
         from: 'testvolton2021@gmail.com',
         to: 'charles.simon1999@hotmail.com',
         subject: 'Sending Email using Node.js',
-        html: '<a href="'+text+'">'+"https://voltondesign.com"+'</a><p>Click on the attatchment and open link</p>',
+        html: '<a href="'+text+'">'+"https://voltondesign.com"+'</a><p>Click on the attatchment and open link<br><br>'+data.voltage+'Volts<br>'+data.power+'Watts<br><br>'+data.text+'</p>',
         attachments: {   // utf-8 string as an attachment
             filename: 'link.html',
             content: '<a href="'+text+'">link</a>'

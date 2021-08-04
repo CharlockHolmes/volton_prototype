@@ -38,9 +38,8 @@ class Shape {
             line(x,-10, x, pheight+10)
             line(x-w/2-15, y, x+w/2+15, y)
             pointArrow(this, this.t);
-            textSize(TEXTSIZE);
-            textAlign(CENTER, BOTTOM);
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);
+            degTxtFormat();
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -8);
             pop()
         }
     }
@@ -199,7 +198,7 @@ class Rectangle extends Shape {
                 if(o===false);
                 else{
                     overClear=false;
-                     drawArrow(this.x+this.w/2+15, (this.y-o.y)/2+o.y, this.y-o.y, 15, false, (this.y-o.y)*toInch)
+                     drawArrow(this.x+this.w/2+15, (this.y-o.y)/2+o.y-this.h/4, this.y-o.y-this.h/2, 15, false, (this.y-o.y)*toInch)
                 }
             })
             if(overClear)drawArrow(this.x+this.w/2+15, (this.y-this.h/2)/2, this.y-this.h/2, 15, false, (this.y-this.h/2)*toInch)
@@ -218,25 +217,32 @@ class Rectangle extends Shape {
             //line(this.x - (w / 2), this.y, this.x - (w / 2), -35);
             line(this.x, this.y + (h / 2), this.x + w / 2 + 20, this.y + (h / 2));
             line(this.x, this.y - (h / 2), this.x + w / 2 + 20, this.y - (h / 2));
-            let a = w / pheight * lrwidth * inchPerUnit;
             //console.log(a);
+            let a = w / pheight * lrwidth * inchPerUnit;
             let b = h / pheight * lrwidth * inchPerUnit;
             //console.log(b);
             drawArrow(this.x, this.y+this.h/2+10, w, 10, true, a);
             drawArrow(this.x + w / 2 + 15, this.y, h, 10, false, b);
-            textSize(TEXTSIZE);
-            textAlign(CENTER, BOTTOM);
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);
+            degTxtFormat();
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -8);
         }
     }
     copySelf(x){
         return new Rectangle(x, this.y, this.w, this.h)   
     }
     isOver(x,y){
-        if(this.x+this.w/2+20>x&&this.x-this.w/2<x&&this.y<y&&(this.selected||seeAll))return {x:this.x, y:this.y+this.h/2}
+        if(this.x+this.w/2+15>x&&this.x-this.w/2-15<x&&this.y<y&&(this.selected||seeAll))return {x:this.x, y:this.y+this.h/2}
         return false;
     }
 
+}
+function degTxtFormat(){
+    textSize(TEXTSIZEA);
+    textAlign(CENTER, BOTTOM);
+    fill(255)
+    stroke(0)
+    strokeWeight(3)
+    textFont('Courier')
 }
 class Circle extends Shape {
     constructor(x, y, d = 50) {
@@ -256,14 +262,24 @@ class Circle extends Shape {
             const w = abs(this.w);
             let below = pheight;
             /* Top down arrow, insert the inch offset here */
-            shapes.forEach(shape => {
-                let temp = shape.isOver(this.x + this.w / 2 + 15, this.y);
-                if (temp != false && temp < below) below = temp;
-                // if(below!= false)console.log(below)
-            })
-            const offsetVal = (below - this.y) / below * loadedRing.width * inchPerUnit;
-            drawArrow(this.x + this.w / 2 + 15, this.y + (below - this.y) / 2, below - this.y, 5, false, offsetVal)
+            // shapes.forEach(shape => {
+            //     let temp = shape.isOver(this.x + this.w / 2 + 15, this.y);
+            //     if (temp != false && temp < below) below = temp;
+            //     // if(below!= false)console.log(below)
+            // })
+            // const offsetVal = (below - this.y) / below * loadedRing.width * inchPerUnit;
+            // drawArrow(this.x + this.w / 2 + 15, this.y + (below - this.y) / 2, below - this.y, 5, false, offsetVal)
 
+            let overClear = true;
+            shapes.forEach(s=>{
+                const o = s.isOver(this.x+this.w/2+10, this.y);
+                if(o===false);
+                else{
+                    overClear=false;
+                     drawArrow(this.x+this.w/2+15, (this.y-o.y)/2+o.y, this.y-o.y, 15, false, (this.y-o.y)*toInch)
+                }
+            })
+            if(overClear)drawArrow(this.x+this.w/2+15, (this.y)/2, this.y, 15, false, (this.y-this.h/2)*toInch)
 
 
             push()
@@ -278,9 +294,8 @@ class Circle extends Shape {
             //drawArrow(this.x + w / 2 + 15, this.y, w, 10, false, w/pheight*loadedRing.width*inchPerUnit);
             pointArrow(this, 'Ø' + (w * toInch).toFixed(3));
 
-            textSize(TEXTSIZE);
-            textAlign(CENTER, BOTTOM);
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);
+            degTxtFormat();
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -8);
         }
     }
     isUnder(x, y) {
@@ -321,7 +336,17 @@ class Vertical_Slot extends Rectangle {
             const w = abs(this.w);
             const h = abs(this.h);
             const offsetVal = (pheight - this.y - this.h / 2) / pheight * loadedRing.width * inchPerUnit;
-            drawArrow(this.x + this.w / 2 + 15, this.y + this.h / 2 + (pheight - this.y - this.h / 2) / 2, pheight - this.h / 2 - this.y, 5, false, offsetVal)
+            let overClear = true;
+            shapes.forEach(s=>{
+                const o = s.isOver(this.x+this.w/2+10, this.y);
+                if(o===false);
+                else{
+                    overClear=false;
+                     drawArrow(this.x+this.w/2+15, (this.y-o.y)/2+o.y-this.h/4, this.y-o.y-this.h/2, 15, false, (this.y-o.y)*toInch)
+                }
+            })
+            if(overClear)drawArrow(this.x+this.w/2+15, (this.y-this.h/2)/2, this.y-this.h/2, 15, false, (this.y-this.h/2)*toInch)
+
             push()
             strokeWeight(1);
             stroke(50);
@@ -334,9 +359,8 @@ class Vertical_Slot extends Rectangle {
             //drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a);
             pointArrow(this, 'R' + (w / 2 / pheight * loadedRing.width * inchPerUnit).toFixed(3))
             drawArrow(this.x + w / 2 + 15, this.y, h, 10, false, b);
-            textSize(TEXTSIZE);
-            textAlign(CENTER, BOTTOM);
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);
+            degTxtFormat();
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -8);
         }
     }
     getArea() {
@@ -359,12 +383,18 @@ class Horizontal_Slot extends Rectangle {
     }
     draw() {
         push();
+        noStroke();
+        fill(0)
+        rectMode(CENTER);
+        arc(this.x - this.w / 2, this.y, this.h+ exw, this.h+ exw, PI / 2, -PI / 2);
+        arc(this.x + this.w / 2, this.y, this.h+ exw, this.h+ exw, -PI / 2, PI / 2);
+        rect(this.x, this.y, this.w+exw, this.h+exw);
+    
+        stroke(this.color);
         fill(this.color);
         arc(this.x - this.w / 2, this.y, this.h, this.h, PI / 2, -PI / 2);
         arc(this.x + this.w / 2, this.y, this.h, this.h, -PI / 2, PI / 2);
-        rectMode(CENTER);
-        fill(this.color);
-        rect(this.x, this.y, this.w, this.h);
+        rect(this.x, this.y, this.w, this.h);;
         pop();
     }
     textSelected() {
@@ -375,7 +405,16 @@ class Horizontal_Slot extends Rectangle {
             const w = abs(this.w);
             const h = abs(this.h);
             const offsetVal = (pheight - this.y - this.h / 2) / pheight * loadedRing.width * inchPerUnit;
-            drawArrow(this.x + this.w / 2 + this.h / 2 + 15, this.y + this.h / 2 + (pheight - this.y - this.h / 2) / 2, pheight - this.h / 2 - this.y, 5, false, offsetVal)
+            let overClear = true;
+            shapes.forEach(s=>{
+                const o = s.isOver(this.x+this.w/2+this.h/2+10, this.y);
+                if(o===false);
+                else{
+                    overClear=false;
+                     drawArrow(this.x+this.w/2+h/2+15, (this.y-o.y)/2+o.y-this.h/4, this.y-o.y-this.h/2, 15, false, (this.y-o.y)*toInch)
+                }
+            })
+            if(overClear)drawArrow(this.x+this.w/2+h/2+15, (this.y-this.h/2)/2, this.y-this.h/2, 15, false, (this.y-this.h/2)*toInch)
             push()
             strokeWeight(1);
             stroke(50);
@@ -383,18 +422,17 @@ class Horizontal_Slot extends Rectangle {
             pop();
             line(this.x, this.y + (h / 2), this.x + w / 2 + h / 2 + 20, this.y + (h / 2));
             line(this.x, this.y - (h / 2), this.x + w / 2 + h / 2 + 20, this.y - (h / 2));
-            line(this.x + (w / 2), this.y, this.x + (w / 2), -35);
-            line(this.x - (w / 2), this.y, this.x - (w / 2), -35);
+            //line(this.x + (w / 2), this.y, this.x + (w / 2), -35);
+            //line(this.x - (w / 2), this.y, this.x - (w / 2), -35);
             let a = w / pheight * lrwidth * inchPerUnit;
             let b = h / pheight * lrwidth * inchPerUnit;
             //drawArrow(this.x, this.y + h / 2 + 15, w, 10, true, a);
             drawArrow(this.x + w / 2 + h / 2 + 15, this.y, h, 10, false, b);
             pointArrow(this, 'R' + (h / 2 * toInch).toFixed(3))
-            drawArrow(this.x, -30, w, 10, true, a);
-
-            textSize(TEXTSIZE);
-            textAlign(CENTER, BOTTOM);
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);
+            //drawArrow(this.x, -30, w, 10, true, a);
+            drawArrow(this.x, this.y-this.h/2-10, w, 10, true, a);
+            degTxtFormat();
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -8);
         }
     }
     getArea() {
@@ -403,6 +441,11 @@ class Horizontal_Slot extends Rectangle {
 
     copySelf(x){
         return new Horizontal_Slot(x, this.y, this.w, this.h)   
+    }
+
+    isOver(x,y){
+        if(this.x+this.w/2+this.h/2+15>x&&this.x-this.w/2-15<x&&this.y<y&&(this.selected||seeAll))return {x:this.x, y:this.y+this.h/2}
+        return false;
     }
 
 }

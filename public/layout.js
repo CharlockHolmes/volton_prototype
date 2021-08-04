@@ -24,7 +24,7 @@ class LayoutHandler{
     }
     setTutorialLayout(){
         localStorage.setItem('tutorialStep', 0)
-        tutorial.update()
+        build.tutorial.update()
         localStorage.setItem('layoutbuff', JSON.stringify(defaultLayout))
         this.layoutToBuffer();
     }
@@ -47,6 +47,7 @@ class LayoutHandler{
             let ref = document.getElementById(e.id);
             ref.style.left = e.left+'px';
             ref.style.top = e.top+'px';
+            console.log(e.id)
             document.getElementById(e.id).children[1].style.display = e.display;
             
         })
@@ -91,8 +92,44 @@ class LayoutHandler{
         })
     }
 
+    specialMode(){
+        let green = 'rgb(64,151,69)';
+        let black = 'rgb(18,20,17)';
+        let backg = 'rgb(49,67,59)'
+        tcc(green,'dragpos')
+        ccc(black,'headerthing')
+        ccc(black,'dragpos')
+        document.getElementById('body').style.backgroundColor = backg;
+        document.getElementById('navbar').style.backgroundImage = 'url(ressources/srcimg/banner2.png)';
+        //document.getElementById('tutorialdrag').style.backgroundColor = 'rgb(29,47,39)';
+        //document.getElementById('tutorialcontent').style.color = 'rgb(44,250,159)';
+    }
+
 }
 
 
-const defaultLayout = [{"top":227,"left":1464,"id":"taskbar","display":""},{"top":58,"left":7,"id":"ringboxdrag","display":"none"},{"top":58,"left":360,"id":"selectedholeboxdrag","display":"none"},{"top":57,"left":504,"id":"selectedconboxdrag","display":"none"},{"top":58,"left":176,"id":"powerboxdrag","display":"none"},{"top":57,"left":691,"id":"gapboxdrag","display":"none"},{"top":57,"left":1054,"id":"textdrag","display":"none"},{"top":226,"left":1060,"id":"tutorialdrag","display":"block"},{"top":101,"left":8,"id":"p5holder","display":"none"}]
+const defaultLayout = [{"top":212,"left":915,"id":"taskbar","display":""},{"top":58,"left":9,"id":"ringboxdrag","display":"none"},{"top":57,"left":360,"id":"selectedholeboxdrag","display":"none"},{"top":57,"left":504,"id":"selectedconboxdrag","display":"none"},{"top":58,"left":176,"id":"powerboxdrag","display":"none"},{"top":57,"left":691,"id":"gapboxdrag","display":"none"},{"top":57,"left":1054,"id":"textdrag","display":"none"},{"top":211,"left":958,"id":"tutorialdrag","display":"block"},{"top":104,"left":12,"id":"p5holder","display":"none"}]
 const defaultLayoutnoTutorial = [{"top":101,"left":1622,"id":"taskbar","display":""},{"top":58,"left":7,"id":"ringboxdrag","display":"none"},{"top":58,"left":360,"id":"selectedholeboxdrag","display":"none"},{"top":57,"left":504,"id":"selectedconboxdrag","display":"none"},{"top":58,"left":176,"id":"powerboxdrag","display":"none"},{"top":57,"left":691,"id":"gapboxdrag","display":"none"},{"top":57,"left":1054,"id":"textdrag","display":"none"},{"top":57,"left":1457,"id":"tutorialdrag","display":"none"},{"top":101,"left":8,"id":"p5holder","display":"block"}]
+
+
+function cc(c,id){
+    document.getElementById(id).style.color = c;
+}
+function ccc(c,cl){
+    let a = document.getElementsByClassName(cl);
+    for(let d of a){
+        d.style.backgroundColor = c;
+    }
+}
+function tc(c,id){
+    document.getElementById(id).style.color = c;
+}
+function tcc(c,cl){
+    let a = document.getElementsByClassName(cl);
+    for(let d of a){
+        d.style.color = c;
+    }
+}
+
+let red = 'rgb(195,142,96)'
+let or = 'rgb(117,171,112)'

@@ -2,9 +2,10 @@
  * Note:
  * Design decision:
  */
-let layout;
 
-const TEXTSIZE = 10;
+
+const TEXTSIZE = 11;
+const TEXTSIZEA = 15;
 let mode = '';
 let p5canvas;
 let loadedRing = JSON.parse(localStorage.getItem('ring'));
@@ -81,6 +82,7 @@ function preload(){
     leftarrow_img = loadImage('ressources/2dtextures/leftarrow.png');
 }
 function setup() {
+    pixelDensity(2)
     p5canvas = createCanvas(canvasWidth, canvasHeight);
     p5canvas.parent('p5holder');
 
@@ -103,8 +105,6 @@ function setup() {
     document.getElementById('selectall').onclick = () => seeAll = !seeAll; 
     holeImport();
     itemImport();
-
-    layout = new LayoutHandler();
 }
 function draw() {
     xtrans = scrollbar.mapTo(scrollbar.x);
@@ -202,7 +202,7 @@ function drawDegrees(){
 function drawContour(){
     push();
     noStroke();
-    fill(100)
+    fill('#152a4f')
     rectMode(CORNER);
     rect(0, 0, width, mtop);
     rect(0, 0, mleft, height);

@@ -71,8 +71,8 @@ class DomTable {
     }
     
     createTable(rows) {
-        let firstPart = "<div id='gapboxdrag'class='dragpos' class = 'draggables'><div id='gapboxdragheader'>Gap / Sections <span id='gapspan'class = 'collapsible'>-</span></div><table class='ring-info' style='width:380px;display:block'><tr><td>#</td><td>Angle</td><td>Arc</td><td>Length</td><td>Type</td></tr>"
-        let lastPart = "<tr><td id='submitgapbutton'>submit</td><td id='addgapbutton'>add</td><td id='removegapbutton'>remove</td></tr></table></div>"
+        let firstPart = "<div id='gapboxdrag'class='dragpos' class = 'draggables'><div id='gapboxdragheader'class='headerthing'>Gap / Sections <span id='gapspan'class = 'collapsible'>-</span></div><table class='ring-info' style='width:380px;display:block'><tr><td>#</td><td>Angle</td><td>Arc</td><td>Length</td><td>Type</td></tr>"
+        let lastPart = "<tr><td id='submitgapbutton'style='background-color:rgb(177, 0, 0);color:white'>Submit</td><td id='addgapbutton'>Add (+)</td><td id='removegapbutton'>Remove (-)</td></tr></table></div>"
         let middle='';
         for (let i = 0; i < rows; i++) {
             middle += "<tr><td>" + (i+1) + "</td><td><input class='input-data'id='gapangle" + i + "'> deg</td><td><input class='input-data'id='gapwidth" + i + "'> deg</td><td><input class='input-data'id='gaplength" + i + "'> in</td><td><select id='gaptype" + i + "' name='type' style='width:50px;'><option value='barrel'>B-Nut</option><option value='qlatch'>Q-latch</option><option value='screws'>Tabs</option><option value='hinge'>Hinge</option><option value='partial'>Partial</option><option value='strap'>Strap</option></select></td></tr>"

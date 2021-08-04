@@ -98,4 +98,4 @@ const tutorialSteps = [
     /**/"Last<br><br> Once you are done with your item, you may click on <span style='color:red'>Submit Project</span> to enter the submition menu and send us your request<br><br> Go to <span style='color:red'>Edit>Practice</span> to begin example",
     /**/"Exercise 1<br><br> Make the following band: <br><br> Width: 3in<br>Diameter:10in<br>Power: 500W<br>Voltage: 120V<br>2 Sections equally sized with QuickLatch closing and 0.38in gap length<br>1 Bornier at 30° 1inch offset<br>1 Bornier at 30° 2inch offset<br> One 1.2inch diameter hole at 60° 1.5inch offset <br> One mirrored copy of the first hole<br><br> Write down in the notes the total current draw,  the total power density and your name<br><br> Submit your project",
 ]
-const tutorial = new TutorialHandler();
+
