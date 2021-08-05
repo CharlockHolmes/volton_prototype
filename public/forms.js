@@ -13,6 +13,7 @@ class Shape {
         this.SELECTRESIZE = 200;
         this.SELECTPADDING = 3 / 5;
         this.arrowIndex = 0;
+        this.isLocked = false;
     }
     doubleClicked() {
         this.arrowIndex++;
@@ -20,6 +21,12 @@ class Shape {
     }
     draw() {
 
+    }
+    drawLock(){
+        if(this.isLocked){
+            imageMode(CENTER);
+            image(lock_img,this.x, this.y, 20, 20)
+        }
     }
     translateTo(mx,my){
         this.x = mx;
@@ -71,55 +78,56 @@ class Shape {
         }
     }
     dragged(mx, my) {
-        if (this.selectMode === 'move') {
-            this.x = mx;
-            this.y = my;
-        }
-        if (this.selectMode === 'resize') {
-            cursor('pointer');
-            let sl = this.x - this.w / 2,
+            if (this.selectMode === 'move') {
+                this.x = mx;
+                this.y = my;
+            }
+            if (this.selectMode === 'resize') {
+                cursor('pointer');
+                let sl = this.x - this.w / 2,
                 sr = this.x + this.w / 2,
                 su = this.y - this.h / 2,
                 sd = this.y + this.h / 2;
-            const dx = Math.abs(this.x - mx);
-            const dy = Math.abs(this.y - my);
-            if (this.t === 'circle' || centerResize == true) {
-                if (dx > dy) {
-                    this.w = 2 * dx;
-                    this.h = this.w;
-                } else {
-                    this.h = 2 * dy;
-                    this.w = this.h;
-                }
-                if (dx > this.w / 2) {
-                    this.w = 2 * dx;
-                    this.h = this.w;
-                }
-                if (dy > this.h / 2) {
-                    this.h = 2 * dy;
-                    this.w = this.h;
-                }
-
-            } else {
-                if (dx > dy) {
-                    if (mx > this.x) {
-                        this.x = (sl + (this.x + dx)) / 2;
-                        this.w = mx - sl;
+                const dx = Math.abs(this.x - mx);
+                const dy = Math.abs(this.y - my);
+                if (this.t === 'circle' || centerResize == true) {
+                    if (dx > dy) {
+                        this.w = 2 * dx;
+                        this.h = this.w;
                     } else {
-                        this.x = (sr + (this.x - dx)) / 2;
-                        this.w = sr - mx;
+                        this.h = 2 * dy;
+                        this.w = this.h;
                     }
+                    if (dx > this.w / 2) {
+                        this.w = 2 * dx;
+                        this.h = this.w;
+                    }
+                    if (dy > this.h / 2) {
+                        this.h = 2 * dy;
+                        this.w = this.h;
+                    }
+                    
                 } else {
-                    if (my > this.y) {
-                        this.y = (su + (this.y + dy)) / 2;
-                        this.h = my - su;
+                    if (dx > dy) {
+                        if (mx > this.x) {
+                            this.x = (sl + (this.x + dx)) / 2;
+                            this.w = mx - sl;
+                        } else {
+                            this.x = (sr + (this.x - dx)) / 2;
+                            this.w = sr - mx;
+                        }
                     } else {
-                        this.y = (sd + (this.y - dy)) / 2;
-                        this.h = sd - my;
+                        if (my > this.y) {
+                            this.y = (su + (this.y + dy)) / 2;
+                            this.h = my - su;
+                        } else {
+                            this.y = (sd + (this.y - dy)) / 2;
+                            this.h = sd - my;
+                        }
                     }
                 }
-            }
-
+                
+            
         }
         selectHole(this);
     }
@@ -165,6 +173,9 @@ class Shape {
     copySelf(x){
 
     }
+    lockPos(){
+        this.isLocked = !this.isLocked;
+    }
 }
 class Rectangle extends Shape {
     constructor(x, y, w, h) {
@@ -177,6 +188,7 @@ class Rectangle extends Shape {
         rectMode(CENTER);
         fill(this.color);
         rect(this.x, this.y, this.w, this.h);
+        if(this.isLocked)this.drawLock()
     }
     textSelected() {
         if (this.selected || seeAll) {
@@ -254,6 +266,7 @@ class Circle extends Shape {
     draw() {
         fill(this.color);
         ellipse(this.x, this.y, this.w, this.w);
+        if(this.isLocked)this.drawLock()
     }
 
     textSelected() {
@@ -326,6 +339,8 @@ class Vertical_Slot extends Rectangle {
         arc(this.x, this.y + this.h / 2, this.w, this.w, 0, PI);
         rectMode(CENTER);
         rect(this.x, this.y, this.w, this.h);
+
+        if(this.isLocked)this.drawLock()
         pop();
     }
     textSelected() {
@@ -395,6 +410,7 @@ class Horizontal_Slot extends Rectangle {
         arc(this.x - this.w / 2, this.y, this.h, this.h, PI / 2, -PI / 2);
         arc(this.x + this.w / 2, this.y, this.h, this.h, -PI / 2, PI / 2);
         rect(this.x, this.y, this.w, this.h);;
+        if(this.isLocked)this.drawLock()
         pop();
     }
     textSelected() {
@@ -594,6 +610,7 @@ class Terminal extends Shape {
             ellipse(this.x, this.y, this.w*2/3, this.h*2/3)
             //image(terminal_img, this.x, this.y, this.w, this.h);
         } 
+        if(this.isLocked)this.drawLock()
         pop()
     }
 
@@ -607,11 +624,14 @@ class Terminal extends Shape {
     }
 
     dragged(mx, my) {
-        if (this.selectMode === 'move') {
-            if (!(this.t == 'barrel' || this.t == 'barrel_screw'|| this.t == 'barrel_screw_qlatch'|| this.t == 'barrel_qlatch')) this.x = mx;
-            this.y = my;
-        }
-        selectHole(this);
+        
+
+            if (this.selectMode === 'move') {
+                if (!(this.t == 'barrel' || this.t == 'barrel_screw'|| this.t == 'barrel_screw_qlatch'|| this.t == 'barrel_qlatch')) this.x = mx;
+                this.y = my;
+            }
+            selectHole(this);
+        
     }
 
     textSelected(){
@@ -695,14 +715,17 @@ class Connector extends Terminal {
         else if(this.t =='barrel_qlatch'&&!this.flipped)image(barrel_qlatch_img, this.tx, this.y, this.w, this.h);
         else if(this.t =='barrel_qlatch'&&this.flipped)image(barrel_qlatch_f_img, this.tx, this.y, this.w, this.h);
         else rect(this.tx, this.y, this.w, this.h);
+        if(this.isLocked)this.drawLock()
         pop();
     }
     dragged(mx, my) {
-        if (this.selectMode === 'move') {
-            this.y = my;
-            if (this.conn != null) this.conn.y = my;
-        }
-        selectHole(this);
+
+            if (this.selectMode === 'move') {
+                this.y = my;
+                if (this.conn != null) this.conn.y = my;
+            }
+            selectHole(this);
+        
     }
     textSelected() {
         if (this.selected || seeAll) {

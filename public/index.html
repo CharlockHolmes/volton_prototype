@@ -44,6 +44,7 @@
             <a id="defaultring">Demo</a>
             <a id="blankring">Blank</a>
             <a id="practicering">Practice</a>
+            <a id="lockall">Lock All</a>
             <a href="#">Undo <span class="shortcut-text">ctrl+z</span></a>
           </div>
         </li>
@@ -59,6 +60,20 @@
             <a id='retro'>Retro Mode</a>
           </div>
         </li>
+        <li class="dropdown">
+            <a class="dropbtn">Windows</a>
+            <div class="dropdown-content">
+              <a>Band Size         <input type="checkbox" id="toggle1" style="float:right"checked='true'></a>
+              <a>Power Rating      <input type="checkbox" id="toggle2" style="float:right"checked='true'></a>
+              <a>Gap / Sections    <input type="checkbox" id="toggle3" style="float:right"checked='true'></a>
+              <a>Planner           <input type="checkbox" id="toggle4" style="float:right"checked='true'></a>
+              <a>Hole              <input type="checkbox" id="toggle5" style="float:right"checked='true'></a>
+              <a>Terminal          <input type="checkbox" id="toggle6" style="float:right"checked='true'></a>
+              <a >Additional Notes <input type="checkbox" id="toggle7" style="float:right"checked='true'></a>
+              <a >Tutorial         <input type="checkbox" id="toggletuto" style="float:right"checked='true'></a>
+              <a >Toolbar          <input type="checkbox" id="toggletoolbar" style="float:right"checked='true'></a>
+            </div>
+          </li>
         <li class="dropdown">
           <a class="dropbtn">Layout</a>
           <div class="dropdown-content">
@@ -83,7 +98,7 @@
         </li>
     </ul>
     <div id="main">
-        <div id='taskbar' class='dragpos'style='position:fixed; z-index: 12; background-color:#F2F2F2 ;top:80px;right:5px; width:40px;'>
+        <div id='taskbar' class='dragpos'style='position:absolute; z-index: 12; background-color:#F2F2F2 ;top:80px;right:5px; width:40px;'>
             <div id="taskbarheader"class="headerthing"style='cursor:move;width:40px;height:15px; background-color: #1A4082;position:relative;left:-1px;border: 1px solid #ddd;'></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons6.png'style="width:40px;height:40px;float:right" id="taskterminal"><span class='tooltiptext'>add Terminal</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons1.png'style="width:40px;height:40px;float:right" id="taskcircle"><span class='tooltiptext'>add Circular Hole</span></div>
@@ -93,6 +108,7 @@
             <!--div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons5.png'style="width:40px;height:40px;float:right" id="taskimport"><span class='tooltiptext'>Import</span></div-->
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons8.png'style="width:40px;height:40px;float:right" id="taskcenter"><span class='tooltiptext'>Center Component</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons9.png'style="width:40px;height:40px;float:right" id="taskmirror"><span class='tooltiptext'>Mirror Component</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/lock1.png'style="width:40px;height:40px;float:right" id="tasklock"><span class='tooltiptext'>Lock Component</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons7.png'style="width:40px;height:40px;float:right" id="tasksave"><span class='tooltiptext'>Save Changes</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons10.png'style="width:40px;height:40px;float:right" id="tasksendmail"><span class='tooltiptext'>Submit Project</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menueyes1.png'style="width:40px;height:40px;float:right" id="taskview"><span class='tooltiptext'>Show/Hide UI</span></div>
@@ -238,7 +254,7 @@
     
         <div id="textdrag"class='dragpos' class = 'draggables'>
             <div id="textdragheader"class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;"> 7</span> Additional notes <span class = "collapsible">-</span></div>
-            <textarea id="textfield" name="notes" rows="10" cols='54'></textarea>
+            <textarea id="textfield" name="notes" rows="9" cols='54'></textarea>
         </div>
 
         <div id="tutorialdrag"class='dragpos' class = 'draggables'>

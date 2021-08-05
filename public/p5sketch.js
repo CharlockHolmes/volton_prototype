@@ -75,6 +75,7 @@ let hash_img;
 let scrollbar_img;
 let leftarrow_img;
 let rightarrow_img;
+let lock_img;
 function preload(){
     barrel_img = loadImage('ressources/2dtextures/barrel.png');
     barrel_f_img= loadImage('ressources/2dtextures/barrel_f.png');
@@ -87,6 +88,7 @@ function preload(){
     scrollbar_img = loadImage('ressources/2dtextures/scrollbar.png');
     rightarrow_img = loadImage('ressources/2dtextures/rightarrow.png');
     leftarrow_img = loadImage('ressources/2dtextures/leftarrow.png');
+    lock_img = loadImage('ressources/2dtextures/lock.png');
 }
 function setup() {
     pixelDensity(2)
@@ -317,7 +319,8 @@ function ctrlKeyOperation(key){
 }
 function itemKeyOperation(key) {
     console.log(key)
-    if (plannerBoxFlag&&(key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'e' || key == 'q' || key=='r' || key =='f'|| key =='c'|| key =='m' || key=='t'||key == 'ArrowUp' || key == 'ArrowLeft' || key == 'ArrowDown' || key == 'ArrowRight')) {
+    key = key.toLowerCase();
+    if (plannerBoxFlag&&(key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'e' || key == 'q' || key=='r' || key =='f'|| key =='c'|| key =='m' || key=='t'||key == 'ArrowUp' || key == 'ArrowLeft' || key == 'ArrowDown' || key == 'ArrowRight'|| key == 'l')) {
         shapes.forEach((shape) => {
             if (shape.selected) {
                 add_z_save();
@@ -353,6 +356,9 @@ function itemKeyOperation(key) {
                     case 'c':
                         shape.center();
                         break;
+                    case 'l':
+                        shape.lockPos();
+                        break;
                     case 'm':
                         if(shape instanceof Connector)
                             shapes.push(...shape.mirror());
@@ -383,7 +389,6 @@ function itemKeyOperation(key) {
     else if(key=='h'&&!(document.getElementById('textfield')===document.activeElement)){
         build.layout.tutorialVisualToggle();
     }
-    console.log(document.getElementById('textfield')===document.activeElement)
 
 }
 
@@ -402,8 +407,7 @@ function doubleClicked() {
         });
     }
 }
-
-function mousePressed() {
+document.getElementById('p5holder').onmousedown = function mouseP() {
     if(!infoBoxFlag && plannerBoxFlag){
         if(mouseX > 0 && mouseX < width &&mouseY>0 && mouseY<height){
             shapes.forEach(shape => {
@@ -412,47 +416,6 @@ function mousePressed() {
             scrollbar.selected =false;
             let makeNew = false;
             let oneClicked = false; 
-            /*demoShapes.forEach(shape =>{
-                if(shape.isInOuterBoundary(mouseX,mouseY)){
-                    if(shape.t=='rect'){
-                        add_z_save();
-                        //console.log('make new rectangle')
-                        if(lastClick.show){
-                            shapes.push(new Rectangle(lastClick.x,lastClick.y, 50,50))
-                        }
-                        else {
-                            shapes.push(new Rectangle(50,50, 50,50))
-                        }
-                    }
-                    if(shape.t=='circle'){
-                        add_z_save();
-                        //console.log('make new circle')
-                        if(lastClick.show){
-                            shapes.push(new Circle(lastClick.x,lastClick.y, 50))
-                        }
-                        else {
-                            shapes.push(new Circle(50,50, 50))
-                        }
-                    }
-                    if(shape.t=='vslot'){
-                        add_z_save();
-                        //console.log('make new v_slot')
-                        if(lastClick.show){
-                            shapes.push(new Vertical_Slot(lastClick.x,lastClick.y, 50,50))
-                        }
-                        else shapes.push(new Vertical_Slot(50,50,50,50))
-                    }
-                    if(shape.t=='hslot'){
-                        add_z_save();
-                        //console.log('make new h_slot')
-                        if(lastClick.show){
-                            shapes.push(new Horizontal_Slot(lastClick.x,lastClick.y, 50,50))
-                        }
-                        else shapes.push(new Horizontal_Slot(50,50,50,50))
-                    }
-                    oneClicked = true;
-                }
-            }) */
             lastClick.show = false;
             shapes.some(shape => {
                 const mx = mouseX - mleft-xtrans;
@@ -480,6 +443,7 @@ function mousePressed() {
             }
             /** Red pointer select */
             else if(!oneClicked){
+                clearSelectWindows();
                 lastClick.x = mouseX - mleft - xtrans;
                 lastClick.y = mouseY - mtop;
                 lastClick.show = true;
@@ -487,7 +451,7 @@ function mousePressed() {
         }
     }
 }
-function mouseReleased(){
+document.getElementById('p5holder').onmouseup = function mouseR(){
     scrollbar.selected = false;
     shapes.forEach(s=>s.snapToGrid())
     
@@ -499,7 +463,8 @@ function mouseDragged() {
                 const mx = this.mouseX - mleft-xtrans;
                 const my = this.mouseY - mtop ;
                 if (shape.selected) {
-                    shape.dragged(mx,my);
+                    
+                    if(!shape.isLocked)shape.dragged(mx,my);
                 }
             });
             
@@ -687,7 +652,17 @@ document.getElementById('exportholes').onclick = ()=>{
 //     holeImport();
 // }
 
+function clearSelectWindows(){
+        document.getElementById('h_angle').value = '';    
+        document.getElementById('h_height').value = '';    
+        document.getElementById('h_width').value = '';    
+        document.getElementById('h_offset').value = ''; 
 
+        document.getElementById('c_angle').value = '';    
+        document.getElementById('c_offset').value = ''; 
+        document.getElementById('c_type').value = ''; 
+        document.getElementById('c_rotation').value ='';
+}
 function selectHole(hole){
     if(hole.t=='vslot'||hole.t=='hslot'||hole.t=='rect'||hole.t=='circle'){
 
@@ -699,7 +674,7 @@ function selectHole(hole){
         document.getElementById('c_angle').value = '';    
         document.getElementById('c_offset').value = ''; 
         document.getElementById('c_type').value = ''; 
-        if(hole.rotation!=null)document.getElementById('c_rotation').value ='';
+        document.getElementById('c_rotation').value ='';
     }else{
         document.getElementById('c_angle').value = (hole.x*toDeg).toFixed();    
         document.getElementById('c_offset').value = (hole.y*toInch).toFixed(3); 
@@ -763,7 +738,9 @@ document.getElementById('taskhslot').onclick = ()  =>{addhole('hslot')}
 document.getElementById('taskterminal').onclick = ()  =>{addhole('terminal')}
 document.getElementById('taskmirror').onclick = ()  =>{itemKeyOperation('m')}
 document.getElementById('taskcenter').onclick = ()  =>{itemKeyOperation('c')}
+document.getElementById('tasklock').onclick = ()  =>{itemKeyOperation('l')}
 
+document.getElementById('lockall').onclick = ()  =>{shapes.forEach(s=>s.isLocked = true)}
 
 function addhole(type){
     if(lastClick.show){

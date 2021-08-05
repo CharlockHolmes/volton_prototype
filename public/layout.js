@@ -10,6 +10,18 @@ class LayoutHandler{
         document.getElementById('defaultlayout').onclick = ()=>this.setDefaultLayout();
         document.getElementById('savelayout').onclick = ()=>this.saveButtonLayout();
         document.getElementById('loadlayout').onclick = ()=>this.loadButtonLayout();
+        this.initToggleView();
+    }
+    initToggleView(){
+        document.getElementById('toggle1').onclick = ()=> this.toggleSpecificDisplay('ringboxdrag')
+        document.getElementById('toggle2').onclick = ()=> this.toggleSpecificDisplay('powerboxdrag')
+        document.getElementById('toggle3').onclick = ()=> this.toggleSpecificDisplay('gapdiv')
+        document.getElementById('toggle4').onclick = ()=> this.toggleSpecificDisplay('p5holder')
+        document.getElementById('toggle5').onclick = ()=> this.toggleSpecificDisplay('selectedholeboxdrag')
+        document.getElementById('toggle6').onclick = ()=> this.toggleSpecificDisplay('selectedconboxdrag')
+        document.getElementById('toggle7').onclick = ()=> this.toggleSpecificDisplay('textdrag')
+        document.getElementById('toggletuto').onclick = ()=> this.toggleSpecificDisplay('tutorialdrag')
+        document.getElementById('toggletoolbar').onclick = ()=> this.toggleSpecificDisplay('taskbar')
     }
     layoutToBuffer(){
         let tempBuff = localStorage.getItem('layoutbuff');
@@ -77,6 +89,11 @@ class LayoutHandler{
         }
         this.displayIcon()
     }
+    toggleSpecificDisplay(id){
+        const item = document.getElementById(id);
+        if(item.style.display == 'none') item.style.display = 'block';
+        else item.style.display = 'none';
+    }
     displayIcon(){
         const src = ['ressources/2dtextures/menueyes1.png', 'ressources/2dtextures/menueyes2.png']
         let element = document.getElementById('taskview');
@@ -107,9 +124,10 @@ class LayoutHandler{
 
     tutorialVisualToggle(){
         const tuto = document.getElementById('tutorialdrag');
-        if(tuto.style.opacity=='0.2')tuto.style.opacity =  '1'
-        else tuto.style.opacity =  '0.2';
+        if(tuto.style.opacity=='0.2'){tuto.style.opacity =  '1';tuto.style.pointerEvents = 'auto'}
+        else {tuto.style.opacity =  '0.2';tuto.style.pointerEvents = 'none'}
     }
+    
 
 }
 
