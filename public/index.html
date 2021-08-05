@@ -85,20 +85,20 @@
     <div id="main">
         <div id='taskbar' class='dragpos'style='position:fixed; z-index: 12; background-color:#F2F2F2 ;top:80px;right:5px; width:40px;'>
             <div id="taskbarheader"class="headerthing"style='cursor:move;width:40px;height:15px; background-color: #1A4082;position:relative;left:-1px;border: 1px solid #ddd;'></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons1.png'style="width:40px;height:40px;float:right" id="taskcircle"><span class='tooltiptext'>Circular Hole</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons2.png'style="width:40px;height:40px;float:right" id="taskrect"><span class='tooltiptext'>Rectangular Hole</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons3.png'style="width:40px;height:40px;float:right" id="taskhslot"><span class='tooltiptext'>Vertical Slot</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons4.png'style="width:40px;height:40px;float:right" id="taskvslot"><span class='tooltiptext'>Horizontal Slot</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons6.png'style="width:40px;height:40px;float:right" id="taskterminal"><span class='tooltiptext'>Terminal</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons6.png'style="width:40px;height:40px;float:right" id="taskterminal"><span class='tooltiptext'>add Terminal</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons1.png'style="width:40px;height:40px;float:right" id="taskcircle"><span class='tooltiptext'>add Circular Hole</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons2.png'style="width:40px;height:40px;float:right" id="taskrect"><span class='tooltiptext'>add Rectangular Hole</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons3.png'style="width:40px;height:40px;float:right" id="taskhslot"><span class='tooltiptext'>add Vertical Slot</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons4.png'style="width:40px;height:40px;float:right" id="taskvslot"><span class='tooltiptext'>add Horizontal Slot</span></div>
             <!--div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons5.png'style="width:40px;height:40px;float:right" id="taskimport"><span class='tooltiptext'>Import</span></div-->
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons7.png'style="width:40px;height:40px;float:right" id="tasksave"><span class='tooltiptext'>Save</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons8.png'style="width:40px;height:40px;float:right" id="taskcenter"><span class='tooltiptext'>Center</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons9.png'style="width:40px;height:40px;float:right" id="taskmirror"><span class='tooltiptext'>Mirror</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons8.png'style="width:40px;height:40px;float:right" id="taskcenter"><span class='tooltiptext'>Center Component</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons9.png'style="width:40px;height:40px;float:right" id="taskmirror"><span class='tooltiptext'>Mirror Component</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons7.png'style="width:40px;height:40px;float:right" id="tasksave"><span class='tooltiptext'>Save Changes</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons10.png'style="width:40px;height:40px;float:right" id="tasksendmail"><span class='tooltiptext'>Submit Project</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menueyes1.png'style="width:40px;height:40px;float:right" id="taskview"><span class='tooltiptext'>Show/Hide UI</span></div>
         </div>
         <div id="ringboxdrag"class='dragpos' class = 'draggables'>
-            <div id="ringboxdragheader" class="headerthing">Band Size <span class = "collapsible">-</span></div>
+            <div id="ringboxdragheader" class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;"> 1</span> Band Size <span class = "collapsible">-</span></div>
             <table class="ring-info" class="content">
                 <tr>
                     <td>Width</td>
@@ -119,7 +119,7 @@
             </table>
         </div>
         <div id="selectedholeboxdrag"class='dragpos' class = 'draggables'>
-            <div id="selectedholeboxdragheader"class="headerthing">Hole <span class = "collapsible">-</span></div>
+            <div id="selectedholeboxdragheader"class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;">5</span> Hole<span class = "collapsible">-</span></div>
             <table class="ring-info" >
                 <tr>
                     <td>Angle</td>
@@ -140,7 +140,7 @@
             </table>
         </div>
         <div id="selectedconboxdrag"class='dragpos' class = 'draggables'>
-            <div id="selectedconboxdragheader"class="headerthing">Item <span class = "collapsible">-</span></div>
+            <div id="selectedconboxdragheader"class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;">6</span> Terminal <span class = "collapsible">-</span></div>
             <table class="ring-info">
                 <tr>
                     <td>Angle</td>
@@ -181,7 +181,7 @@
             </table>
         </div>
         <div id="powerboxdrag"class='dragpos' class = 'draggables'>
-            <div id="powerboxdragheader"class="headerthing">Power Rating <span class = "collapsible">-</span></div>
+            <div id="powerboxdragheader"class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;"> 2</span> Power Rating <span class = "collapsible">-</span></div>
             <table class="ring-info">
                 <tr>
                     <td>Power</td>
@@ -237,7 +237,7 @@
         </div-->
     
         <div id="textdrag"class='dragpos' class = 'draggables'>
-            <div id="textdragheader"class="headerthing">Additional notes <span class = "collapsible">-</span></div>
+            <div id="textdragheader"class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;"> 7</span> Additional notes <span class = "collapsible">-</span></div>
             <textarea id="textfield" name="notes" rows="10" cols='54'></textarea>
         </div>
 
@@ -246,7 +246,7 @@
             <div>
                 
                 <div id="tutorialnext"class="tutob"style='background-color: rgb(13, 42, 97);width:20%;position:relative;left:80%;color:cornsilk;cursor:pointer;float:left'>next</div>
-                <div id="tutoriallast"class="tutob"style='background-color: rgb(13, 42, 97);width:20%;position:relative;right:80%;color:cornsilk;cursor:pointer;float:right'>last</div>
+                <div id="tutoriallast"class="tutob"style='background-color: rgb(13, 42, 97);width:20%;position:relative;right:80%;color:cornsilk;cursor:pointer;float:right'>prev</div>
                 <span id="tutorialcontent">loading tutorial</span>
                 <div>_________________________________________</div>
             </div>
@@ -258,7 +258,7 @@
     <canvas class='webgl' id='three'></canvas>
     <div>
         <div id="p5holder"class='dragpos' class ="draggables">
-            <div id="p5holderheader"class="headerthing">
+            <div id="p5holderheader"class="headerthing"><span style="position:relative;float:left;background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;"> 4</span>
                 Planner <span class="collapsible"id='isplan'>-</span>
             </div>
         </div>

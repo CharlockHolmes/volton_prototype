@@ -105,11 +105,17 @@ class LayoutHandler{
         //document.getElementById('tutorialcontent').style.color = 'rgb(44,250,159)';
     }
 
+    tutorialVisualToggle(){
+        const tuto = document.getElementById('tutorialdrag');
+        if(tuto.style.opacity=='0.2')tuto.style.opacity =  '1'
+        else tuto.style.opacity =  '0.2';
+    }
+
 }
 
 
-const defaultLayout = [{"top":212,"left":915,"id":"taskbar","display":""},{"top":58,"left":9,"id":"ringboxdrag","display":"none"},{"top":57,"left":360,"id":"selectedholeboxdrag","display":"none"},{"top":57,"left":504,"id":"selectedconboxdrag","display":"none"},{"top":58,"left":176,"id":"powerboxdrag","display":"none"},{"top":57,"left":691,"id":"gapboxdrag","display":"none"},{"top":57,"left":1054,"id":"textdrag","display":"none"},{"top":211,"left":958,"id":"tutorialdrag","display":"block"},{"top":104,"left":12,"id":"p5holder","display":"none"}]
-const defaultLayoutnoTutorial = [{"top":101,"left":1622,"id":"taskbar","display":""},{"top":58,"left":7,"id":"ringboxdrag","display":"none"},{"top":58,"left":360,"id":"selectedholeboxdrag","display":"none"},{"top":57,"left":504,"id":"selectedconboxdrag","display":"none"},{"top":58,"left":176,"id":"powerboxdrag","display":"none"},{"top":57,"left":691,"id":"gapboxdrag","display":"none"},{"top":57,"left":1054,"id":"textdrag","display":"none"},{"top":57,"left":1457,"id":"tutorialdrag","display":"none"},{"top":101,"left":8,"id":"p5holder","display":"block"}]
+const defaultLayout = [{"top":231,"left":601,"id":"taskbar","display":""},{"top":58,"left":9,"id":"ringboxdrag","display":"none"},{"top":58,"left":726,"id":"selectedholeboxdrag","display":"none"},{"top":58,"left":870,"id":"selectedconboxdrag","display":"none"},{"top":58,"left":178,"id":"powerboxdrag","display":"none"},{"top":58,"left":361,"id":"gapboxdrag","display":"none"},{"top":58,"left":1055,"id":"textdrag","display":"none"},{"top":230,"left":647,"id":"tutorialdrag","display":"block"},{"top":242,"left":44,"id":"p5holder","display":"none"}]
+const defaultLayoutnoTutorial = [{"top":236,"left":16,"id":"taskbar","display":""},{"top":58,"left":9,"id":"ringboxdrag","display":"none"},{"top":58,"left":726,"id":"selectedholeboxdrag","display":"none"},{"top":58,"left":870,"id":"selectedconboxdrag","display":"none"},{"top":58,"left":178,"id":"powerboxdrag","display":"none"},{"top":58,"left":361,"id":"gapboxdrag","display":"none"},{"top":58,"left":1055,"id":"textdrag","display":"none"},{"top":57,"left":1457,"id":"tutorialdrag","display":"none"},{"top":235,"left":59,"id":"p5holder","display":"none"}]
 
 
 function cc(c,id){
@@ -130,6 +136,3 @@ function tcc(c,cl){
         d.style.color = c;
     }
 }
-
-let red = 'rgb(195,142,96)'
-let or = 'rgb(117,171,112)'

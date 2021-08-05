@@ -19,6 +19,7 @@ class DomTable {
         let check = document.getElementById('gapboxdrag');
         if(check!=null)check.remove();
         this.adjustRingGaps(num);
+        //this.uploadTableData();
 
         let ref = document.getElementById('gapdiv');
         ref.innerHTML += this.createTable(num);
@@ -35,7 +36,7 @@ class DomTable {
         document.getElementById('addgapbutton').onclick = ()=>{this.pos={top:this.ref.style.top, left:this.ref.style.left};if(this.rows<8)this.build(this.rows+1,false)};
         document.getElementById('removegapbutton').onclick = ()=>{if(this.rows>1){this.pos={top:this.ref.style.top, left:this.ref.style.left};if(this.rows>1)this.build(this.rows-1,false);}};
         document.getElementById('gapspan').addEventListener("click", function() {addCollapse(this);});
-        if(isNew)this.uploadTableData();
+        if(isNew||!isNew)this.uploadTableData();
         else this.uploadFromBuffer();
     }
     adjustRingGaps(num){
@@ -44,21 +45,31 @@ class DomTable {
             let gl = r.gaps.length;
             if(gl<num){
                 let cg = r.addGap();
+                
                 normalizeGap(cg);
+                for(let i=0; i<r.gaps.length;i++){
+                    normalizeGapAngle(r.gaps[i],[i],r.gaps.length-1)
+                }
+                
                 if(r.gaps.length==2){
-                    normalizeGap(r.gaps[0])
                     let ccg = r.gaps[0];
+                    normalizeGap(ccg);
                     this.buffer[0][0]=((Math.abs(ccg.begin-ccg.end)*360/(2*PI)).toFixed(1));
                     this.buffer[1][0]=(Math.round((ccg.begin+ccg.end)/2*360/(2*PI)));
                     this.buffer[2][0]=(ccg.t);
+
                 }
-                this.buffer[0].push((Math.abs(cg.begin-cg.end)*360/(2*PI)).toFixed(1));
-                this.buffer[1].push(Math.round((cg.begin+cg.end)/2*360/(2*PI)));
-                this.buffer[2].push(cg.t);
+                    this.buffer[0].push((Math.abs(cg.begin-cg.end)*360/(2*PI)).toFixed(1));
+                    this.buffer[1].push(Math.round((cg.begin+cg.end)/2*360/(2*PI)));
+                    this.buffer[2].push(cg.t);
+                
                 console.log(r.gaps)
             }
             if(gl>num){
                 r.gaps.pop();
+                for(let i=0; i<r.gaps.length;i++){
+                    normalizeGapAngle(r.gaps[i],[i],r.gaps.length-1)
+                }
                 if(r.gaps.length==1){
                     normalizeGap(r.gaps[0])
                     let ccg = r.gaps[0];
@@ -71,7 +82,7 @@ class DomTable {
     }
     
     createTable(rows) {
-        let firstPart = "<div id='gapboxdrag'class='dragpos' class = 'draggables'><div id='gapboxdragheader'class='headerthing'>Gap / Sections <span id='gapspan'class = 'collapsible'>-</span></div><table class='ring-info' style='width:380px;display:block'><tr><td>#</td><td>Angle</td><td>Arc</td><td>Length</td><td>Type</td></tr>"
+        let firstPart = "<div id='gapboxdrag'class='dragpos' class = 'draggables'><div id='gapboxdragheader'class='headerthing'><span style='background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;'> 3</span> Gap / Sections / Fasteners <span id='gapspan'class = 'collapsible'>-</span></div><table class='ring-info' style='width:380px;display:block'><tr><td>#</td><td>Angle</td><td>Arc</td><td>Length</td><td>Closing</td></tr>"
         let lastPart = "<tr><td id='submitgapbutton'style='background-color:rgb(177, 0, 0);color:white'>Submit</td><td id='addgapbutton'>Add (+)</td><td id='removegapbutton'>Remove (-)</td></tr></table></div>"
         let middle='';
         for (let i = 0; i < rows; i++) {

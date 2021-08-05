@@ -200,3 +200,23 @@ function normalizeGap(g){
     g.begin = gcenter-gawidth/2;
     g.end = gcenter+gawidth/2;
 }
+
+function normalizeGapAngle(g,num,total){
+    let offset = gapCenterPerNum[num][total];
+    let gcenter = (g.begin+g.end)/2;
+    let diff = gcenter - g.begin;
+    if(diff>=2*PI)diff-2*PI;
+    gcenter = offset;
+    g.begin = gcenter - diff;
+    g.end = gcenter+diff;
+}
+const gapCenterPerNum = [
+    /*0*/[0,0,0,0             , 0     ,0     ,0       ,0     ],
+    /*1*/[0,PI,2*PI/3,PI/2    , 0.4*PI,1/3*PI,1/3.5*PI,1/4*PI],
+    /*2*/[0,0,4*PI/3, PI      , 0.8*PI,2/3*PI,2/3.5*PI,2/4*PI],
+    /*3*/[0,0,0,3*PI/2        , 1.2*PI,3/3*PI,3/3.5*PI,3/4*PI],
+    /*4*/[0,0,0,0             , 1.6*PI,4/3*PI,4/3.5*PI,4/4*PI],
+    /*5*/[0,0,0,0             , 0     ,5/3*PI,5/3.5*PI,5/4*PI],
+    /*6*/[0,0,0,0             , 0     ,0     ,6/3.5*PI,6/4*PI],
+    /*7*/[0,0,0,0             , 0     ,0     ,0       ,7/4*PI],
+]

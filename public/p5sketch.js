@@ -317,7 +317,7 @@ function ctrlKeyOperation(key){
 }
 function itemKeyOperation(key) {
     console.log(key)
-    if (plannerBoxFlag&&(key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'e' || key == 'q' || key=='r' || key =='f'|| key =='c'|| key =='m' || key=='t'||key == 'ArrowUp' || key == 'ArrowLeft' || key == 'ArrowDown' || key == 'ArrowRight' )) {
+    if (plannerBoxFlag&&(key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'e' || key == 'q' || key=='r' || key =='f'|| key =='c'|| key =='m' || key=='t'||key == 'ArrowUp' || key == 'ArrowLeft' || key == 'ArrowDown' || key == 'ArrowRight')) {
         shapes.forEach((shape) => {
             if (shape.selected) {
                 add_z_save();
@@ -380,6 +380,10 @@ function itemKeyOperation(key) {
                 break;
         }
     }
+    else if(key=='h'&&!(document.getElementById('textfield')===document.activeElement)){
+        build.layout.tutorialVisualToggle();
+    }
+    console.log(document.getElementById('textfield')===document.activeElement)
 
 }
 
