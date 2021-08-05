@@ -857,45 +857,52 @@ function loadCamera(cameraImports){
     }
 }
 function generateURL(ring = r){
-    const position = {position:{x : camera.position.x, y:camera.position.y, z:camera.position.z},rotation:{_x: camera.rotation._x, _y:camera.rotation._y, _z:camera.rotation._z}, target:{x:controls.target.x, y:controls.target.y, z:controls.target.z}}
-    const camt = JSON.stringify(position);
-    ringAnglesToDeg();
-    let ringt = JSON.stringify(ring);
-    let str = '?';
-    str+= 'ring=' + ringt;
-    str+= '&camera='+camt;
-    // const hostname = window.location.host;
-    // const urltemp = 'http://'+hostname+'/'+str;
-    //const encode = encodeURI(urltemp);
-    //console.log(urltemp)
-    //navigator.clipboard.writeText(encode);
-    let ur = new URL(window.location);
-    ur.searchParams.set('ring', ringt);
+    if(CAPTCHA_Validate()){
 
-    //ur.searchParams.set('camera', camt);
-    const encoded = ur.toString();
-    const compressed = compact(encoded);
-    console.log(encoded)
-    console.log(compressed)
+        const position = {position:{x : camera.position.x, y:camera.position.y, z:camera.position.z},rotation:{_x: camera.rotation._x, _y:camera.rotation._y, _z:camera.rotation._z}, target:{x:controls.target.x, y:controls.target.y, z:controls.target.z}}
+        const camt = JSON.stringify(position);
+        ringAnglesToDeg();
+        let ringt = JSON.stringify(ring);
+        let str = '?';
+        str+= 'ring=' + ringt;
+        str+= '&camera='+camt;
+        // const hostname = window.location.host;
+        // const urltemp = 'http://'+hostname+'/'+str;
+        //const encode = encodeURI(urltemp);
+        //console.log(urltemp)
+        //navigator.clipboard.writeText(encode);
+        let ur = new URL(window.location);
+        ur.searchParams.set('ring', ringt);
 
-    navigator.clipboard.writeText(compressed);
-////////////////////////////////////////////////////////////////
-
-    const data = {url:compressed,power:document.getElementById('powerasked').value, voltage:document.getElementById('voltage').value,text:document.getElementById('textfield').value, id:1}
-    const options = {
-        method:'POST',
-        headers:{
-            'Content-Type':'application/json'
-        },
-        body: JSON.stringify(data)
+        //ur.searchParams.set('camera', camt);
+        const encoded = ur.toString();
+        const compressed = compact(encoded);
+        console.log(encoded)
+        console.log(compressed)
+        
+        navigator.clipboard.writeText(compressed);
+        ////////////////////////////////////////////////////////////////
+        
+        const data = {url:compressed,power:document.getElementById('powerasked').value, voltage:document.getElementById('voltage').value,text:document.getElementById('textfield').value, id:1}
+        const options = {
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(data)
+        }
+        console.log('This will be send on email'+options)
+        fetch('/api', options);
+        
+        //window.location.replace(encoded)
+        // window.location.search = str;
     }
-    console.log('This will be send on email'+options)
-    fetch('/api', options);
-    
-    //window.location.replace(encoded)
-    // window.location.search = str;
 }
 /**
  * 
  */
 
+function CAPTCHA_Validate(){
+    let hn = window.location.hostname
+    if(hn=='voltondesign.com'||hn=='localhost')return true;
+}
