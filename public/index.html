@@ -134,30 +134,11 @@
                 </tr>
             </table>
         </div>
-        <div id="selectedholeboxdrag"class='dragpos' class = 'draggables'>
-            <div id="selectedholeboxdragheader"class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;">5</span> Hole<span class = "collapsible">-</span></div>
-            <table class="ring-info" >
-                <tr id='tr1'>
-                    <td>Angle</td>
-                    <td><input class="input-data"id='h_angle'> deg</td>
-                </tr>
-                <tr>
-                    <td>Offset</td>
-                    <td><input class="input-data"id='h_offset'> in</td>
-                </tr>
-                <tr>
-                    <td>Height</td>
-                    <td><input class="input-data"id='h_height'> in</td>
-                </tr>
-                <tr>
-                    <td>Width</td>
-                    <td><input class="input-data"id='h_width'> in</td>
-                </tr>
-            </table>
-        </div>
+       
         <div id="selectedconboxdrag"class='dragpos' class = 'draggables'>
-            <div id="selectedconboxdragheader"class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;">6</span> Terminal <span class = "collapsible">-</span></div>
-            <table class="ring-info">
+            <div id="selectedconboxdragheader"class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;">5</span> <span id='componenttitle'>Terminal</span> <span class = "collapsible">-</span></div>
+            <div>
+            <table class="ring-info" id='terminaltable'>
                 <tr>
                     <td>Angle</td>
                     <td><input class="input-data" id="c_angle"> deg</td>
@@ -190,11 +171,37 @@
                         <option value="thermo">Thermocpl</option>
                     </select>	</td>
                 </tr>
-                <!--tr>
-                    <td></td>
-                    <td>Submit</td>
-                </tr-->
+                
             </table>
+            <table class="ring-info" id='holetable'>
+                <tr>
+                    <td>Angle</td>
+                    <td><input class="input-data"id='h_angle'> deg</td>
+                </tr>
+                <tr>
+                    <td>Offset</td>
+                    <td><input class="input-data"id='h_offset'> in</td>
+                </tr>
+                <tr id='holeheight'>
+                    <td >Height</td>
+                    <td><input class="input-data"id='h_height'> in</td>
+                </tr>
+                <tr>
+                    <td id='holediam'>Width</td>
+                    <td><input class="input-data"id='h_width'> in</td>
+                </tr>
+            </table>
+            <table class='ring-info'id='emptytable'>
+                <tr id='tr1'>
+                    <td>Select Component<br> or<br>Place Marker</td>
+                </tr>
+            </table>
+            <table class='ring-info'id='markertable'>
+                <tr id='tr1'>
+                    <td>Marker Placed</td>
+                </tr>
+            </table>
+        </div>
         </div>
         <div id="powerboxdrag"class='dragpos' class = 'draggables'>
             <div id="powerboxdragheader"class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;"> 2</span> Power Rating <span class = "collapsible">-</span></div>
@@ -308,7 +315,7 @@
         let infoBoxFlag = false;
         //Make the DIV element draggagle:
         dragElement(document.getElementById("ringboxdrag"));
-        dragElement(document.getElementById("selectedholeboxdrag"));
+        //dragElement(document.getElementById("selectedholeboxdrag"));
         dragElement(document.getElementById("selectedconboxdrag"));
         
         dragElement(document.getElementById("powerboxdrag"));

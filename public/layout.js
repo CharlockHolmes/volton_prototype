@@ -131,9 +131,13 @@ class LayoutHandler{
 
 }
 
-
-const defaultLayout = [{"top":231,"left":601,"id":"taskbar","display":""},{"top":58,"left":9,"id":"ringboxdrag","display":"none"},{"top":58,"left":726,"id":"selectedholeboxdrag","display":"none"},{"top":58,"left":870,"id":"selectedconboxdrag","display":"none"},{"top":58,"left":178,"id":"powerboxdrag","display":"none"},{"top":58,"left":361,"id":"gapboxdrag","display":"none"},{"top":58,"left":1055,"id":"textdrag","display":"none"},{"top":230,"left":647,"id":"tutorialdrag","display":"block"},{"top":242,"left":44,"id":"p5holder","display":"none"}]
-const defaultLayoutnoTutorial = [{"top":236,"left":16,"id":"taskbar","display":""},{"top":58,"left":9,"id":"ringboxdrag","display":"none"},{"top":58,"left":726,"id":"selectedholeboxdrag","display":"none"},{"top":58,"left":870,"id":"selectedconboxdrag","display":"none"},{"top":58,"left":178,"id":"powerboxdrag","display":"none"},{"top":58,"left":361,"id":"gapboxdrag","display":"none"},{"top":58,"left":1055,"id":"textdrag","display":"none"},{"top":57,"left":1457,"id":"tutorialdrag","display":"none"},{"top":235,"left":59,"id":"p5holder","display":"none"}]
+window.onerror = function(error) {
+    localStorage.setItem('layoutbuff', JSON.stringify(defaultLayoutnoTutorial))
+    setTimeout(()=>window.location.reload(),1000)
+    alert(error +'will reload'); 
+  };
+const defaultLayout = [{"top":295,"left":820,"id":"taskbar","display":""},{"top":59,"left":12,"id":"ringboxdrag","display":"block"},{"top":58,"left":730,"id":"selectedconboxdrag","display":"block"},{"top":59,"left":178,"id":"powerboxdrag","display":"block"},{"top":58,"left":361,"id":"gapboxdrag","display":"block"},{"top":58,"left":913,"id":"textdrag","display":"block"},{"top":294,"left":877,"id":"tutorialdrag","display":"block"},{"top":260,"left":6,"id":"p5holder","display":"none"}]
+const defaultLayoutnoTutorial = [{"top":259,"left":1623,"id":"taskbar","display":""},{"top":59,"left":12,"id":"ringboxdrag","display":"block"},{"top":58,"left":730,"id":"selectedconboxdrag","display":"block"},{"top":59,"left":178,"id":"powerboxdrag","display":"block"},{"top":58,"left":361,"id":"gapboxdrag","display":"block"},{"top":58,"left":913,"id":"textdrag","display":"block"},{"top":57,"left":1316,"id":"tutorialdrag","display":"none"},{"top":260,"left":6,"id":"p5holder","display":"none"}]
 
 
 function cc(c,id){

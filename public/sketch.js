@@ -752,8 +752,8 @@ document.getElementById('save').onclick = () =>{
     console.log('save pressed')
     generateURL();
 }
-
 document.getElementById('textfield').onchange = saveTextField;
+
 function saveTextField(){
     let tempTxt = document.getElementById('textfield').value;
     localStorage.setItem('textfield', tempTxt)

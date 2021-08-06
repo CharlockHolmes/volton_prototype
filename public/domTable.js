@@ -158,5 +158,112 @@ class DomTable {
 } 
 
 class ComponentTableManager{
+    constructor(){
 
+        this.markerTable = document.getElementById('markertable');
+        this.emptyTable = document.getElementById('emptytable');
+        
+        this.holeTable = document.getElementById('holetable');
+        this.holeFields = [];
+        this.holeFields.push(document.getElementById('h_angle'))
+        this.holeFields.push(document.getElementById('h_height'))
+        this.holeFields.push(document.getElementById('h_width'))
+        this.holeFields.push(document.getElementById('h_offset'))
+        this.holeFields.forEach(h=>{h.onchange =()=>this.changeHole()})
+
+        this.terminalTable = document.getElementById('terminaltable');
+        this.terminalFields = [];
+        this.terminalFields.push(document.getElementById('c_type'))
+        this.terminalFields.push(document.getElementById('c_rotation'))
+        this.terminalFields.push(document.getElementById('c_angle'))
+        this.terminalFields.push(document.getElementById('c_offset'))
+        this.terminalFields.forEach(h=>{h.onchange =()=>this.changeConnector()})
+
+        this.clearTerminal()
+        this.clearHole()
+        this.hideAll()
+
+    }
+    changeHole(){
+        shapes.forEach(hole=>{
+            if(hole.selected){
+                let x = 1/toDeg* document.getElementById('h_angle').value;
+                let h = 1/toInch* document.getElementById('h_height').value;
+                let w = 1/toInch*document.getElementById('h_width').value;
+                let y = 1/toInch* document.getElementById('h_offset').value;
+                hole.updateValues(x,y,w,h);
+            }
+        })
+    }
+
+    changeConnector(){
+        shapes.forEach(hole=>{
+            if(hole.selected){
+                if(hole.t!='vslot'||hole.t!='hslot'||hole.t!='rect'||hole.t!='circle'){ 
+                    let x = 1/toDeg* document.getElementById('c_angle').value;
+                    let y = 1/toInch* document.getElementById('c_offset').value;
+                    let rotation = document.getElementById('c_rotation').value *2*PI/360;
+                    let type = document.getElementById('c_type').value;
+                    if(type!='boitier'){
+                        hole.h = 0.7 / (lrwidth * inchPerUnit) * pheight;
+                        hole.w = 0.7 / (lrlength * inchPerUnit) * pwidth;
+                    }else{
+                        hole.h = 1.5 / (lrwidth * inchPerUnit) * pheight;
+                        hole.w = 1.5 / (lrlength * inchPerUnit) * pwidth;
+                    }
+                    hole.updateValues(x,y,undefined,undefined,rotation,type);
+                }
+            }
+        })
+    }
+
+    showHole(){
+        shapes.forEach(hole=>{
+            if(hole.selected){
+                if(hole.t=='circle'){
+                    document.getElementById('holeheight').style.display = 'none'
+                    document.getElementById('holediam').innerHTML = 'Diameter'
+                }
+                else{
+                    document.getElementById('holeheight').style.display = 'table-row'
+                    document.getElementById('holediam').innerHTML = 'Width'
+                }
+            }
+        })
+        //document.getElementById('componenttitle').innerHTML = 'Hole'
+        this.markerTable.style.display = 'none'
+        this.emptyTable.style.display = 'none'
+        this.holeTable.style.display = 'table'
+        this.terminalTable.style.display = 'none'
+        this.clearTerminal();
+    }
+    showTerminal(){
+        //document.getElementById('componenttitle').innerHTML = 'Terminal'
+
+        this.markerTable.style.display = 'none'
+        this.emptyTable.style.display = 'none'
+        this.holeTable.style.display = 'none'
+        this.terminalTable.style.display = 'table'
+        this.clearHole();
+    }
+    showMarker(){
+        //document.getElementById('componenttitle').innerHTML = 'Component'
+        this.markerTable.style.display = 'table'
+        this.emptyTable.style.display = 'none'
+        this.holeTable.style.display = 'none'
+        this.terminalTable.style.display = 'none'
+    }
+    hideAll(){
+        document.getElementById('componenttitle').innerHTML = 'Component'
+        this.markerTable.style.display = 'none'
+        this.emptyTable.style.display = 'table'
+        this.holeTable.style.display = 'none';
+        this.terminalTable.style.display = 'none';
+    }
+    clearTerminal(){
+        this.terminalFields.forEach(t=>t.value = '')
+    }
+    clearHole(){
+        this.holeFields.forEach(t=>t.value = '')
+    }
 }

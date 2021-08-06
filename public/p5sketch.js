@@ -447,6 +447,7 @@ document.getElementById('p5holder').onmousedown = function mouseP() {
                 lastClick.x = mouseX - mleft - xtrans;
                 lastClick.y = mouseY - mtop;
                 lastClick.show = true;
+                build.componentTable.showMarker();
             }
         }
     }
@@ -670,6 +671,7 @@ function selectHole(hole){
         document.getElementById('h_height').value = (hole.h*toInch).toFixed(3);    
         document.getElementById('h_width').value = (hole.w*toInch).toFixed(3);    
         document.getElementById('h_offset').value = (hole.y*toInch).toFixed(3); 
+        build.componentTable.showHole();
 
         document.getElementById('c_angle').value = '';    
         document.getElementById('c_offset').value = ''; 
@@ -680,55 +682,14 @@ function selectHole(hole){
         document.getElementById('c_offset').value = (hole.y*toInch).toFixed(3); 
         document.getElementById('c_type').value = hole.t; 
         if(hole.rotation!=null)document.getElementById('c_rotation').value = Math.round(hole.rotation*360/(2*PI));
-
+        build.componentTable.showTerminal();
         document.getElementById('h_angle').value = '';    
         document.getElementById('h_height').value ='';    
         document.getElementById('h_width').value ='';    
         document.getElementById('h_offset').value = ''; 
     }
 }  
-/** This is the automatic changing of Terminals according to the entry in the table */
-document.getElementById('c_type').onchange =()=>changeConnector();
-document.getElementById('c_rotation').onchange =()=>changeConnector();
-document.getElementById('c_angle').onchange =()=>changeConnector();
-document.getElementById('c_offset').onchange =()=>changeConnector();
-function changeConnector(){
-    shapes.forEach(hole=>{
-        if(hole.selected){
-            if(hole.t!='vslot'||hole.t!='hslot'||hole.t!='rect'||hole.t!='circle'){ 
-                let x = 1/toDeg* document.getElementById('c_angle').value;
-                let y = 1/toInch* document.getElementById('c_offset').value;
-                let rotation = document.getElementById('c_rotation').value *2*PI/360;
-                let type = document.getElementById('c_type').value;
-                if(type!='boitier'){
-                    hole.h = 0.7 / (lrwidth * inchPerUnit) * pheight;
-                    hole.w = 0.7 / (lrlength * inchPerUnit) * pwidth;
-                }else{
-                    hole.h = 1.5 / (lrwidth * inchPerUnit) * pheight;
-                    hole.w = 1.5 / (lrlength * inchPerUnit) * pwidth;
-                }
-                hole.updateValues(x,y,undefined,undefined,rotation,type);
-            }
-        }
-    })
-}
 
-/** This is the automatic changing of Holes according to the entry in the table */
-document.getElementById('h_angle').onchange =()=>changeHole();
-document.getElementById('h_height').onchange =()=>changeHole();
-document.getElementById('h_width').onchange =()=>changeHole();
-document.getElementById('h_offset').onchange =()=>changeHole();
-function changeHole(){
-    shapes.forEach(hole=>{
-        if(hole.selected){
-            let x = 1/toDeg* document.getElementById('h_angle').value;
-            let h = 1/toInch* document.getElementById('h_height').value;
-            let w = 1/toInch*document.getElementById('h_width').value;
-            let y = 1/toInch* document.getElementById('h_offset').value;
-            hole.updateValues(x,y,w,h);
-        }
-    })
-}
 
 document.getElementById('tasksave').onclick = ()  =>{holeExport();}
 document.getElementById('taskcircle').onclick = ()=>{addhole('circle')}
