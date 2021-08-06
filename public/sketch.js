@@ -576,7 +576,7 @@ function loadCustomItem() {
 
 /**
  * Functions that runs in a loop for each animation frame of the window. 
- * @param {*} time 
+ * @param {*} time is time
  */
 function render(time) {
     time *= 0.001; // the callback sets the time value
@@ -608,6 +608,7 @@ function render(time) {
     }
     requestAnimationFrame(render);
 }
+
 
 /**
  *  Ajusts to the canvas size

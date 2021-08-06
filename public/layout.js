@@ -131,11 +131,7 @@ class LayoutHandler{
 
 }
 
-window.onerror = function(error) {
-    localStorage.setItem('layoutbuff', JSON.stringify(defaultLayoutnoTutorial))
-    setTimeout(()=>window.location.reload(),1000)
-    alert(error +'will reload'); 
-  };
+
 const defaultLayout = [{"top":295,"left":820,"id":"taskbar","display":""},{"top":59,"left":12,"id":"ringboxdrag","display":"block"},{"top":58,"left":730,"id":"selectedconboxdrag","display":"block"},{"top":59,"left":178,"id":"powerboxdrag","display":"block"},{"top":58,"left":361,"id":"gapboxdrag","display":"block"},{"top":58,"left":913,"id":"textdrag","display":"block"},{"top":294,"left":877,"id":"tutorialdrag","display":"block"},{"top":260,"left":6,"id":"p5holder","display":"none"}]
 const defaultLayoutnoTutorial = [{"top":259,"left":1623,"id":"taskbar","display":""},{"top":59,"left":12,"id":"ringboxdrag","display":"block"},{"top":58,"left":730,"id":"selectedconboxdrag","display":"block"},{"top":59,"left":178,"id":"powerboxdrag","display":"block"},{"top":58,"left":361,"id":"gapboxdrag","display":"block"},{"top":58,"left":913,"id":"textdrag","display":"block"},{"top":57,"left":1316,"id":"tutorialdrag","display":"none"},{"top":260,"left":6,"id":"p5holder","display":"none"}]
 
