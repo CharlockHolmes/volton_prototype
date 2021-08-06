@@ -14,6 +14,7 @@ class Shape {
         this.SELECTPADDING = 3 / 5;
         this.arrowIndex = 0;
         this.isLocked = false;
+        this.degPosY = pheight-10
     }
     doubleClicked() {
         this.arrowIndex++;
@@ -46,7 +47,7 @@ class Shape {
             line(x-w/2-15, y, x+w/2+15, y)
             pointArrow(this, this.t);
             degTxtFormat();
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -8);
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, this.degPosY);
             pop()
         }
     }
@@ -236,7 +237,7 @@ class Rectangle extends Shape {
             drawArrow(this.x, this.y+this.h/2+10, w, 10, true, a);
             drawArrow(this.x + w / 2 + 15, this.y, h, 10, false, b);
             degTxtFormat();
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -8);
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, this.degPosY);
         }
     }
     copySelf(x){
@@ -251,9 +252,9 @@ class Rectangle extends Shape {
 function degTxtFormat(){
     textSize(TEXTSIZEA);
     textAlign(CENTER, BOTTOM);
-    fill(255)
+    fill(0)
     stroke(0)
-    strokeWeight(3)
+    //strokeWeight(3)
     //textFont('Courier')
 }
 class Circle extends Shape {
@@ -292,7 +293,7 @@ class Circle extends Shape {
                      drawArrow(this.x+this.w/2+15, (this.y-o.y)/2+o.y, this.y-o.y, 15, false, (this.y-o.y)*toInch)
                 }
             })
-            if(overClear)drawArrow(this.x+this.w/2+15, (this.y)/2, this.y, 15, false, (this.y-this.h/2)*toInch)
+            if(overClear)drawArrow(this.x+this.w/2+15, (this.y)/2, this.y, 15, false, (this.y)*toInch)
 
 
             push()
@@ -308,7 +309,7 @@ class Circle extends Shape {
             pointArrow(this, 'Ø' + (w * toInch).toFixed(3));
 
             degTxtFormat();
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -8);
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, this.degPosY);
         }
     }
     isUnder(x, y) {
@@ -375,7 +376,7 @@ class Vertical_Slot extends Rectangle {
             pointArrow(this, 'R' + (w / 2 / pheight * loadedRing.width * inchPerUnit).toFixed(3))
             drawArrow(this.x + w / 2 + 15, this.y, h, 10, false, b);
             degTxtFormat();
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -8);
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, this.degPosY);
         }
     }
     getArea() {
@@ -448,7 +449,7 @@ class Horizontal_Slot extends Rectangle {
             //drawArrow(this.x, -30, w, 10, true, a);
             drawArrow(this.x, this.y-this.h/2-10, w, 10, true, a);
             degTxtFormat();
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -8);
+            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, this.degPosY);
         }
     }
     getArea() {

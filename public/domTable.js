@@ -44,7 +44,7 @@ class DomTable {
         while(r.gaps.length!=num){
             let gl = r.gaps.length;
             if(gl<num){
-                let cg = r.addGap();
+                let cg = r.addGap(undefined,undefined,r.gaps[0].t);
                 
                 normalizeGap(cg);
                 for(let i=0; i<r.gaps.length;i++){
@@ -156,3 +156,7 @@ class DomTable {
         document.getElementById('gapwidth'  + index).value=(angle*360/(2*PI)).toFixed(1);
     }
 } 
+
+class ComponentTableManager{
+
+}
