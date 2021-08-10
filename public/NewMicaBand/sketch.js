@@ -44,7 +44,7 @@ const dcmpts =100000;
 let renderer;
 
 const textureLoader = new THREE.TextureLoader();
-const normalTexture = textureLoader.load('/ressources/alphamap.png');
+const normalTexture = textureLoader.load('ressources/alphamap.png');
 // Renderer
 const canvas = document.querySelector('canvas.webgl');
 
@@ -455,7 +455,7 @@ function addRingClock() {
     color: 0x990000
 }, followCamera = true, options = undefined) {
     const textLoader = new THREE.FontLoader();
-    textLoader.load('/ressources/Roboto Black_Regular.json', function (font) {
+    textLoader.load('ressources/Roboto Black_Regular.json', function (font) {
         const geoTxt = new THREE.TextGeometry(msg, {
             font: font,
             size: 0.03*r.radius,
