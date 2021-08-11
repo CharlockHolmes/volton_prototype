@@ -25,9 +25,24 @@ const database = new Datastore('database.db');
 app.post('/api', (request, response) => {
     console.log("i got a request");
     const data = request.body;
-    //database.insert({data}); 
-    console.log(data.url);
-    sendMail(data.url,data)
+    //database.insert({data});
+    let str = ''
+    data.items.forEach(item=>{
+        const ring = item.ring;
+        str +='<br><br>';
+        str += "Voltage:"+item.voltage+'V<br>';
+        str += "Power:"+item.power+'W<br>';
+        str += "Diameter:"+ring.radius*2*3+'inch<br>';
+        str += "Width:"+ring.width*3+'inch<br>';
+        str += "Type:"+item.type+'<br>';
+        str += "Holes:"+ring.holes.length+'<br>';
+        str += "Connectors:"+ring.terminals.length+'<br>';
+        //str += "id:"+num+'<br>';
+        str += 'Additional Notes: '+ item.text + '<br>'
+        str += '<a href="'+item.url+'">'+item.url+'</a>'
+    }) 
+    console.log(str);
+    sendMail(str)
     //response.json(data);
     response.end(); //bare minimum require to make it work, needs to send something back
 });
@@ -46,16 +61,16 @@ app.post('/api', (request, response) => {
 
 
 
-function sendMail(text = 'nothing was inserted', data){
+function sendMail(text = 'nothing was inserted'){
 
     var mailOptions = {
         from: 'testvolton2021@gmail.com',
         to: 'charles.simon1999@hotmail.com',
         subject: 'Sending Email using Node.js',
-        html: '<a href="'+text+'">'+"https://voltondesign.com"+'</a><p>Click on the attatchment and open link<br><br>'+data.voltage+'Volts<br>'+data.power+'Watts<br><br>'+data.text+'</p>',
+        html: '<p>'+text+'</p>',
         attachments: {   // utf-8 string as an attachment
             filename: 'link.html',
-            content: '<a href="'+text+'">link</a>'
+            content: text
         }
     };
     console.log('something is happening')

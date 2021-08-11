@@ -881,10 +881,9 @@ function generateURL(ring = r){
         console.log(encoded)
         console.log(compressed)
         
-        navigator.clipboard.writeText(compressed);
         ////////////////////////////////////////////////////////////////
         
-        const data = {url:compressed,power:document.getElementById('powerasked').value, voltage:document.getElementById('voltage').value,text:document.getElementById('textfield').value, id:1}
+        const data = {type:'micaband',url:compressed,power:document.getElementById('powerasked').value, voltage:document.getElementById('voltage').value,text:document.getElementById('textfield').value, ring:ring,id:1}
         const options = {
             method:'POST',
             headers:{
@@ -892,12 +891,29 @@ function generateURL(ring = r){
             },
             body: JSON.stringify(data)
         }
+        navigator.clipboard.writeText(compressed); //Copy
         console.log('This will be send on email'+options)
-        fetch('/api', options);
+        exportToCart(data)
+        //fetch('/api', options);
+
+
         
         //window.location.replace(encoded)
         // window.location.search = str;
     }
+}
+/** Sets the itemX localstorage item for cart */
+function exportToCart(data){
+    let num = localStorage.getItem('cartIndex');
+    if(num==null||num==undefined){
+        alert('no index')
+        localStorage.setItem('cartIndex',0)
+        exportToCart(data)
+    }
+    else if(isNaN(num)==false){
+        localStorage.setItem('item'+num,JSON.stringify(data))
+    }
+    window.location.pathname=  '/Cart/'
 }
 /**
  * 

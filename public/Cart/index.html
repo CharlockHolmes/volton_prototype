@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.min.js"></script>
+    <!--link rel="stylesheet" type="text/css" href="../style.csss-->
+    <title>Volton Design</title>
+
+</head>
+
+
+<body id="body">
+    
+    <div id='listi'> List of items
+    </div>
+    <button id = 'addnewitem'> Add New Item</button>
+    <button id = 'StartSubmission'> Begin Submission</button>
+    <script src='Summary.js'></script>
+    <script>
+        let sum = new Summary()
+        const blank = '{"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.08314,"end":0.08314,"t":"screws"}],"connectors":[],"terminals":[],"thickness":0.9583333333333334,"sections":1}'
+        document.getElementById('addnewitem').onclick = ()=>{
+            let index = Math.round(Math.random()*1000)
+            while(localStorage.getItem('item'+index)!=null){
+                console.log(index+' already in use')
+                index = Math.round(Math.random()*1000); 
+            }
+            localStorage.setItem('ring',blank)
+            localStorage.setItem("cartIndex",index);
+            window.location.pathname = '/'
+        }
+        document.getElementById('StartSubmission').onclick = ()=>{
+            window.location.pathname = '/Cart/Submission/'
+        }
+    </script>
+
+</body>
+
+
+</html>
