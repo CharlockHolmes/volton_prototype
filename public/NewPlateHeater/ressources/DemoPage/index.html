@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--link rel="stylesheet" type="text/css" href="styleTest.css"-->
+
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"
+		integrity="sha512-LF8ZB1iTwi4Qvkm4pekHG4a437Y9Af5ZuwbnW4GTbAWQeR2E4KW8WF+xH8b9psevV7wIlDMx1MH9YfPqgKhA/Q=="
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
+	<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js" ></script>
+
+    <!--script id="lzutf8" src="https://cdn.jsdelivr.net/npm/lzutf8/build/production/lzutf8.min.js"></script-->
+	<!--script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld05UwbAAAAACikqGC49Y8kDJEekhzQcbqRlenm"></script-->
+	<link rel='icon' href='https://www.volton.com/gx/favicon/favicon.ico?v=2'>
+
+	<title>Volton Demos</title>
+</head>
+<body>
+    <style>
+        span.txt{
+            text-align: center;
+            position:relative;
+            left:50%;
+            user-select: none;
+        }
+    </style>
+    <script src="demoLoader.js"></script>
+    <div style="background-color: cornflowerblue;">
+       <div style="position:fixed; left:00px; top:100px">  <span class="txt">Bornier</span>     <canvas class='webgl' id='canvasbornier' ></canvas></div>
+       <div style="position:fixed; left:200px; top:100px"> <span class="txt">Boitier</span>     <canvas class='webgl' id='canvasboitier' ></canvas></div>
+       <div style="position:fixed; left:400px; top:100px"> <span class="txt">Euro_H</span>      <canvas class='webgl' id='canvaseuroh' ></canvas></div>
+       <div style="position:fixed; left:600px; top:100px"> <span class="txt">Euro_V</span>      <canvas class='webgl' id='canvaseurov' ></canvas></div>
+       <div style="position:fixed; left:800px; top:100px"> <span class="txt">BX_V</span>        <canvas class='webgl' id='canvasarmaturebx_v' ></canvas></div>
+       <div style="position:fixed; left:1000px; top:100px"><span class="txt">BX_H</span>        <canvas class='webgl' id='canvasarmaturebx_h' ></canvas></div>
+       <div style="position:fixed; left:00px; top:350px">  <span class="txt">Thermo</span>      <canvas class='webgl' id='canvasthermo' ></canvas></div>
+       <div style="position:fixed; left:200px; top:350px"> <span class="txt">Tressh</span>      <canvas class='webgl' id='canvastressh' ></canvas></div>
+       <div style="position:fixed; left:400px; top:350px"> <span class="txt">Wire</span>        <canvas class='webgl' id='canvaswire_alone' ></canvas></div>
+       <div style="position:fixed; left:600px; top:350px"> <span class="txt">Wire_spring</span> <canvas class='webgl' id='canvaswire_spring'></canvas></div>
+       <div style="position:fixed; left:800px; top:350px"> <span class="txt">Wire_Tress</span>  <canvas class='webgl' id='canvaswire_tress'></canvas></div>
+       <div style="position:fixed; left:1000px; top:350px"><span class="txt">Wire0</span>       <canvas class='webgl' id='canvaswire0'></canvas></div>
+    </div>
+    <script>
+        let demos = [];
+        demos.push(new TerminalDemo('bornier'))
+        demos.push(new TerminalDemo('boitier'))
+        demos.push(new TerminalDemo('euroh'))
+        demos.push(new TerminalDemo('eurov'))
+        demos.push(new TerminalDemo('armaturebx_v'))
+        demos.push(new TerminalDemo('armaturebx_h'))
+        demos.push(new TerminalDemo('thermo'))
+        demos.push(new TerminalDemo('tressh'))
+        demos.push(new TerminalDemo('wire_alone'))
+        demos.push(new TerminalDemo('wire_spring'))
+        demos.push(new TerminalDemo('wire_tress'))
+        demos.push(new TerminalDemo('wire0'))
+        renderDemos();
+        function renderDemos(){
+            for(let i = 0; i<demos.length; i++){
+                demos[i].render();
+            }
+            //console.log('has rendered')
+            requestAnimationFrame(renderDemos)
+        }
+    </script>
+    
+</body>
+</html>

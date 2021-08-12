@@ -1,0 +1,87 @@
+
+
+    
+
+body{
+    background-color: rgb(255, 255, 255);
+    position:relative;
+}
+#headbanner{
+    background-color: green;
+}
+
+section{
+    height : 100vh;
+}
+#optionbuttons{
+    position:sticky;
+    top: 0px;
+    left:0px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 20;
+    background-color:rgb(172, 190, 216);
+    padding:5px;
+    height:40px;
+    border-radius: 10px;
+
+    user-select: none; /* supported by Chrome and Opera */
+}
+div.menubutton:hover{
+    cursor:pointer;
+    background-color:rgb(143, 167, 199);
+}
+div.menubutton{
+    align-content: center;
+    padding: 10px;
+    margin:2px;
+    cursor:default;
+    background-color: rgb(232, 235, 247);
+    text-align: center;
+    border-radius: 10px;
+    float:left;
+    width:10%;
+}
+#p5holder{
+    position:sticky;
+    background-color:rgb(232, 235, 247);
+    left: 20%;
+    top:50px;
+    float:right;
+}
+div.table{ 
+    position:sticky;
+    top: 50px;
+    left:0px;
+    width:20%;
+    display: table;
+    float:left;
+}
+.tr{ 
+    width: 220px;
+    border: indigo solid 1px;
+    display: table-row;
+    background-color: lightcoral;
+}
+
+.td{ 
+    display: table-cell; 
+    margin:1px;
+    padding: 4px;
+    width: 100px;
+    display: inline-table;
+    user-select: none; /* supported by Chrome and Opera */
+}
+div.td{
+    background-color: lightseagreen;
+}
+button:hover{
+    cursor: pointer;
+}
+canvas.webgl{
+    position:fixed;
+    top:50px;
+    left:0px;
+}
+
+
+
