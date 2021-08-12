@@ -112,6 +112,20 @@ function loadBasicGUI(gltf, num, name) {
     grot.add(gltf.scene.rotation, 'y').min(0).max(Math.PI * 2).step(0.01);
     grot.add(gltf.scene.rotation, 'z').min(0).max(Math.PI * 2).step(0.01);
 }
+
+function toX(x, y){
+    let sin = Math.asin(x/r.radius);
+    if(x>=0&&y>=0)sin=PI/2 - sin;
+    else if(x<0&&y>=0)sin = PI/2-sin;
+    else if(x<0&&y<0)sin=(3*PI/2)+sin;
+    else if(x>=0&&y<0)sin=(3*PI/2)+sin;
+    //PI;
+
+    let dif = PI-sin;
+
+    console.log(x,y,sin,dif)
+    return r.radius*dif;
+}
 // Loads a bornier object;
 function loadTerminal(offsetZ, radius, angle = Math.PI / 2,name = 'bornier', rotation = 0,num = loaderCount++) {
     const loader = new THREE.GLTFLoader();
@@ -129,25 +143,25 @@ function loadTerminal(offsetZ, radius, angle = Math.PI / 2,name = 'bornier', rot
                 y:Math.sin(angle) * radius*1.001,
                 z:offsetZ,
             }
-            gltf.scene.position.x = pos.x;
-            gltf.scene.position.y = pos.y;
+            gltf.scene.position.x = toX(pos.x,pos.y);
+            gltf.scene.position.y = 0;
             gltf.scene.position.z = pos.z;
 
-            const sideAxis = {
-                x: Math.cos(angle),
-                y: Math.sin(angle),
-                z: 0,
-            }
-            const upAxis = {
-                x: 0,
-                y: 0,
-                z: 1,
-            }
-            let upVector = new THREE.Vector3(upAxis.x, upAxis.y,upAxis.z);
-            let sideVector =new THREE.Vector3(sideAxis.x,sideAxis.y,sideAxis.z);
+            // const sideAxis = {
+            //     x: 1,
+            //     y: 0,
+            //     z: 0,
+            // }
+            // const upAxis = {
+            //     x: 0,
+            //     y: 0,
+            //     z: 1,
+            // }
+            // let upVector = new THREE.Vector3(upAxis.x, upAxis.y,upAxis.z);
+            // let sideVector =new THREE.Vector3(sideAxis.x,sideAxis.y,sideAxis.z);
 
-            gltf.scene.rotateOnWorldAxis(upVector,angle - Math.PI / 2)
-            gltf.scene.rotateOnWorldAxis(sideVector,rotation)
+            // gltf.scene.rotateOnWorldAxis(upVector,angle - Math.PI / 2)
+            // gltf.scene.rotateOnWorldAxis(sideVector,rotation)
             
             //gltf.scene.lookAt(targetPt.x, targetPt.y, targetPt.z)
 
@@ -161,6 +175,7 @@ function loadTerminal(offsetZ, radius, angle = Math.PI / 2,name = 'bornier', rot
                     o.material.color = {r:0.9, g:0.99,b:0.99};
                 }
             })
+            console.log(gltf.scene)
             scene.add(gltf.scene);
             //console.log(name,gltf.scene)///////////////////////////////////////////////////////
             //console.log("A Bornier was Added to scene");
@@ -519,7 +534,7 @@ function clearObjectArrays(){
 function loadCustomItem() {
     loadMenuThings();
     initGlobals();
-    addRingClock();
+    //addRingClock();
 
     r.terminals.forEach(borne => {
         loadTerminal(borne.offset, r.radius, borne.angle,borne.t,borne.rotation);

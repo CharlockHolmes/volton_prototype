@@ -81,7 +81,7 @@ class HeatingItem{
         this.ref.innerHTML+=str;
 
         document.getElementById('remove'+this.id).onclick = ()=>{this.removeSelf()}
-        document.getElementById('modify'+this.id).onclick = ()=>{let i = JSON.parse(localStorage.getItem('item'+this.id));localStorage.setItem('ring', JSON.stringify(i.ring));localStorage.setItem('cartIndex',this.id);window.location.pathname = '/NewMicaBand/'}
+        document.getElementById('modify'+this.id).onclick = ()=>{let i = JSON.parse(localStorage.getItem('item'+this.id));localStorage.setItem('ring', JSON.stringify(i.ring));localStorage.setItem('cartIndex',this.id);let url = JSON.parse(localStorage.getItem('item'+this.id)).url;if(url.includes('NewMicaBand'))window.location.pathname = '/NewMicaBand/';else window.location.pathname = '/NewPlateHeater/'}
         document.getElementById('add'+this.id).onclick = ()=>{this.quantity++;document.getElementById('quant'+this.id).value++;this.loadQuantity();}
         document.getElementById('sub'+this.id).onclick = ()=>{if(this.quantity>1){this.quantity--;document.getElementById('quant'+this.id).value--;this.loadQuantity();}}
         document.getElementById('quant'+this.id).onchange = ()=>{this.loadQuantity();}

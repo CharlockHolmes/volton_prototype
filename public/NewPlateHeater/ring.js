@@ -38,7 +38,7 @@ class Ring {
         let ndx = 0;
 
         let a = 0;
-        let da = 2 * Math.PI / resolution;
+        let da = 2 * Math.PI / (resolution);
         //let count = 0;
         this.holes.sort((a, b) => {
             return a.offset - b.offset;
@@ -47,26 +47,26 @@ class Ring {
         /**
          * Here we make the little tab where the screws goes to tighten the ring.
          */
-        if (this.gaps.length > 0) {
-            this.gaps.forEach(gap => {
-                if (gap.t == 'screws') {
-                    const x0 = Math.cos(gap.begin) * this.radius;
-                    const y0 = Math.sin(gap.begin) * this.radius;
-                    const z0 = -width / 2;
-                    const z1 = width / 2;
-                    makeTriangle(x0, y0, z0, x0 * 1.08, y0 * 1.08, z1);
-                }
-                if (gap.t == 'screws') {
-                    const x0 = Math.cos(gap.end) * this.radius;
-                    const y0 = Math.sin(gap.end) * this.radius;
-                    const z0 = -width / 2;
-                    const z1 = width / 2;
-                    makeTriangle(x0, y0, z0, x0 * 1.08, y0 * 1.08, z1);
-                }
+        // if (this.gaps.length > 0) {
+        //     this.gaps.forEach(gap => {
+        //         if (gap.t == 'screws') {
+        //             const x0 = Math.cos(gap.begin) * this.radius;
+        //             const y0 = Math.sin(gap.begin) * this.radius;
+        //             const z0 = -width / 2;
+        //             const z1 = width / 2;
+        //             //makeTriangle(x0, y0, z0, x0 * 1.08, y0 * 1.08, z1);
+        //         }
+        //         if (gap.t == 'screws') {
+        //             const x0 = Math.cos(gap.end) * this.radius;
+        //             const y0 = Math.sin(gap.end) * this.radius;
+        //             const z0 = -width / 2;
+        //             const z1 = width / 2;
+        //             //makeTriangle(x0, y0, z0, x0 * 1.08, y0 * 1.08, z1);
+        //         }
 
-            });
+        //     });
 
-        }
+        // }
         /**
          * This loop goes through every angle of the ring starting at 0 radiants.
          * makes as many passes as the resolution indicates. 
@@ -74,10 +74,11 @@ class Ring {
          */
         for (let i = 0; i < resolution; i++, a += da) {
             let skip = false;
-            this.gaps.forEach(gap => {
-                if (a >= gap.begin + Math.PI * 2 && a <= gap.end + Math.PI * 2) skip = true;
-                if (a >= gap.begin && a <= gap.end) skip = true;
-            });
+            // this.gaps.forEach(gap => {
+            //     //if (a >= gap.begin + Math.PI * 2 && a <= gap.end + Math.PI * 2) skip = true;
+            //     //if (a >= gap.begin && a <= gap.end) skip = true;
+            //     //if(a+da<PI/64 || a+da>127/64*PI)skip = true;
+            // });
             if (!skip) {
                 const x0 = Math.cos(a) * this.radius;
                 const x1 = Math.cos(a + da) * this.radius;
@@ -86,6 +87,16 @@ class Ring {
                 const z0 = -width / 2; // Largeur extérieure a ne pas changer
                 const z1 = width / 2;
                 const holeOnPass = [];
+
+                //Flag2
+                let X0 = toX(x0,y0)
+                let X1 = toX(x1,y1)
+                let Y0 = 0;
+                let Y1 = -0.03;
+
+                if(X0>=0&&X1<0)X1 = X0;
+                if(X1>=0&&X0<0)X1 = X0;
+               
                 // Here we look 
                 this.holes.forEach(holeSearch => {
                     const v0 = new THREE.Vector3(x0, y0, holeSearch.offset);
@@ -143,31 +154,34 @@ class Ring {
                         if(hole.offset - hole.r <= z0  )leftCheck = false;
                         if(hole.offset + hole.r >= z1 )rightCheck = false;
                     });
-                    if(leftCheck)makeFoldover(z0);
-                    if(rightCheck)makeFoldover(z1)
+                    //if(leftCheck)makeFoldover(z0);
+                    //if(rightCheck)makeFoldover(z1)
 
                     //Make the ring
                     let smallerStart = 100;
                     for (let x = 0; x < holeOnPass.length; x++) {
                         if(holeOnPass[x].offset-hz[x]<smallerStart)smallerStart =holeOnPass[x].offset-hz[x]; 
                     }
-                    LimitedmakeTriangle(x0, y0, z0, x1, y1, smallerStart);
+
+                   //Flag1
+
+                    LimitedmakeTrianglei(X1, Y1, smallerStart, X0, Y0, z0);
                     for (let x = 0; x < holeOnPass.length - 1; x++) {
                         if(hz[x]+holeOnPass[x].offset<-hz[x + 1] +holeOnPass[x+1].offset)
-                        LimitedmakeTriangle(x0, y0, hz[x] + holeOnPass[x].offset, x1, y1, -hz[x + 1] + holeOnPass[x + 1].offset); // in between holes
+                        LimitedmakeTrianglei(X0, Y0, hz[x] + holeOnPass[x].offset, X1, Y1, -hz[x + 1] + holeOnPass[x + 1].offset); // in between holes
                     }
                     let biggerEnd = -100;
                     for (let x = 0; x < holeOnPass.length; x++) {
                         if(holeOnPass[x].offset+hz[x]>biggerEnd)biggerEnd =holeOnPass[x].offset+hz[x]; 
                     }
-                    LimitedmakeTriangle(x0, y0, biggerEnd, x1, y1, z1);
+                    LimitedmakeTrianglei(X1, Y1, z1, X0, Y0, biggerEnd);
 
 
                 } 
                 else {
-                    makeFoldover(z0);
-                    makeFoldover(z1);
-                    LimitedmakeTriangle(x0, y0, z0, x1, y1, z1);
+                    //makeFoldover(z0);
+                    //makeFoldover(z1);
+                   LimitedmakeTriangle(X0, Y0, z0, X1, Y1, z1);
                 }
                 /**
                  * This is the part where you create the over ring on both sides. 
@@ -181,20 +195,50 @@ class Ring {
                     makeTriangleSingleZ(x0, y0, x1, y1, hz * (1 - rw), hz * (1 - rw + ro), rh);
                 }
 
+                
                 function LimitedmakeTriangle(a, b, c, d, e, f) {
                     let singleZ = true;
                     if (c < z0) {c = z0;singleZ = false;}
                     if (c > z1){c = z1;singleZ = false;}
                     if (f < z0) {f = z0;singleZ = false;}
                     if (f > z1) {f = z1;singleZ = false;}
-                    makeTriangle(a, b, c, d, e, f); // firstt plane
-                    makeTriangle(a * t, b * t, c, d * t, e * t, f); // Second plane
+                    makeTriangle(a, b, c, d, b, f); // second plane
+                    makeTriangle(a, e, c, d, e, f); // firstt plane
                     if(singleZ){
-                        makeTriangleSingleZ(a * t, b * t, d * t, e * t, c, c, 1 / t); // in between
-                        makeTriangleSingleZ(a * t, b * t, d * t, e * t, f, f, 1 / t); // in between
+                        makeTriangleSingleZ(a , b , d , e , c, c, 1); // in between
+                        makeTriangleSingleZ(a , b , d , e , f, f, 1); // in between
                         
                     }
-                    makeTriangle(a, b, c, d * t, e * t, f); // in between
+                    makeTriangle(a, b, c, a , e , f); // in between
+                }
+                function LimitedmakeTrianglei(d, b, f, a, e, c) {
+                    let singleZ = true;
+                    if (c < z0) {c = z0;singleZ = false;}
+                    if (c > z1){c = z1;singleZ = false;}
+                    if (f < z0) {f = z0;singleZ = false;}
+                    if (f > z1) {f = z1;singleZ = false;}
+                    makeTriangle(a, b, c, d, b, f); // second plane
+                    makeTriangle(a, e, c, d, e, f); // firstt plane
+                    if(singleZ){
+                        makeTriangleSingleZ(d , b , a , e , c, c, 1); // in between
+                        makeTriangleSingleZ(d , b , a , e , f, f, 1); // in between
+                        
+                    }
+                    makeTriangle(a, b, c, a , e , f); // in between
+                }
+                //flag3
+                function toX(x, y){
+                    let sin = Math.asin(x/radius);
+                    if(x>=0&&y>=0)sin=PI/2 - sin;
+                    else if(x<0&&y>=0)sin = PI/2-sin;
+                    else if(x<0&&y<0)sin=(3*PI/2)+sin;
+                    else if(x>=0&&y<0)sin=(3*PI/2)+sin;
+                    //PI;
+
+                    let dif = PI-sin;
+
+                    console.log(x,y,sin,dif)
+                    return radius*dif;
                 }
 
                 // This function generates two triangles and makes vertexes for the mesh between four connected points.
@@ -225,11 +269,11 @@ class Ring {
 
             positions.set([tx0, ty0, tz0], posNdx);
             posNdx += numComponents;
-            positions.set([tx1, ty1, tz0], posNdx);
+            positions.set([tx1, ty0, tz0], posNdx);
             posNdx += numComponents;
-            positions.set([tx0 * multi, ty0 * multi, tz1], posNdx);
+            positions.set([tx0, ty1 , tz1], posNdx);
             posNdx += numComponents;
-            positions.set([tx1 * multi, ty1 * multi, tz1], posNdx);
+            positions.set([tx1 , ty1, tz1], posNdx);
             posNdx += numComponents;
             indices.push(
                 ndx, ndx + 1, ndx + 2,

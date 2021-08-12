@@ -85,7 +85,7 @@ class LayoutHandler{
             this.hidden = false; 
             this.domElements.forEach(e=>{if(e.id!='taskbar') document.getElementById(e.id).style.display = 'block'})
             this.manageVariables();
-            this.update();
+            //this.update();
         }
         this.displayIcon()
     }
@@ -99,7 +99,7 @@ class LayoutHandler{
         let element = document.getElementById('taskview');
         if(this.hidden)element.src = src[1];
         else element.src = src[0];
-        console.log(element)
+        //console.log(element)
     }
 
     manageVariables(){
