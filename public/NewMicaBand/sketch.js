@@ -52,11 +52,14 @@ function createRenderer(){
     renderer = new THREE.WebGLRenderer({
         canvas: canvas,
         alpha: true,
-        antialias: true
+        antialias: true,
+        preserveDrawingBuffer:true
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
-
+function saveImg(){
+    localStorage.setItem('image'+localStorage.getItem('cartIndex'),JSON.stringify(renderer.domElement.toDataURL("image/png").replace("image/png", "image/octet-stream")));
+}
 // Scene and camera
 let scene;
 let camera;
@@ -912,6 +915,7 @@ function exportToCart(data){
     }
     else if(isNaN(num)==false){
         localStorage.setItem('item'+num,JSON.stringify(data))
+        saveImg();
     }
     window.location.pathname=  '/Cart/'
 }

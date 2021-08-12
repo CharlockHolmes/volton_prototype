@@ -666,8 +666,8 @@ class Terminal extends Shape {
         const rot = Math.round(this.rotation*360/(2*PI));
         if(rot >= 350 || rot<=10&&!this.flipped){
             this.rotation = 0;
-            line(x+(10+off/2), y, x+(5+off/2), y-5)
-            line(x+(10+off/2), y, x+(5+off/2), y+5)
+            line(x-(10+off/2), y, x-(5+off/2), y-5)
+            line(x-(10+off/2), y, x-(5+off/2), y+5)
         }
         if(rot >= 80 && rot<=100 ){
             this.rotation = PI/2;
@@ -677,8 +677,8 @@ class Terminal extends Shape {
         }
         if(rot >= 170 && rot<=190  || this.flipped){
             this.rotation = PI;
-            line(x-(10+off/2), y, x-(5+off/2), y-5)
-            line(x-(10+off/2), y, x-(5+off/2), y+5)
+            line(x+(10+off/2), y, x+(5+off/2), y-5)
+            line(x+(10+off/2), y, x+(5+off/2), y+5)
         }
         if(rot >= 260 && rot<=280 ){
             this.rotation = PI*3/2;
