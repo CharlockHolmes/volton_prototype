@@ -93,10 +93,11 @@ class Ring {
                 let X1 = toX(x1,y1)
                 let Y0 = 0;
                 let Y1 = -0.03;
-
-                if(X0>=0&&X1<0)X1 = X0;
-                if(X1>=0&&X0<0)X1 = X0;
-               
+                if(x0>0){
+                    if(X0>=0&&X1<0)X1 = X0;
+                    if(X1>=0&&X0<0)X1 = X0;
+                }
+                    
                 // Here we look 
                 this.holes.forEach(holeSearch => {
                     const v0 = new THREE.Vector3(x0, y0, holeSearch.offset);
@@ -237,11 +238,11 @@ class Ring {
 
                     let dif = PI-sin;
 
-                    console.log(x,y,sin,dif)
+                    //console.log(x,y,sin,dif)
                     return radius*dif;
                 }
 
-                // This function generates two triangles and makes vertexes for the mesh between four connected points.
+                // This function makes math
 
             }
         }
@@ -320,16 +321,16 @@ class Ring {
     addGap(begin=0, end=0, t = 'screws',options=undefined) {
         if(options!==undefined&&options.position!==undefined&&options.angle!==undefined){
             this.gaps.push({
-                begin: options.position - options.angle/2,
-                end: options.position + options.angle/2,
-                t : t,
+                begin: 0,
+                end: 0,
+                t : 'empty',
             })
         }
         else{
             this.gaps.push({
-                begin: begin,
-                end: end,
-                t: t
+                begin: 0,
+                end: 0,
+                t: 'empty'
             });
         }
         return this.gaps[this.gaps.length-1]
@@ -391,7 +392,7 @@ class Ring {
     }
     /** Modifies the radius of the ring with respect to the minimum and maximal values */
     setRadius(radius){
-        if(radius>= MIN_DIAMETER/2/INCH_PER_UNIT && radius <= MAX_DIAMETER_PER_SECTION*this.sections){
+        if(radius>0.3&&radius<50/*radius>= MIN_DIAMETER/2/INCH_PER_UNIT && radius <= MAX_DIAMETER_PER_SECTION*this.sections*/){
             this.radius = radius;
             return true;
         }

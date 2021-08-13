@@ -14,7 +14,7 @@ class Shape {
         this.SELECTPADDING = 3 / 5;
         this.arrowIndex = 0;
         this.isLocked = false;
-        this.degPosY = pheight-10
+        this.degPosY = pheight-20
     }
     doubleClicked() {
         this.arrowIndex++;
@@ -47,7 +47,7 @@ class Shape {
             line(x-w/2-15, y, x+w/2+15, y)
             pointArrow(this, this.t);
             degTxtFormat();
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, this.degPosY);
+            text((this.x * lr.radius*PI*2*INCH_PER_UNIT / pwidth).toFixed(3) + '"', this.x, this.degPosY);
             pop()
         }
     }
@@ -133,9 +133,18 @@ class Shape {
         selectHole(this);
     }
     snapToGrid(){
-        let roundingT = this.x*360/pwidth
-        roundingT = Math.round(roundingT)
-        this.x = roundingT/360*pwidth
+
+        let value = this.x * lr.radius*PI*2*INCH_PER_UNIT / pwidth;
+
+        let ex = Math.round(value*32)/32
+        console.log(value.toFixed(3)+' was approximated to ' + ex)
+        
+        let roundingT = ex*pwidth/(lr.radius*PI*2*INCH_PER_UNIT )
+
+        
+        this.x = roundingT
+
+        if(this.selected)selectHole(this)
     }
     unSelect() {
         this.selected = false;
@@ -162,6 +171,7 @@ class Shape {
     }
     center(){
         this.y = pheight/2;
+        if(this.selected)selectHole(this)
     }
 
     mirror(){
@@ -237,7 +247,7 @@ class Rectangle extends Shape {
             drawArrow(this.x, this.y+this.h/2+10, w, 10, true, a);
             drawArrow(this.x + w / 2 + 15, this.y, h, 10, false, b);
             degTxtFormat();
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, this.degPosY);
+            text((this.x * lr.radius*PI*2*INCH_PER_UNIT / pwidth).toFixed(3) + '"', this.x, this.degPosY);
         }
     }
     copySelf(x){
@@ -309,7 +319,7 @@ class Circle extends Shape {
             pointArrow(this, 'Ø' + (w * toInch).toFixed(3));
 
             degTxtFormat();
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, this.degPosY);
+            text((this.x * lr.radius*PI*2*INCH_PER_UNIT / pwidth).toFixed(3) + '"', this.x, this.degPosY);
         }
     }
     isUnder(x, y) {
@@ -376,7 +386,7 @@ class Vertical_Slot extends Rectangle {
             pointArrow(this, 'R' + (w / 2 / pheight * loadedRing.width * inchPerUnit).toFixed(3))
             drawArrow(this.x + w / 2 + 15, this.y, h, 10, false, b);
             degTxtFormat();
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, this.degPosY);
+            text((this.x * lr.radius*PI*2*INCH_PER_UNIT / pwidth).toFixed(3) + '"', this.x, this.degPosY);
         }
     }
     getArea() {
@@ -449,7 +459,7 @@ class Horizontal_Slot extends Rectangle {
             //drawArrow(this.x, -30, w, 10, true, a);
             drawArrow(this.x, this.y-this.h/2-10, w, 10, true, a);
             degTxtFormat();
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, this.degPosY);
+            text((this.x * lr.radius*PI*2*INCH_PER_UNIT / pwidth).toFixed(3) + '"', this.x, this.degPosY);
         }
     }
     getArea() {
@@ -741,7 +751,7 @@ class Connector extends Terminal {
             //pointArrow(this, this.t);
             textSize(TEXTSIZE);
             textAlign(CENTER, BOTTOM);
-            text((this.x * 360 / pwidth).toFixed(0) + '°', this.x, -11);
+            text((this.x * lr.radius*PI*2*INCH_PER_UNIT / pwidth).toFixed(3) + '"', this.x, -11);
             pop()
         }
         if(this.selected||seeAll){

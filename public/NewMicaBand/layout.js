@@ -56,6 +56,7 @@ class LayoutHandler{
     }
     bufferToLayout(){
         this.buffer.forEach(e=>{
+            console.log(e)
             let ref = document.getElementById(e.id);
             ref.style.left = e.left+'px';
             ref.style.top = e.top+'px';
@@ -65,14 +66,16 @@ class LayoutHandler{
         })
     }
     update(){
-        print('layoutupdate')
-        this.buffer = []
-        this.domElements.forEach(e=>{
-            const state = document.getElementById(e.id).children[1].style.display;
-            this.buffer.push({top:e.offsetTop, left:e.offsetLeft,id:e.id,display:state})
-        })
-        //console.log(this.buffer)
-        localStorage.setItem('layoutbuff', JSON.stringify(this.buffer))
+        if(this.hidden!=true){
+            print('layoutupdate')
+            this.buffer = []
+            this.domElements.forEach(e=>{
+                const state = document.getElementById(e.id).children[1].style.display;
+                this.buffer.push({top:e.offsetTop, left:e.offsetLeft,id:e.id,display:state})
+            })
+            //console.log(this.buffer)
+            localStorage.setItem('layoutbuff', JSON.stringify(this.buffer))
+        }
     }
 
     toggleDisplay(){

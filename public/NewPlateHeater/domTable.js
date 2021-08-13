@@ -13,7 +13,7 @@ class DomTable {
      * This function build the table and replace any preexisting table. It modifies directly the r.gaps array.
      * @param {} num the number of rows to be build in the table 
      */
-    build(num, isNew = true){
+    build(num=1, isNew = true){
         if(!isNew)this.saveToBuffer()
         this.rows = num;
         let check = document.getElementById('gapboxdrag');
@@ -32,53 +32,16 @@ class DomTable {
             this.ref.style.left = this.pos.left;
         }
         this.create_Arc_Length_Dependency()
-        document.getElementById('submitgapbutton').onclick = ()=>this.loadTableData();
-        document.getElementById('addgapbutton').onclick = ()=>{this.pos={top:this.ref.style.top, left:this.ref.style.left};if(this.rows<8)this.build(this.rows+1,false)};
-        document.getElementById('removegapbutton').onclick = ()=>{if(this.rows>1){this.pos={top:this.ref.style.top, left:this.ref.style.left};if(this.rows>1)this.build(this.rows-1,false);}};
+        //document.getElementById('submitgapbutton').onclick = ()=>this.loadTableData();
+        //document.getElementById('addgapbutton').onclick = ()=>{this.pos={top:this.ref.style.top, left:this.ref.style.left};if(this.rows<8)this.build(this.rows+1,false)};
+        //.getElementById('removegapbutton').onclick = ()=>{if(this.rows>1){this.pos={top:this.ref.style.top, left:this.ref.style.left};if(this.rows>1)this.build(this.rows-1,false);}};
         document.getElementById('gapspan').addEventListener("click", function() {addCollapse(this);});
         if(isNew||!isNew)this.uploadTableData();
         else this.uploadFromBuffer();
     }
     adjustRingGaps(num){
-        if(num<=8)
-        while(r.gaps.length!=num){
-            let gl = r.gaps.length;
-            if(gl<num){
-                let cg = r.addGap(undefined,undefined,r.gaps[0].t);
-                
-                normalizeGap(cg);
-                for(let i=0; i<r.gaps.length;i++){
-                    normalizeGapAngle(r.gaps[i],[i],r.gaps.length-1)
-                }
-                
-                if(r.gaps.length==2){
-                    let ccg = r.gaps[0];
-                    normalizeGap(ccg);
-                    this.buffer[0][0]=((Math.abs(ccg.begin-ccg.end)*360/(2*PI)).toFixed(1));
-                    this.buffer[1][0]=(Math.round((ccg.begin+ccg.end)/2*360/(2*PI)));
-                    this.buffer[2][0]=(ccg.t);
-
-                }
-                    this.buffer[0].push((Math.abs(cg.begin-cg.end)*360/(2*PI)).toFixed(1));
-                    this.buffer[1].push(Math.round((cg.begin+cg.end)/2*360/(2*PI)));
-                    this.buffer[2].push(cg.t);
-                
-                console.log(r.gaps)
-            }
-            if(gl>num){
-                r.gaps.pop();
-                for(let i=0; i<r.gaps.length;i++){
-                    normalizeGapAngle(r.gaps[i],[i],r.gaps.length-1)
-                }
-                if(r.gaps.length==1){
-                    normalizeGap(r.gaps[0])
-                    let ccg = r.gaps[0];
-                    this.buffer[0][0]=((Math.abs(ccg.begin-ccg.end)*360/(2*PI)).toFixed(1));
-                    this.buffer[1][0]=(Math.round((ccg.begin+ccg.end)/2*360/(2*PI)));
-                    this.buffer[2][0]=(ccg.t);
-                }
-            }
-        }
+        r.gaps = [];
+        r.addGap();
     }
     
     createTable(rows) {
@@ -187,11 +150,12 @@ class ComponentTableManager{
     changeHole(){
         shapes.forEach(hole=>{
             if(hole.selected){
-                let x = 1/toDeg* document.getElementById('h_angle').value;
+                let x = fromInch( document.getElementById('h_angle').value);
                 let h = 1/toInch* document.getElementById('h_height').value;
                 let w = 1/toInch*document.getElementById('h_width').value;
                 let y = 1/toInch* document.getElementById('h_offset').value;
                 hole.updateValues(x,y,w,h);
+                hole.snapToGrid();
             }
         })
     }
@@ -200,7 +164,7 @@ class ComponentTableManager{
         shapes.forEach(hole=>{
             if(hole.selected){
                 if(hole.t!='vslot'||hole.t!='hslot'||hole.t!='rect'||hole.t!='circle'){ 
-                    let x = 1/toDeg* document.getElementById('c_angle').value;
+                    let x = fromInch(document.getElementById('c_angle').value);
                     let y = 1/toInch* document.getElementById('c_offset').value;
                     let rotation = document.getElementById('c_rotation').value *2*PI/360;
                     let type = document.getElementById('c_type').value;
@@ -212,6 +176,8 @@ class ComponentTableManager{
                         hole.w = 1.5 / (lrlength * inchPerUnit) * pwidth;
                     }
                     hole.updateValues(x,y,undefined,undefined,rotation,type);
+                    hole.snapToGrid();
+
                 }
             }
         })

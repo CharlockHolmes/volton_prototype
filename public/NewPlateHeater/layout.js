@@ -15,7 +15,6 @@ class LayoutHandler{
     initToggleView(){
         document.getElementById('toggle1').onclick = ()=> this.toggleSpecificDisplay('ringboxdrag')
         document.getElementById('toggle2').onclick = ()=> this.toggleSpecificDisplay('powerboxdrag')
-        document.getElementById('toggle3').onclick = ()=> this.toggleSpecificDisplay('gapdiv')
         document.getElementById('toggle4').onclick = ()=> this.toggleSpecificDisplay('p5holder')
         document.getElementById('toggle5').onclick = ()=> this.toggleSpecificDisplay('selectedholeboxdrag')
         document.getElementById('toggle6').onclick = ()=> this.toggleSpecificDisplay('selectedconboxdrag')
@@ -56,23 +55,33 @@ class LayoutHandler{
     }
     bufferToLayout(){
         this.buffer.forEach(e=>{
-            let ref = document.getElementById(e.id);
-            ref.style.left = e.left+'px';
-            ref.style.top = e.top+'px';
-            console.log(e.id)
-            document.getElementById(e.id).children[1].style.display = e.display;
+            if(e.id != 'gapboxdrag'){
+
+                let ref = document.getElementById(e.id);
+                ref.style.left = e.left+'px';
+                ref.style.top = e.top+'px';
+                console.log(e.id)
+                document.getElementById(e.id).children[1].style.display = e.display;
+            }
             
         })
     }
     update(){
-        print('layoutupdate')
-        this.buffer = []
-        this.domElements.forEach(e=>{
-            const state = document.getElementById(e.id).children[1].style.display;
-            this.buffer.push({top:e.offsetTop, left:e.offsetLeft,id:e.id,display:state})
-        })
-        //console.log(this.buffer)
-        localStorage.setItem('layoutbuff', JSON.stringify(this.buffer))
+        if(this.hidden!=true){
+            let gapBackup;
+            this.buffer.forEach(e=>{
+                if(e.id == 'gapboxdrag')gapBackup = e;
+            })
+            print('layoutupdate')
+            this.buffer = []
+            this.domElements.forEach(e=>{
+                const state = document.getElementById(e.id).children[1].style.display;
+                this.buffer.push({top:e.offsetTop, left:e.offsetLeft,id:e.id,display:state})
+            })
+            this.buffer.push(gapBackup)
+            //console.log(this.buffer)
+            localStorage.setItem('layoutbuff', JSON.stringify(this.buffer))
+        }
     }
 
     toggleDisplay(){
@@ -80,12 +89,13 @@ class LayoutHandler{
             this.hidden = true; 
             plannerBoxFlag = false;
             this.domElements.forEach(e=>{if(e.id!='taskbar') document.getElementById(e.id).style.display = 'none'})
+            //this.update();
         }
         else{
             this.hidden = false; 
             this.domElements.forEach(e=>{if(e.id!='taskbar') document.getElementById(e.id).style.display = 'block'})
             this.manageVariables();
-            //this.update();
+            this.update();
         }
         this.displayIcon()
     }
@@ -133,7 +143,7 @@ class LayoutHandler{
 
 
 const defaultLayout = [{"top":295,"left":820,"id":"taskbar","display":""},{"top":59,"left":12,"id":"ringboxdrag","display":"block"},{"top":58,"left":730,"id":"selectedconboxdrag","display":"block"},{"top":59,"left":178,"id":"powerboxdrag","display":"block"},{"top":58,"left":361,"id":"gapboxdrag","display":"block"},{"top":58,"left":913,"id":"textdrag","display":"block"},{"top":294,"left":877,"id":"tutorialdrag","display":"block"},{"top":260,"left":6,"id":"p5holder","display":"none"}]
-const defaultLayoutnoTutorial = [{"top":259,"left":1623,"id":"taskbar","display":""},{"top":59,"left":12,"id":"ringboxdrag","display":"block"},{"top":58,"left":730,"id":"selectedconboxdrag","display":"block"},{"top":59,"left":178,"id":"powerboxdrag","display":"block"},{"top":58,"left":361,"id":"gapboxdrag","display":"block"},{"top":58,"left":913,"id":"textdrag","display":"block"},{"top":57,"left":1316,"id":"tutorialdrag","display":"none"},{"top":260,"left":6,"id":"p5holder","display":"none"}]
+const defaultLayoutnoTutorial = [{"top":272,"left":1536,"id":"taskbar","display":""},{"top":59,"left":12,"id":"ringboxdrag","display":"block"},{"top":60,"left":362,"id":"selectedconboxdrag","display":"block"},{"top":59,"left":178,"id":"powerboxdrag","display":"block"},{"top":0,"left":0,"id":"gapboxdrag","display":"block"},{"top":60,"left":545,"id":"textdrag","display":"block"},{"top":59,"left":948,"id":"tutorialdrag","display":"none"},{"top":260,"left":6,"id":"p5holder","display":"none"}]
 
 
 function cc(c,id){

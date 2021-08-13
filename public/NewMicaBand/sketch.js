@@ -261,6 +261,7 @@ function loadSavedValues(){
         console.log('ayyaya')
         defaultRing();
         saveRing();
+        reload();
     }
 }
 
@@ -730,6 +731,7 @@ document.getElementById('submitbutton').onclick = () =>{
         camera.position.z = cameraPositionZ*defaultRadius;
         loadDefaultConnectorSettings();
         saveRing(); 
+        reload()
     }
 }
 /**
@@ -751,6 +753,7 @@ document.getElementById('submitbutton').onclick = () =>{
 document.getElementById('defaultring').onclick = () =>{
     defaultRing();
     saveRing();
+    reload();
 }
 document.getElementById('save').onclick = () =>{
     console.log('save pressed')
@@ -766,7 +769,10 @@ function loadTextField(){
     let tempTxt = localStorage.getItem('textfield')
     document.getElementById('textfield').value = tempTxt;
 }
-
+function reload(){
+    if(enableLinkModification&&window.location.search.length>10)window.location.search = ''
+    else location.reload();
+}
 
 /* Saving functions  */
 
@@ -783,8 +789,6 @@ function saveRing(ring=r){
     localStorage.setItem('shapesZ','[]')
     reloadCount++;
     if(reloadCount>reloadValue){
-        if(enableLinkModification&&window.location.search.length>10)window.location.search = ''
-        else location.reload();
     }
     else loadCustomItem();
 }
@@ -861,6 +865,8 @@ function loadCamera(cameraImports){
     }
 }
 function generateURL(ring = r){
+    plannerBoxFlag = false;
+    setTimeout(()=>{
     if(CAPTCHA_Validate()){
 
         const position = {position:{x : camera.position.x, y:camera.position.y, z:camera.position.z},rotation:{_x: camera.rotation._x, _y:camera.rotation._y, _z:camera.rotation._z}, target:{x:controls.target.x, y:controls.target.y, z:controls.target.z}}
@@ -904,6 +910,7 @@ function generateURL(ring = r){
         //window.location.replace(encoded)
         // window.location.search = str;
     }
+    },1000)
 }
 /** Sets the itemX localstorage item for cart */
 function exportToCart(data){

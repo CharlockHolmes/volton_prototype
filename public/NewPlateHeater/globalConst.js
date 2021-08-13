@@ -186,29 +186,29 @@ function getStandardData(width, diameter, type){
     return false;
 }
 function normalizeGap(g){
-    let std = 0;
-    if(g.t=='tab') std = getStandardData(r.width*inchPerUnit, r.radius*2*inchPerUnit,  'tab')
-    else std = getStandardData(r.width*inchPerUnit, r.radius*2*inchPerUnit,  'barrel')
-    if(g.begin>2*PI)g.begin-=2*PI;
-    if(g.end>2*PI)g.begin-=2*PI;
-    let gcenter = (g.begin+g.end)/2;
-    let length = 0; 
-    if(r.gaps.length>1)length = std.gap.multiple;
-    else length = std.gap.single;
-    const radius = r.radius*inchPerUnit;
-    let gawidth = Math.acos(((radius*radius*2)-(length*length))/(2*radius*radius));
-    g.begin = gcenter-gawidth/2;
-    g.end = gcenter+gawidth/2;
+    // let std = 0;
+    // if(g.t=='tab') std = getStandardData(r.width*inchPerUnit, r.radius*2*inchPerUnit,  'tab')
+    // else std = getStandardData(r.width*inchPerUnit, r.radius*2*inchPerUnit,  'barrel')
+    // if(g.begin>2*PI)g.begin-=2*PI;
+    // if(g.end>2*PI)g.begin-=2*PI;
+    // let gcenter = (g.begin+g.end)/2;
+    // let length = 0; 
+    // if(r.gaps.length>1)length = std.gap.multiple;
+    // else length = std.gap.single;
+    // const radius = r.radius*inchPerUnit;
+    // let gawidth = Math.acos(((radius*radius*2)-(length*length))/(2*radius*radius));
+    // g.begin = gcenter-gawidth/2;
+    // g.end = gcenter+gawidth/2;
 }
 
 function normalizeGapAngle(g,num,total){
-    let offset = gapCenterPerNum[num][total];
-    let gcenter = (g.begin+g.end)/2;
-    let diff = gcenter - g.begin;
-    if(diff>=2*PI)diff-2*PI;
-    gcenter = offset;
-    g.begin = gcenter - diff;
-    g.end = gcenter+diff;
+    // let offset = gapCenterPerNum[num][total];
+    // let gcenter = (g.begin+g.end)/2;
+    // let diff = gcenter - g.begin;
+    // if(diff>=2*PI)diff-2*PI;
+    // gcenter = offset;
+    // g.begin = gcenter - diff;
+    // g.end = gcenter+diff;
 }
 const gapCenterPerNum = [
     /*0*/[0,0,0,0             , 0     ,0     ,0       ,0     ],

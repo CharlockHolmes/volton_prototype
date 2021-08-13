@@ -7,17 +7,14 @@ class Builder{
             loadSavedValues();
             letInit();
             loadTextField()
-            this.tutorial
-            this.gapTable
-            this.layout;
-            this.componentTable;
             setTimeout(()=>{
                 this.tutorial = new TutorialHandler();
-                this.gapTable = new DomTable(r.gaps.length, r.radius, inchPerUnit);
-                this.gapTable.uploadTableData();
+                this.gapTable = new DomTable(1, r.radius, inchPerUnit);
+                //this.gapTable.uploadTableData();
                 this.layout = new LayoutHandler()
                 this.componentTable = new ComponentTableManager();
                 document.getElementById('loadingbanner').innerHTML = '';
+                this.layout.toggleSpecificDisplay('gapdiv')
             },1000);
         }
 

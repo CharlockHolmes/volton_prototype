@@ -690,8 +690,7 @@ function selectHole(hole){
     }
 }  
 
-
-document.getElementById('tasksave').onclick = ()  =>{holeExport();}
+document.getElementById('tasksave').onclick = ()  =>{holeExport();reload();}
 document.getElementById('taskcircle').onclick = ()=>{addhole('circle')}
 document.getElementById('taskrect').onclick = ()  =>{addhole('rect')}
 document.getElementById('taskvslot').onclick = ()  =>{addhole('vslot')}
@@ -700,7 +699,7 @@ document.getElementById('taskterminal').onclick = ()  =>{addhole('terminal')}
 document.getElementById('taskmirror').onclick = ()  =>{itemKeyOperation('m')}
 document.getElementById('taskcenter').onclick = ()  =>{itemKeyOperation('c')}
 document.getElementById('tasklock').onclick = ()  =>{itemKeyOperation('l')}
-
+document.getElementById('tasksendmail').onclick = ()  =>{holeExport();loadCustomItem();generateURL();}
 document.getElementById('lockall').onclick = ()  =>{shapes.forEach(s=>s.isLocked = true)}
 
 function addhole(type){

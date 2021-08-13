@@ -147,25 +147,25 @@ function loadTerminal(offsetZ, radius, angle = Math.PI / 2,name = 'bornier', rot
             gltf.scene.position.y = 0;
             gltf.scene.position.z = pos.z;
 
-            // const sideAxis = {
-            //     x: 1,
-            //     y: 0,
-            //     z: 0,
-            // }
-            // const upAxis = {
-            //     x: 0,
-            //     y: 0,
-            //     z: 1,
-            // }
-            // let upVector = new THREE.Vector3(upAxis.x, upAxis.y,upAxis.z);
-            // let sideVector =new THREE.Vector3(sideAxis.x,sideAxis.y,sideAxis.z);
+            const sideAxis = {
+                x: 1,
+                y: 0,
+                z: 0,
+            }
+            const upAxis = {
+                x: 0,
+                y: 0,
+                z: 1,
+            }
+            //let upVector = new THREE.Vector3(upAxis.x, upAxis.y,upAxis.z);
+            //let sideVector =new THREE.Vector3(sideAxis.x,sideAxis.y,sideAxis.z);
 
-            // gltf.scene.rotateOnWorldAxis(upVector,angle - Math.PI / 2)
-            // gltf.scene.rotateOnWorldAxis(sideVector,rotation)
+            //gltf.scene.rotateOnWorldAxis(upVector,angle - Math.PI / 2)
+            //gltf.scene.rotateOnWorldAxis(sideVector,rotation)
             
             //gltf.scene.lookAt(targetPt.x, targetPt.y, targetPt.z)
 
-            //gltf.scene.rotation.z = angle - Math.PI / 2;
+            gltf.scene.rotation.y = rotation;
 
             //rotateAboutPoint(gltf.scene, gltf.scene.position, )
 
@@ -276,6 +276,7 @@ function loadSavedValues(){
         console.log('ayyaya')
         defaultRing();
         saveRing();
+        reload();
     }
 }
 
@@ -301,6 +302,7 @@ function blankRing(){
     clearObjectArrays();
     loadDefaultGapSettings(1, 'screws')
     saveRing();
+    reload();
 }
 document.getElementById('blankring').onclick = ()=>blankRing();
 document.getElementById('practicering').onclick = ()=>{localStorage.setItem('tutorialStep',14);blankRing();}
@@ -712,8 +714,8 @@ function resetToDefaultView(){
 document.getElementById('submitbutton').onclick = () =>{
     let proceed = true; 
     let adjustGaps = false;
-    let twidth = document.getElementById('ringwidth').value;
-    let tdiameter = document.getElementById('ringdiameter').value;
+    let twidth = document.getElementById('ringwidth').value ;
+    let tdiameter = parseFloat(Math.round(document.getElementById('ringdiameter').value/PI*dcmpts)/dcmpts);  //flag diam
     let tresolution = document.getElementById('ringresolution').value;
     console.log(twidth, tdiameter, tresolution);
 
@@ -724,12 +726,12 @@ document.getElementById('submitbutton').onclick = () =>{
         proceed = false;
         console.log('Error: variable width is not a number')
     }
-    if(!Number.isFinite(tdiameter)){
+    if(Number.isFinite(tdiameter)){
         if(tdiameter/inchPerUnit/2!=r.radius)adjustGaps = true;
         if(!r.setRadius(tdiameter/2/inchPerUnit))proceed = false;
     }
     else {
-        console.log('Error: variable height is not a number')
+        console.log('Error: variable height is not a number',tdiameter)
         proceed = false;
     }
     if(!Number.isFinite(tresolution)){
@@ -745,6 +747,7 @@ document.getElementById('submitbutton').onclick = () =>{
         camera.position.z = cameraPositionZ*defaultRadius;
         loadDefaultConnectorSettings();
         saveRing(); 
+        reload();
     }
 }
 /**
@@ -766,6 +769,7 @@ document.getElementById('submitbutton').onclick = () =>{
 document.getElementById('defaultring').onclick = () =>{
     defaultRing();
     saveRing();
+    reload();
 }
 document.getElementById('save').onclick = () =>{
     console.log('save pressed')
@@ -798,8 +802,7 @@ function saveRing(ring=r){
     localStorage.setItem('shapesZ','[]')
     reloadCount++;
     if(reloadCount>reloadValue){
-        if(enableLinkModification&&window.location.search.length>10)window.location.search = ''
-        else location.reload();
+        
     }
     else loadCustomItem();
 }
@@ -827,6 +830,11 @@ function ringAnglesToDeg(ring = r){
     
 }
 
+function reload(){
+    if(enableLinkModification&&window.location.search.length>10)window.location.search = ''
+    else location.reload();
+}
+
 /**
  * Loads the camera position then loads the ring.
  */
@@ -839,7 +847,7 @@ function loadRing(ringImport){
  */
 function loadMenuThings(){
     document.getElementById('ringwidth').value = (r.width*inchPerUnit).toFixed(2);
-    document.getElementById('ringdiameter').value = (r.radius*2*inchPerUnit).toFixed(2);
+    document.getElementById('ringdiameter').value = (r.radius*2*inchPerUnit*PI).toFixed(2);
     //document.getElementById('ringgap').value = 'not implemented';
     document.getElementById('ringresolution').value = r.resolution;
     //document.getElementById('gapwidth').value = Math.abs(r.gaps[0].begin-r.gaps[0].end)*360/(2*PI);
@@ -876,6 +884,8 @@ function loadCamera(cameraImports){
     }
 }
 function generateURL(ring = r){
+    plannerBoxFlag = false;
+    setTimeout(()=>{
     if(CAPTCHA_Validate()){
 
         const position = {position:{x : camera.position.x, y:camera.position.y, z:camera.position.z},rotation:{_x: camera.rotation._x, _y:camera.rotation._y, _z:camera.rotation._z}, target:{x:controls.target.x, y:controls.target.y, z:controls.target.z}}
@@ -919,6 +929,7 @@ function generateURL(ring = r){
         //window.location.replace(encoded)
         // window.location.search = str;
     }
+    },1000)
 }
 /** Sets the itemX localstorage item for cart */
 function exportToCart(data){

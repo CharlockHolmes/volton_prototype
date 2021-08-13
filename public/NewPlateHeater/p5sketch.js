@@ -199,14 +199,22 @@ function drawDegrees(){
     translate(xtrans,0);
     textAlign(CENTER,BOTTOM);
     strokeWeight(1);
-    for(let i =0; i<=pwidth; i+=pwidth/12){
+    let trueLength = r.radius*INCH_PER_UNIT*PI*2;
+    let length = Math.floor(trueLength);
+    let tpw = length/trueLength*pwidth;
+
+    for(let i =0, ii=0; i<=pwidth&&ii<pwidth; i+=tpw/length, ii+=pwidth/trueLength){
         fill(0);
-        text((i/pwidth*360).toFixed(0)+'°', i, pheight);
+        text((i/pwidth*length).toFixed(0)+'"', i, pheight);
         fill('rgba(0,0,0,0.1)')
         line(i, pheight-15, i, pheight-21);
         line(i, 5, i, 11);
-        line(i+pwidth/24, pheight-15, i+pwidth/24, pheight-18);
-        line(i+pwidth/24, 5, i+pwidth/24,8);
+        line(i+tpw/(length*2), pheight-15, i+tpw/(length*2), pheight-19);
+        line(i+tpw/(length*2), 5, i+tpw/(length*2),8);
+        line(i+tpw/(length*4), pheight-15, i+tpw/(length*4), pheight-19);
+        line(i+tpw/(length*4), 5, i+tpw/(length*4),8);
+        line(i+tpw/(length*4/3), pheight-15, i+tpw/(length*4/3), pheight-18);
+        line(i+tpw/(length*4/3), 5, i+tpw/(length*4/3),8);
     }
     pop();
 }
@@ -664,10 +672,17 @@ function clearSelectWindows(){
         document.getElementById('c_type').value = ''; 
         document.getElementById('c_rotation').value ='';
 }
+
+function toInchFunc(x){
+    return Math.round(1000*(x * lr.radius*PI*2*INCH_PER_UNIT / pwidth))/1000
+}
+function fromInch(x){
+    return Math.round(x *pwidth/( lr.radius*PI*2*INCH_PER_UNIT ))
+}
 function selectHole(hole){
     if(hole.t=='vslot'||hole.t=='hslot'||hole.t=='rect'||hole.t=='circle'){
 
-        document.getElementById('h_angle').value = (hole.x*toDeg).toFixed();    
+        document.getElementById('h_angle').value = (toInchFunc(hole.x)).toFixed(3);    
         document.getElementById('h_height').value = (hole.h*toInch).toFixed(3);    
         document.getElementById('h_width').value = (hole.w*toInch).toFixed(3);    
         document.getElementById('h_offset').value = (hole.y*toInch).toFixed(3); 
@@ -678,7 +693,7 @@ function selectHole(hole){
         document.getElementById('c_type').value = ''; 
         document.getElementById('c_rotation').value ='';
     }else{
-        document.getElementById('c_angle').value = (hole.x*toDeg).toFixed();    
+        document.getElementById('c_angle').value = (toInchFunc(hole.x)).toFixed();    
         document.getElementById('c_offset').value = (hole.y*toInch).toFixed(3); 
         document.getElementById('c_type').value = hole.t; 
         if(hole.rotation!=null)document.getElementById('c_rotation').value = Math.round(hole.rotation*360/(2*PI));
@@ -691,7 +706,7 @@ function selectHole(hole){
 }  
 
 
-document.getElementById('tasksave').onclick = ()  =>{holeExport();}
+document.getElementById('tasksave').onclick = ()  =>{holeExport();reload();}
 document.getElementById('taskcircle').onclick = ()=>{addhole('circle')}
 document.getElementById('taskrect').onclick = ()  =>{addhole('rect')}
 document.getElementById('taskvslot').onclick = ()  =>{addhole('vslot')}
@@ -700,6 +715,7 @@ document.getElementById('taskterminal').onclick = ()  =>{addhole('terminal')}
 document.getElementById('taskmirror').onclick = ()  =>{itemKeyOperation('m')}
 document.getElementById('taskcenter').onclick = ()  =>{itemKeyOperation('c')}
 document.getElementById('tasklock').onclick = ()  =>{itemKeyOperation('l')}
+document.getElementById('tasksendmail').onclick = ()  =>{holeExport();loadCustomItem();generateURL();}
 
 document.getElementById('lockall').onclick = ()  =>{shapes.forEach(s=>s.isLocked = true)}
 
