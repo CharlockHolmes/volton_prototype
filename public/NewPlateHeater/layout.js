@@ -143,7 +143,7 @@ class LayoutHandler{
 
 
 const defaultLayout = [{"top":295,"left":820,"id":"taskbar","display":""},{"top":59,"left":12,"id":"ringboxdrag","display":"block"},{"top":58,"left":730,"id":"selectedconboxdrag","display":"block"},{"top":59,"left":178,"id":"powerboxdrag","display":"block"},{"top":58,"left":361,"id":"gapboxdrag","display":"block"},{"top":58,"left":913,"id":"textdrag","display":"block"},{"top":294,"left":877,"id":"tutorialdrag","display":"block"},{"top":260,"left":6,"id":"p5holder","display":"none"}]
-const defaultLayoutnoTutorial = [{"top":272,"left":1536,"id":"taskbar","display":""},{"top":59,"left":12,"id":"ringboxdrag","display":"block"},{"top":60,"left":362,"id":"selectedconboxdrag","display":"block"},{"top":59,"left":178,"id":"powerboxdrag","display":"block"},{"top":0,"left":0,"id":"gapboxdrag","display":"block"},{"top":60,"left":545,"id":"textdrag","display":"block"},{"top":59,"left":948,"id":"tutorialdrag","display":"none"},{"top":260,"left":6,"id":"p5holder","display":"none"}]
+const defaultLayoutnoTutorial = [{"top":272,"left":1536,"id":"taskbar","display":""},{"top":59,"left":12,"id":"ringboxdrag","display":"block"},{"top":60,"left":362,"id":"selectedconboxdrag","display":"block"},{"top":59,"left":178,"id":"powerboxdrag","display":"block"},{"top":59,"left":1352,"id":"gapboxdrag","display":"block"},{"top":60,"left":545,"id":"textdrag","display":"block"},{"top":59,"left":948,"id":"tutorialdrag","display":"none"},{"top":260,"left":6,"id":"p5holder","display":"none"}]
 
 
 function cc(c,id){
