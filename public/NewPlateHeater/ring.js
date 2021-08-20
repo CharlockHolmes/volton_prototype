@@ -9,7 +9,7 @@
 
 
 class Ring {
-    constructor(radius, width, resolution,holes = [], gaps = [], terminals = [], connectors = [], thickness = 0.98, sections = 1) {
+    constructor(radius, width, resolution,holes = [], gaps = [], terminals = [], connectors = [], thickness = 0.98, voltage=120, power =500 ) {
         this.holes = holes;
         this.radius = radius;
         this.width = width;
@@ -18,7 +18,8 @@ class Ring {
         this.connectors = connectors;
         this.terminals = terminals;
         this.thickness = (radius-(1/24))/radius;
-        this.sections = sections; 
+        this.voltage = voltage;
+        this.power = power;
     }
 
     makeShape() {
@@ -390,14 +391,17 @@ class Ring {
             return false;
         }
     }
-    /** Modifies the radius of the ring with respect to the minimum and maximal values */
+    /** Modifies the radius of the ring with respect to the minimum and maximal values 
+     * 
+     * Radius in units
+    */
     setRadius(radius){
-        if(radius>0.3&&radius<50/*radius>= MIN_DIAMETER/2/INCH_PER_UNIT && radius <= MAX_DIAMETER_PER_SECTION*this.sections*/){
+        if(radius*2>=1.4999/INCH_PER_UNIT/PI&&radius<50/*radius>= MIN_DIAMETER/2/INCH_PER_UNIT && radius <= MAX_DIAMETER_PER_SECTION*this.sections*/){
             this.radius = radius;
             return true;
         }
         else {
-            console.log("Invalid radius entry:", radius);
+            console.log("Invalid radius entry:", radius*2, 1.5/INCH_PER_UNIT/PI);
             return false;
         }
     }

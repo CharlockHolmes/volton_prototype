@@ -9,7 +9,7 @@
 
 
 class Ring {
-    constructor(radius, width, resolution,holes = [], gaps = [], terminals = [], connectors = [], thickness = 0.98, sections = 1) {
+    constructor(radius, width, resolution,holes = [], gaps = [], terminals = [], connectors = [], thickness = 0.98, voltage = 120,power = 500) {
         this.holes = holes;
         this.radius = radius;
         this.width = width;
@@ -18,7 +18,8 @@ class Ring {
         this.connectors = connectors;
         this.terminals = terminals;
         this.thickness = (radius-(1/24))/radius;
-        this.sections = sections; 
+        this.voltage = voltage;
+        this.power = power;
     }
 
     makeShape() {
@@ -347,7 +348,7 @@ class Ring {
     }
     /** Modifies the radius of the ring with respect to the minimum and maximal values */
     setRadius(radius){
-        if(radius>= MIN_DIAMETER/2/INCH_PER_UNIT && radius <= MAX_DIAMETER_PER_SECTION*this.sections){
+        if(radius>= MIN_DIAMETER/2/INCH_PER_UNIT && radius <= MAX_DIAMETER_PER_SECTION*this.gaps.length){
             this.radius = radius;
             return true;
         }

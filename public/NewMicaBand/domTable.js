@@ -32,7 +32,7 @@ class DomTable {
             this.ref.style.left = this.pos.left;
         }
         this.create_Arc_Length_Dependency()
-        document.getElementById('submitgapbutton').onclick = ()=>this.loadTableData();
+        document.getElementById('submitgapbutton').onclick = ()=>{this.loadTableData(); reload();};
         document.getElementById('addgapbutton').onclick = ()=>{this.pos={top:this.ref.style.top, left:this.ref.style.left};if(this.rows<8)this.build(this.rows+1,false)};
         document.getElementById('removegapbutton').onclick = ()=>{if(this.rows>1){this.pos={top:this.ref.style.top, left:this.ref.style.left};if(this.rows>1)this.build(this.rows-1,false);}};
         document.getElementById('gapspan').addEventListener("click", function() {addCollapse(this);});

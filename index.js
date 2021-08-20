@@ -30,6 +30,7 @@ app.post('/api', (request, response) => {
     data.items.forEach(item=>{
         const ring = item.ring;
         str +='<br><br>';
+        str += "Quantity:"+item.quantity+'<br>';
         str += "Voltage:"+item.voltage+'V<br>';
         str += "Power:"+item.power+'W<br>';
         str += "Diameter:"+ring.radius*2*3+'inch<br>';

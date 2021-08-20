@@ -23,7 +23,7 @@ let r;
 let cubes = [];
 let enableLinkModification = true;
 let showGroupGlobal = true; 
-const cameraPositionZ = 30;
+const cameraPositionZ = 50;
 const segmentsAround = 1000;
 let defaultWidth = 1.234;
 let defaultRadius = 1.66;
@@ -252,7 +252,7 @@ function loadSavedValues(){
         console.log('saved from link')
         let ring = JSON.parse(tr);
         // ring = compressData(ring, true)
-        r = new Ring(ring.radius, ring.width, ring.resolution,ring.holes, ring.gaps, ring.terminals, ring.connectors, ring.thickness);
+        r = new Ring(ring.radius, ring.width, ring.resolution,ring.holes, ring.gaps, ring.terminals, ring.connectors, ring.thickness, ring.voltage, ring.power);
         console.log(r)
         const tc = decodedURL.searchParams.get('camera')
         if(tc!=null){
@@ -536,6 +536,8 @@ function clearObjectArrays(){
 function loadCustomItem() {
     loadMenuThings();
     initGlobals();
+    document.getElementById('powerasked').value = r.power;
+    document.getElementById('voltage').value = r.voltage;
     //addRingClock();
 
     r.terminals.forEach(borne => {
@@ -797,6 +799,8 @@ function loadTextField(){
 function saveRing(ring=r){
     const position = {position:{x : camera.position.x, y:camera.position.y, z:camera.position.z},rotation:{_x: camera.rotation._x, _y:camera.rotation._y, _z:camera.rotation._z}, target:{x:controls.target.x, y:controls.target.y, z:controls.target.z}}
     ringAnglesToDeg(ring);
+    ring.power = document.getElementById('powerasked').value;
+    ring.voltage = document.getElementById('voltage').value;
     localStorage.setItem('camera', JSON.stringify(position));
     localStorage.setItem('ring', JSON.stringify(ring));
     localStorage.setItem('shapesZ','[]')
@@ -840,7 +844,7 @@ function reload(){
  */
 function loadRing(ringImport){
     const ring = JSON.parse(ringImport);
-    r = new Ring(ring.radius, ring.width, ring.resolution,ring.holes, ring.gaps, ring.terminals, ring.connectors, ring.thickness);
+    r = new Ring(ring.radius, ring.width, ring.resolution,ring.holes, ring.gaps, ring.terminals, ring.connectors, ring.thickness, ring.voltage, ring.power);
 }
 /** 
  * Loads the cursomisation menu information

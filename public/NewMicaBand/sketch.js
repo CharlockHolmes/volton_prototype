@@ -237,7 +237,7 @@ function loadSavedValues(){
         console.log('saved from link')
         let ring = JSON.parse(tr);
         // ring = compressData(ring, true)
-        r = new Ring(ring.radius, ring.width, ring.resolution,ring.holes, ring.gaps, ring.terminals, ring.connectors, ring.thickness);
+        r = new Ring(ring.radius, ring.width, ring.resolution,ring.holes, ring.gaps, ring.terminals, ring.connectors, ring.thickness, ring.voltage, ring.power);
         console.log(r)
         const tc = decodedURL.searchParams.get('camera')
         if(tc!=null){
@@ -287,6 +287,7 @@ function blankRing(){
     clearObjectArrays();
     loadDefaultGapSettings(1, 'screws')
     saveRing();
+    reload();
 }
 document.getElementById('blankring').onclick = ()=>blankRing();
 document.getElementById('practicering').onclick = ()=>{localStorage.setItem('tutorialStep',14);blankRing();}
@@ -521,6 +522,9 @@ function loadCustomItem() {
     loadMenuThings();
     initGlobals();
     addRingClock();
+
+    document.getElementById('powerasked').value = r.power;
+    document.getElementById('voltage').value = r.voltage;
 
     r.terminals.forEach(borne => {
         loadTerminal(borne.offset, r.radius, borne.angle,borne.t,borne.rotation);
@@ -784,6 +788,10 @@ function reload(){
 function saveRing(ring=r){
     const position = {position:{x : camera.position.x, y:camera.position.y, z:camera.position.z},rotation:{_x: camera.rotation._x, _y:camera.rotation._y, _z:camera.rotation._z}, target:{x:controls.target.x, y:controls.target.y, z:controls.target.z}}
     ringAnglesToDeg(ring);
+
+    ring.power = document.getElementById('powerasked').value;
+    ring.voltage = document.getElementById('voltage').value;
+    
     localStorage.setItem('camera', JSON.stringify(position));
     localStorage.setItem('ring', JSON.stringify(ring));
     localStorage.setItem('shapesZ','[]')
@@ -821,7 +829,7 @@ function ringAnglesToDeg(ring = r){
  */
 function loadRing(ringImport){
     const ring = JSON.parse(ringImport);
-    r = new Ring(ring.radius, ring.width, ring.resolution,ring.holes, ring.gaps, ring.terminals, ring.connectors, ring.thickness);
+    r = new Ring(ring.radius, ring.width, ring.resolution,ring.holes, ring.gaps, ring.terminals, ring.connectors, ring.thickness, ring.voltage, ring.power);
 }
 /** 
  * Loads the cursomisation menu information

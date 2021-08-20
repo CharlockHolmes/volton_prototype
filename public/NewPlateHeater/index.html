@@ -96,6 +96,7 @@
           </div>
         </li>
     </ul>
+    <div style='position: fixed; right: 20px; bottom:20px;z-index: 40;font:xx-large bold;color:rgb(244,165,0); background-color: rgb(26,64,130); padding: 10px;border-style:solid; border-width: 10; border-radius: 5px; border-color: rgb(244,165,0); opacity: 80%;'> Property of Volton</div>
     <div id="main">
         <div id='taskbar' class='dragpos'style='position:absolute; z-index: 12; background-color:#F2F2F2 ;top:80px;right:5px; width:40px;'>
             <div id="taskbarheader"class="headerthing"style='cursor:move;width:40px;height:15px; background-color: #1A4082;position:relative;left:-1px;border: 1px solid #ddd;'></div>
@@ -129,7 +130,7 @@
                 </tr>
                 <tr >
                     <td></td>
-                    <td style='background-color:rgb(177, 0, 0);color:white'><div id='submitbutton'> Submit</div></td>
+                    <td style='background-color:rgb(177, 0, 0);color:white'id='submitbutton'><div > Submit</div></td>
                 </tr>
             </table>
         </div>
@@ -215,11 +216,11 @@
                 </tr>
                 <tr>
                     <td>W Density</td>
-                    <td><input class="input-data"id='powerpersqrinch'> W/In^2</td>
+                    <td><span class="input-data"id='powerpersqrinch'> </span>  W/In^2</td>
                 </tr>
                 <tr>
                     <td>Current</td>
-                    <td><input class="input-data"id='current'> A</td>
+                    <td><span class="input-data"id='current'> </span>   A</td>
                 </tr>
             </table>
         </div>
@@ -277,7 +278,15 @@
     
     </div>
 
-    <canvas class='webgl' id='three'></canvas>
+    <style>
+        .webgl{
+            cursor:grab
+        }
+        .webgl:active{
+            cursor:grabbing;
+        }
+    </style>
+    <canvas class='webgl' id='three' ></canvas>
     <div>
         <div id="p5holder"class='dragpos' class ="draggables">
             <div id="p5holderheader"class="headerthing"><span style="position:relative;float:left;background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;"> 3</span>

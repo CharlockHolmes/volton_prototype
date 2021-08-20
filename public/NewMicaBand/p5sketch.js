@@ -33,6 +33,8 @@ let pwidth;
 let toInch;
 let toDeg;
 let toRad;
+
+let scrollbarNeeded = true;
 function letInit(){
     loadedRing = JSON.parse(localStorage.getItem('ring'));
     lr = loadedRing;
@@ -48,6 +50,15 @@ function letInit(){
 
     pheight = canvasHeight - mtop - mbot;
     pwidth = pheight/aspectRatio;
+
+
+    if(pwidth<canvasWidth){
+        canvasHeight = window.innerHeight*0.7;
+        canvasWidth = canvasHeight/aspectRatio;
+        pwidth = canvasWidth - mleft - mright;
+        pheight = canvasHeight - mtop - mbot;
+        scrollbarNeeded = false;
+    }
     toInch = 1/pheight*lrwidth*inchPerUnit;
     toDeg = 360/pwidth;
     toRad = 2*PI/pwidth;
@@ -126,10 +137,12 @@ function draw() {
     drawLastClick();
     drawTextSelected();
     drawDegrees();
-    if(mouseIsPressed)
+    if(scrollbarNeeded){
+        if(mouseIsPressed)
         if(scrollbar.isInArrowBoxes(mouseX, mouseY))
             scrollbar.clickArrowBoxes(mouseX, mouseY);
-    scrollbar.draw();
+        scrollbar.draw();
+    }
     
 }
 function drawLastClick(){
@@ -282,14 +295,14 @@ function calculatePower(){
     // console.log('k', k);
     // console.log('holeArea', holeArea);
     const ppsi = powerAsked/area;
-    document.getElementById('powerpersqrinch').value = ppsi.toFixed(2);
+    document.getElementById('powerpersqrinch').textContent = ppsi.toFixed(2);
     if(ppsi<42)document.getElementById('powerpersqrinch').style = 'color:black';
     else if(ppsi<52)document.getElementById('powerpersqrinch').style = 'color:orange';
     else document.getElementById('powerpersqrinch').style = 'color:red';
     
     const voltage = document.getElementById('voltage').value;
     const current = (powerAsked/voltage).toFixed(2);
-    document.getElementById('current').value = current;
+    document.getElementById('current').textContent = current;
     if(current<25)document.getElementById('current').style = 'color:black';
     else document.getElementById('current').style = 'color:red';
 }
