@@ -26,7 +26,7 @@ app.post('/api', (request, response) => {
     console.log("i got a request");
     const data = request.body;
     //database.insert({data});
-    let str = ''
+    let str = data.info;
     data.items.forEach(item=>{
         const ring = item.ring;
         str +='<br><br>';

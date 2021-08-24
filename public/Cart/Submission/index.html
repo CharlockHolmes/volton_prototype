@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Contact form</title>
+    <title>Submission</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <style>
@@ -132,15 +132,14 @@ input:valid+span:after {
         <div>
           <textarea id="message"rows="4" placeholder="optional"></textarea>
         </div>
-        <button type="submit" id="submit">Submit</button>
-      </form>
+        <button type = "button"id="ssubmitt">Submit</button>
+    </form>
     </div>
   </body>
   <script>
-    document.getElementById('submit').onclick = ()=>{
+    document.getElementById('ssubmitt').onclick = ()=>{
         if(validate()){
-
-            
+            submitData(getForm())
         }
         else{
             alert('Invalid entry')
@@ -152,14 +151,19 @@ input:valid+span:after {
             if(!e.checkValidity())state= false
         })
         console.log(state)
-        return state;
+        return true;
     }
     function getForm(){
-        let str = 'Name: ';
-        str+= document.getElementById('name').textContent + '';
+        let str = '';
+        str+= 'Name: '+document.getElementById('name').value + '<br>';
+        str+= 'Email: '+document.getElementById('email').value + '<br>';
+        str+= 'Phone: '+document.getElementById('telNo').value + '<br>';
+        str+= 'Company: '+document.getElementById('company').value + '<br>';
+        str+= 'Message: '+document.getElementById('message').value + '<br>';
+        return str;
     }
 
-    function submitData(){
+    function submitData(client){
         let items = [];
             var keys = Object.keys(localStorage)
             keys.forEach(k=>{
@@ -169,7 +173,7 @@ input:valid+span:after {
                 }
             })
             let info =[];
-            const data = {items:items,info:info}
+            const data = {items:items,info:client}
             const options = {
                 method:'POST',
                 headers:{
@@ -178,6 +182,15 @@ input:valid+span:after {
                 body: JSON.stringify(data)
             }
             fetch('/api', options);
+            console.log(client)
+        let layoutSave = localStorage.getItem('layoutbuff')
+        localStorage.clear();
+        localStorage.setItem('cartIndex', 0)
+        localStorage.setItem('tutorialStep', 1)
+        localStorage.setItem('layoutbuff', layoutSave)
+        alert('Submission completed!')
+        window.location.pathname = '/'
+
     }
     </script>
 </html>
