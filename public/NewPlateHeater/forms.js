@@ -82,6 +82,7 @@ class Shape {
             if (this.selectMode === 'move') {
                 this.x = mx;
                 this.y = my;
+                if(this.x<0)this.x = 0;
             }
             if (this.selectMode === 'resize') {
                 cursor('pointer');
@@ -142,7 +143,9 @@ class Shape {
         let roundingT = ex*pwidth/(lr.radius*PI*2*INCH_PER_UNIT )
 
         
-        this.x = roundingT
+        this.x = roundingT;
+
+        
 
         if(this.selected)selectHole(this)
     }
@@ -533,6 +536,8 @@ class ScrollBar extends Shape {
     dragged(mx) {
         const w = this.w;
         this.x = mx;
+        if(this.x<0)this.x=0;
+
         if (mx - w / 2 < 0+mleft) this.x = w / 2+mleft;
         if (mx + w / 2 > width-mright) this.x = width -mright- w / 2;
     }
@@ -569,6 +574,7 @@ class ScrollBar extends Shape {
     }
     moveLeft(){
         this.dragged(this.x-3)
+        if(this.x<0)this.x=0;
     }
 }
 class Terminal extends Shape {
@@ -640,6 +646,7 @@ class Terminal extends Shape {
             if (this.selectMode === 'move') {
                 if (!(this.t == 'barrel' || this.t == 'barrel_screw'|| this.t == 'barrel_screw_qlatch'|| this.t == 'barrel_qlatch')) this.x = mx;
                 this.y = my;
+                if(this.x<0)this.x=0;
             }
             selectHole(this);
         

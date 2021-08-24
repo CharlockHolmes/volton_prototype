@@ -924,7 +924,7 @@ function generateURL(ring = r){
 function exportToCart(data){
     let num = localStorage.getItem('cartIndex');
     if(num==null||num==undefined){
-        alert('no index')
+        //alert('no index')
         localStorage.setItem('cartIndex',0)
         exportToCart(data)
     }

@@ -1,29 +1,166 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html>
+  <head>
+    <title>Contact form</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <style>
+      html, body {
+      min-height: 100%;
+      padding: 0;
+      margin: 0;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 14px;
+      color: #666;
+      }
+      h1 {
+      margin: 0 0 20px;
+      font-weight: 400;
+      color: #1c87c9;
+      }
+      p {
+      margin: 0 0 5px;
+      }
+      .main-block {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #1c87c9;
+      }
+      form {
+      padding: 25px;
+      margin: 25px;
+      box-shadow: 0 2px 5px #f5f5f5; 
+      background: #f5f5f5; 
+      }
+      .fas {
+      margin: 25px 10px 0;
+      font-size: 72px;
+      color: #fff;
+      }
+      .fa-envelope {
+      transform: rotate(-20deg);
+      }
+      .fa-at , .fa-mail-bulk{
+      transform: rotate(10deg);
+      }
+      input, textarea {
+      width: calc(100% - 40px);
+      padding: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #1c87c9;
+      outline: none;
+      }
+      input::placeholder {
+      color: #666;
+      }
+      button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      background: #1c87c9; 
+      font-size: 16px;
+      font-weight: 400;
+      color: #fff;
+      }
+      button:hover {
+      background: #2371a0;
+      }    
+      @media (min-width: 568px) {
+      .main-block {
+      flex-direction: row;
+      }
+      .left-part, form {
+      width: 50%;
+      }
+      .fa-envelope {
+      margin-top: 0;
+      margin-left: 20%;
+      }
+      .fa-at {
+      margin-top: -10%;
+      margin-left: 65%;
+      }
+      .fa-mail-bulk {
+      margin-top: 2%;
+      margin-left: 28%;
+      }
+      }
+      div {
+  margin-bottom: 10px;
+  position: relative;
+}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.min.js"></script>
-    <!--link rel="stylesheet" type="text/css" href="../style.csss-->
-    <title>Volton Design</title>
-
-</head>
+input[type="number"] {
+  width: 100px;
+}
 
 
-<body id="body">
-    
-    <div id='listi'> List of items
+
+input:invalid+span:after {
+  position: absolute; content: '✖';
+  padding-left: 5px;
+  color: #8b0000;
+}
+
+input:valid+span:after {
+  position: absolute;
+  content: '✓';
+  padding-left: 5px;
+  color: #009000;
+}
+    </style>
+  </head>
+  <body>
+    <div class="main-block">
+      <div class="left-part">
+        <i class="fas fa-envelope"></i>
+        <i class="fas fa-at"></i>
+        <i class="fas fa-mail-bulk"></i>
+      </div>
+      <form id="myForm">
+        <h1>Submit</h1>
+        <div class="info">
+          <input class="fname" id="name"type="text" name="name" placeholder="Full name"pattern="[a-zA-Z-]+ +[a-zA-Z -]*" required><span class="validity"></span>
+          <input type="email" id="email" placeholder="Email"pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" size="30" required><span class="validity"></span>
+          <input type='tel'id="telNo" name="telNo" placeholder="Phone number (in format xxx-xxx-xxxx)"type="tel" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" width="300px"><span class="validity"></span>
+          <input type="text" id="company" name="name" placeholder="Company">
+        </div>
+        <p>Message</p>
+        <div>
+          <textarea id="message"rows="4" placeholder="optional"></textarea>
+        </div>
+        <button type="submit" id="submit">Submit</button>
+      </form>
     </div>
-    <button id = 'submit'> Add New Item</button>
-    <script src=''></script>
+  </body>
+  <script>
+    document.getElementById('submit').onclick = ()=>{
+        if(validate()){
 
+            
+        }
+        else{
+            alert('Invalid entry')
+        }
+    }
+    function validate(){
+        let state = true;
+        document.getElementById("myForm").querySelectorAll("[required]").forEach(e=>{
+            if(!e.checkValidity())state= false
+        })
+        console.log(state)
+        return state;
+    }
+    function getForm(){
+        let str = 'Name: ';
+        str+= document.getElementById('name').textContent + '';
+    }
 
-    <script>
-        document.getElementById('submit').onclick = ()=>{
-
-            let items = [];
+    function submitData(){
+        let items = [];
             var keys = Object.keys(localStorage)
             keys.forEach(k=>{
                 console.log(k)
@@ -31,7 +168,8 @@
                     items.push(JSON.parse(localStorage.getItem(k)))
                 }
             })
-            const data = {items:items}
+            let info =[];
+            const data = {items:items,info:info}
             const options = {
                 method:'POST',
                 headers:{
@@ -40,10 +178,7 @@
                 body: JSON.stringify(data)
             }
             fetch('/api', options);
-        }
+    }
     </script>
-
-</body>
-
-
 </html>
+        

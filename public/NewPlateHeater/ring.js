@@ -104,16 +104,25 @@ class Ring {
                     const v0 = new THREE.Vector3(x0, y0, holeSearch.offset);
                     const v1 = new THREE.Vector3(x1, y1, holeSearch.offset);
                     const c = new THREE.Vector3(Math.cos(holeSearch.angle)*radius, Math.sin(holeSearch.angle)*radius, holeSearch.offset);
-                    if(holeSearch.t=='circle'){
-                        if (v0.distanceTo(c) < holeSearch.r)
+                    if(holeSearch.angle<0);
+                    else if((c.y>=0)&&(((v0.x>=0)&&(v0.y<0))||((v1.x>=0)&&(v1.y<0))));
+                    else if((c.y<0)&&(((v0.x>=0)&&(v0.y>=0))||((v1.x>=0)&&(v1.y>=0))));
+                    else{placeHole()
+
+                        
+                    }
+                    function placeHole(){
+                        if(holeSearch.t=='circle'){
+                            if (v0.distanceTo(c) < holeSearch.r)
                             if (v1.distanceTo(c) < holeSearch.r) {
                                 holeOnPass.push(holeSearch);
                             }
-                    }
-                    if(holeSearch.t=='rect'){
-                        if (v0.distanceTo(c) < holeSearch.r.w)
+                        }
+                        if(holeSearch.t=='rect'){
+                            if (v0.distanceTo(c) < holeSearch.r.w)
                             if (v1.distanceTo(c) < holeSearch.r.w) {
-                            holeOnPass.push(holeSearch);
+                                holeOnPass.push(holeSearch);
+                            }
                         }
                     }
                 });
