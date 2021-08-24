@@ -84,6 +84,55 @@
           </div>
         </li>
         <li class="dropdown">
+          <a class="dropbtn"> Presets</a>
+          <div class="dropdown-content">
+            <a id="typea">Type A</a>
+            <a id="typeb">Type B</a>
+            <a id="typec">Type C</a>
+            <a id="typed">Type D</a>
+            <a id="typef">Type F</a>
+            <a id="typeg">Type G</a>
+            <a id="typeh">Type H</a>
+            <a id="typej">Type J</a>
+          </div>
+        </li>
+        <script>
+            // This is the presets javascript
+            document.getElementById('typea').onclick = ()=>{
+                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.08314,"end":0.08314,"t":"screws"}],"connectors":[],"terminals":[{"angle":0.2618,"offset":0,"t":"bornier","rotation":6.283},{"angle":6.02139,"offset":0,"t":"bornier","rotation":6.283}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
+                reload();
+            }
+            document.getElementById('typeb').onclick = ()=>{
+                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.08314,"end":0.08314,"t":"screws"}],"connectors":[],"terminals":[{"angle":0.2618,"offset":-0.167,"t":"bornier","rotation":6.283},{"angle":0.2618,"offset":0.129,"t":"bornier","rotation":6.283}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
+                reload();
+            }
+            document.getElementById('typec').onclick = ()=>{
+                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.08314,"end":0.08314,"t":"screws"}],"connectors":[],"terminals":[{"angle":0.2618,"offset":0,"t":"wire_spring","rotation":6.283}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
+                reload();
+            }
+            document.getElementById('typed').onclick = ()=>{
+                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.08314,"end":0.08314,"t":"screws"}],"connectors":[],"terminals":[{"angle":0.38397,"offset":0,"t":"boitier","rotation":1.571}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
+                reload();
+            }
+            document.getElementById('typef').onclick = ()=>{
+                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.0637,"end":0.0637,"t":"screws"},{"begin":3.07789,"end":3.2053,"t":"screws"}],"connectors":[],"terminals":[{"angle":5.75959,"offset":0,"t":"bornier","rotation":6.283},{"angle":0.5236,"offset":0,"t":"bornier","rotation":6.283},{"angle":3.66519,"offset":0,"t":"bornier","rotation":6.283},{"angle":2.61799,"offset":0,"t":"bornier","rotation":6.283}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
+                reload();
+            }
+            document.getElementById('typeg').onclick = ()=>{
+                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.0637,"end":0.0637,"t":"screws"},{"begin":3.07789,"end":3.2053,"t":"screws"}],"connectors":[],"terminals":[{"angle":0.5236,"offset":0.167,"t":"bornier","rotation":6.283},{"angle":0.5236,"offset":-0.167,"t":"bornier","rotation":1.571},{"angle":5.75959,"offset":0.167,"t":"bornier","rotation":6.283},{"angle":5.75959,"offset":-0.167,"t":"bornier","rotation":1.571}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
+                reload();
+            }
+            document.getElementById('typeh').onclick = ()=>{
+                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.0637,"end":0.0637,"t":"screws"},{"begin":3.07789,"end":3.2053,"t":"screws"}],"connectors":[],"terminals":[{"angle":0.5236,"offset":0,"t":"wire_spring","rotation":1.571},{"angle":5.75959,"offset":0,"t":"wire_spring","rotation":1.571}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
+                reload();
+            }
+            document.getElementById('typej').onclick = ()=>{
+                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.0637,"end":0.0637,"t":"screws"},{"begin":3.07789,"end":3.2053,"t":"screws"}],"connectors":[],"terminals":[{"angle":0.5236,"offset":0,"t":"boitier","rotation":1.571},{"angle":5.75959,"offset":0,"t":"boitier","rotation":1.571}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
+                reload();
+            }
+
+        </script>
+        <li class="dropdown">
           <a class="dropbtn">Help</a>
           <div class="dropdown-content">
             <a href="#">Shortcuts</a>
