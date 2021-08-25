@@ -114,13 +114,15 @@ function loadBasicGUI(gltf, num, name) {
 }
 
 function toX(x, y){
+    if(x>r.radius)x = r.radius // this is a weird problem i dont like it, lookup asin 
+    if(x<-r.radius)x = -r.radius // this is a weird problem i dont like it, lookup asin 
     let sin = Math.asin(x/r.radius);
     if(x>=0&&y>=0)sin=PI/2 - sin;
     else if(x<0&&y>=0)sin = PI/2-sin;
     else if(x<0&&y<0)sin=(3*PI/2)+sin;
     else if(x>=0&&y<0)sin=(3*PI/2)+sin;
     //PI;
-
+    console.log(sin)
     let dif = PI-sin;
 
     console.log(x,y,sin,dif)

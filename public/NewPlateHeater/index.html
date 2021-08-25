@@ -83,6 +83,44 @@
           </div>
         </li>
         <li class="dropdown">
+            <a class="dropbtn"> Presets</a>
+            <div class="dropdown-content">
+              <a id="typek">Type K</a>
+              <a id="typel">Type L</a>
+              <a id="typem">Type M</a>
+              <a id="typen">Type N</a>
+              <a id="typeo">Type O</a>
+              <a id="typep">Type P</a>
+            </div>
+          </li>
+          <script>
+              // This is the presets javascript
+              document.getElementById('typek').onclick = ()=>{
+                  saveRing({"holes":[],"radius":0.5305166666666666,"width":1,"resolution":"1000","gaps":[{"begin":0,"end":0,"t":"empty"}],"connectors":[],"terminals":[{"angle":5.65486,"offset":0,"t":"bornier","rotation":6.283},{"angle":0.62832,"offset":0,"t":"bornier","rotation":6.283}],"thickness":0.9583333333333334,"voltage":"120","power":"500"})
+                  reload();
+              }
+              document.getElementById('typel').onclick = ()=>{
+                  saveRing({"holes":[],"radius":0.5305166666666666,"width":1,"resolution":"1000","gaps":[{"begin":0,"end":0,"t":"empty"}],"connectors":[],"terminals":[{"angle":0.62832,"offset":0.167,"t":"bornier","rotation":6.283},{"angle":0.62832,"offset":-0.167,"t":"bornier","rotation":6.283}],"thickness":0.9583333333333334,"voltage":"120","power":"500"})
+                  reload();
+              }
+              document.getElementById('typem').onclick = ()=>{
+                  saveRing({"holes":[],"radius":0.5305166666666666,"width":1,"resolution":"1000","gaps":[{"begin":0,"end":0,"t":"empty"}],"connectors":[],"terminals":[{"angle":0.62832,"offset":0,"t":"boitier","rotation":3.142}],"thickness":0.9583333333333334,"voltage":"120","power":"500"})
+                  reload();
+              }
+              document.getElementById('typen').onclick = ()=>{
+                  saveRing({"holes":[],"radius":0.5305166666666666,"width":1,"resolution":"1000","gaps":[{"begin":0,"end":0,"t":"empty"}],"connectors":[],"terminals":[{"angle":0.62832,"offset":0,"t":"wire_spring","rotation":3.142}],"thickness":0.9583333333333334,"voltage":"120","power":"500"})
+                  reload();
+              }
+              document.getElementById('typeo').onclick = ()=>{
+                  saveRing({"holes":[],"radius":0.5305166666666666,"width":1,"resolution":"1000","gaps":[{"begin":0,"end":0,"t":"empty"}],"connectors":[],"terminals":[{"angle":0.11781,"offset":0.182,"t":"tressh","rotation":6.283},{"angle":0.09817,"offset":-0.164,"t":"tressh","rotation":6.283}],"thickness":0.9583333333333334,"voltage":"120","power":"500"})
+                  reload();
+              }
+              document.getElementById('typep').onclick = ()=>{
+                  saveRing({"holes":[],"radius":0.5305166666666666,"width":1,"resolution":"1000","gaps":[{"begin":0,"end":0,"t":"empty"}],"connectors":[],"terminals":[{"angle":6.22428,"offset":0,"t":"tressh","rotation":3.142},{"angle":0.11781,"offset":0,"t":"tressh","rotation":6.283}],"thickness":0.9583333333333334,"voltage":"120","power":"500"})
+                  reload();
+              }
+  </script>
+        <li class="dropdown">
           <a class="dropbtn">Help</a>
           <div class="dropdown-content">
             <a href="#">Shortcuts</a>
@@ -397,7 +435,12 @@
 <script src="layout.js"></script>
 <script src="tutorial.js"></script>
 <script src="builder.js"></script>
-
+<script>
+    window.onerror(()=>{
+       localStorage.clear();
+       location.reload(); 
+    })
+</script>
 <!--
     -->
 </body>

@@ -446,7 +446,12 @@
 <script src="layout.js"></script>
 <script src="tutorial.js"></script>
 <script src="builder.js"></script>
-
+<script>
+    window.onerror(()=>{
+       localStorage.clear();
+       location.reload(); 
+    })
+</script>
 <!--
     -->
 </body>

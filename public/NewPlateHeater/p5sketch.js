@@ -706,7 +706,7 @@ function selectHole(hole){
         document.getElementById('c_type').value = ''; 
         document.getElementById('c_rotation').value ='';
     }else{
-        document.getElementById('c_angle').value = (toInchFunc(hole.x)).toFixed();    
+        document.getElementById('c_angle').value = (toInchFunc(hole.x)).toFixed(3);    
         document.getElementById('c_offset').value = (hole.y*toInch).toFixed(3); 
         document.getElementById('c_type').value = hole.t; 
         if(hole.rotation!=null)document.getElementById('c_rotation').value = Math.round(hole.rotation*360/(2*PI));
