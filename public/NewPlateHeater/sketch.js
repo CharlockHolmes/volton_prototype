@@ -284,19 +284,21 @@ function loadSavedValues(){
 
 //Default ring that will appear on first load
 function defaultRing() {
-    //Create default ring
-    createRing(1,1,1000);
-    clearObjectArrays();
-    // Adding default hole
-    //addRingHole();
-    loadDefaultGapSettings(2, 'barrel')
+    saveRing({"holes":[],"radius":0.5305166666666666,"width":1,"resolution":"1000","gaps":[{"begin":0,"end":0,"t":"empty"}],"connectors":[],"terminals":[{"angle":0.62832,"offset":0.167,"t":"bornier","rotation":6.283},{"angle":0.62832,"offset":-0.167,"t":"bornier","rotation":6.283}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
+    reload();
+    // //Create default ring
+    // createRing(1,1,1000);
+    // clearObjectArrays();
+    // // Adding default hole
+    // //addRingHole();
+    // loadDefaultGapSettings(2, 'barrel')
 
-    //Add borniers
+    // //Add borniers
     
-    loadDefaultConnectorSettings();
-    loadDefaultBorniersSettings();
-    // Loading the item
-    loadCustomItem();
+    // loadDefaultConnectorSettings();
+    // loadDefaultBorniersSettings();
+    // // Loading the item
+    // loadCustomItem();
 }
 function blankRing(){
     console.log('blank ring')

@@ -267,19 +267,21 @@ function loadSavedValues(){
 
 //Default ring that will appear on first load
 function defaultRing() {
+    saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.0637,"end":0.0637,"t":"barrel"},{"begin":3.07789,"end":3.2053,"t":"barrel"}],"connectors":[{"angle":-0.0637,"offset":0.333,"t":"barrel_screw","flipped":false,"id":"322717","rotation":null},{"angle":0.0637,"offset":0.333,"t":"barrel","flipped":true,"id":"322717","rotation":null},{"angle":-0.0637,"offset":-0.333,"t":"barrel_screw","flipped":false,"id":"5522107","rotation":null},{"angle":0.0637,"offset":-0.333,"t":"barrel","flipped":true,"id":"5522107","rotation":null},{"angle":3.07789,"offset":0.333,"t":"barrel","flipped":false,"id":"5059425","rotation":null},{"angle":3.2053,"offset":0.333,"t":"barrel_screw","flipped":true,"id":"5059425","rotation":null},{"angle":3.07789,"offset":-0.333,"t":"barrel","flipped":false,"id":"3416037","rotation":null},{"angle":3.2053,"offset":-0.333,"t":"barrel_screw","flipped":true,"id":"3416037","rotation":null}],"terminals":[{"angle":0.5236,"offset":0.167,"t":"bornier","rotation":6.283},{"angle":0.5236,"offset":-0.167,"t":"bornier","rotation":1.571},{"angle":5.75959,"offset":0.167,"t":"bornier","rotation":6.283},{"angle":5.75959,"offset":-0.167,"t":"bornier","rotation":1.571}],"thickness":0.9583333333333334,"voltage":"120","power":"500"})
+    reload();
     //Create default ring
-    createRing(1,1,1000);
-    clearObjectArrays();
-    // Adding default hole
-    //addRingHole();
-    loadDefaultGapSettings(2, 'barrel')
+    // createRing(1,1,1000);
+    // clearObjectArrays();
+    // // Adding default hole
+    // //addRingHole();
+    // loadDefaultGapSettings(2, 'barrel')
 
-    //Add borniers
+    // //Add borniers
     
-    loadDefaultConnectorSettings();
-    loadDefaultBorniersSettings();
-    // Loading the item
-    loadCustomItem();
+    // loadDefaultConnectorSettings();
+    // loadDefaultBorniersSettings();
+    // // Loading the item
+    // loadCustomItem();
 }
 function blankRing(){
     console.log('blank ring')
