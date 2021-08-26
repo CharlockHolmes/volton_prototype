@@ -26,7 +26,13 @@ app.post('/api', (request, response) => {
     console.log("i got a request");
     const data = request.body;
     //database.insert({data});
-    let str = data.info;
+    let str = '';
+    str+= 'Name: '+ data.info.name + '<br>';
+    str+= 'Email: '+ data.info.email + '<br>';
+    str+= 'Phone: '+ data.info.phone +'<br>';
+    str+= 'Company: '+ data.info.company +'<br>';
+    str+= 'Message: '+ data.info.message + '<br>';
+
     data.items.forEach(item=>{
         const ring = item.ring;
         str +='<br><br>';
@@ -43,7 +49,7 @@ app.post('/api', (request, response) => {
         str += '<a href="'+item.url+'">'+item.url+'</a>'
     }) 
     console.log(str);
-    sendMail(str)
+    sendMail(str, data.info.email)
     //response.json(data);
     response.end(); //bare minimum require to make it work, needs to send something back
 });
@@ -62,18 +68,28 @@ app.post('/api', (request, response) => {
 
 
 
-function sendMail(text = 'nothing was inserted'){
+function sendMail(text = 'nothing was inserted', clientmail){
 
     var mailOptions = {
         from: 'testvolton2021@gmail.com',
-        to: 'charles.simon1999@hotmail.com',
-        subject: 'Sending Email using Node.js',
-        html: '<p>'+text+'</p>',
+        to: ['csimon9999@gmail.com', clientmail],
+        subject: 'Submission Volton Design',
+        html: '<p>'+'Click on the submission to view the order. Click on the links to review any item designed in the submission'+'</p>',
         attachments: {   // utf-8 string as an attachment
-            filename: 'link.html',
+            filename: 'submission.html',
             content: text
         }
     };
+    // var mailOptions2 = {
+    //     from: 'testvolton2021@gmail.com',
+    //     to: clientmail,
+    //     subject: 'Submission copy - Volton',
+    //     html: '<p>'+'You may find a copy of your submission in the link.html file attached to this document.<br> A representative will contact you to confirm the order.'+'</p>',
+    //     attachments: {   // utf-8 string as an attachment
+    //         filename: 'link.html',
+    //         content: text
+    //     }
+    // };
     console.log('something is happening')
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {

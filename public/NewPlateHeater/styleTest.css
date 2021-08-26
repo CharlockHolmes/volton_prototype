@@ -14,6 +14,7 @@ html{
     left: 191px;
     top:61px;
     float:right;
+    z-index:11;
 }
 #p5holderheader{
   border: 1px solid #ddd;
@@ -25,6 +26,7 @@ html{
     background-color: #1A4082;
     min-width: 500px;
     color:honeydew;
+    z-index:11;
     cursor:move;
 }
 /* Dropdown menu */
@@ -64,7 +66,7 @@ ul {
     background-color: #f9f9f9;
     min-width: var(--infoWidth);
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 10;
+    z-index: 13;
   }
   
   .dropdown-content a {

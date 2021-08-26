@@ -160,7 +160,16 @@ input:valid+span:after {
         str+= 'Phone: '+document.getElementById('telNo').value + '<br>';
         str+= 'Company: '+document.getElementById('company').value + '<br>';
         str+= 'Message: '+document.getElementById('message').value + '<br>';
-        return str;
+
+        let id = {};
+        id.name = document.getElementById('name').value;
+        id.email = document.getElementById('email').value;
+        id.phone = document.getElementById('telNo').value;
+        id.company = document.getElementById('company').value;
+        id.message = document.getElementById('message').value;
+
+
+        return id;
     }
 
     function submitData(client){
@@ -181,13 +190,16 @@ input:valid+span:after {
                 },
                 body: JSON.stringify(data)
             }
+            //console.log(options)
             fetch('/api', options);
             console.log(client)
         let layoutSave = localStorage.getItem('layoutbuff')
+        let tutostate = localStorage.getItem('tutoen')
         localStorage.clear();
         localStorage.setItem('cartIndex', 0)
         localStorage.setItem('tutorialStep', 1)
         localStorage.setItem('layoutbuff', layoutSave)
+        if(tutostate == 'false')localStorage.setItem('tutoen', false)
         alert('Submission completed!')
         window.location.pathname = '/'
 
