@@ -11,6 +11,11 @@ class LayoutHandler{
         document.getElementById('savelayout').onclick = ()=>this.saveButtonLayout();
         document.getElementById('loadlayout').onclick = ()=>this.loadButtonLayout();
         this.initToggleView();
+        let tcheck = localStorage.getItem('tutoen')
+        if(tcheck == 'false'){
+            document.getElementById('toggletuto').checked = false;
+            this.toggleSpecificDisplay('tutorialdrag')
+        }
     }
     initToggleView(){
         document.getElementById('toggle1').onclick = ()=> this.toggleSpecificDisplay('ringboxdrag')
@@ -19,8 +24,14 @@ class LayoutHandler{
         document.getElementById('toggle5').onclick = ()=> this.toggleSpecificDisplay('selectedholeboxdrag')
         document.getElementById('toggle6').onclick = ()=> this.toggleSpecificDisplay('selectedconboxdrag')
         document.getElementById('toggle7').onclick = ()=> this.toggleSpecificDisplay('textdrag')
-        document.getElementById('toggletuto').onclick = ()=> this.toggleSpecificDisplay('tutorialdrag')
         document.getElementById('toggletoolbar').onclick = ()=> this.toggleSpecificDisplay('taskbar')
+        document.getElementById('toggletuto').onclick = ()=> {
+            if(!document.getElementById('toggletuto').checked)
+                localStorage.setItem('tutoen', false)
+            else 
+                localStorage.setItem('tutoen', true)
+            this.toggleSpecificDisplay('tutorialdrag')
+        }
     }
     layoutToBuffer(){
         let tempBuff = localStorage.getItem('layoutbuff');

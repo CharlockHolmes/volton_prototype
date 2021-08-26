@@ -308,9 +308,17 @@ function calculatePower(){
 }
 document.addEventListener("keydown", function (e) {
     if([37,38,39,40].indexOf(e.keyCode) > -1){
+    
       e.preventDefault();
+      //itemKeyOperation(e.key)
       // Do whatever else you want with the keydown event (i.e. your navigation).
     }
+    if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)  && e.keyCode == 83) {
+        e.preventDefault();
+          holeExport();
+          reload();
+        // Process the event here (such as click on submit button)
+      }
   }, false);
 function keyPressed() {
     
@@ -326,31 +334,33 @@ function keyPressed() {
     else itemKeyOperation(key);
 }
 function ctrlKeyOperation(key){
+    console.log(key)
     if(key=='z'||key=='Z'){
         get_z_save();
     }
+    
 }
 function itemKeyOperation(key) {
     console.log(key)
     key = key.toLowerCase();
-    if (plannerBoxFlag&&(key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'e' || key == 'q' || key=='r' || key =='f'|| key =='c'|| key =='m' || key=='t'||key == 'ArrowUp' || key == 'ArrowLeft' || key == 'ArrowDown' || key == 'ArrowRight'|| key == 'l')) {
+    if (plannerBoxFlag&&(key == 'w' || key == 'a' || key == 's' || key == 'd' || key == 'e' || key == 'q' || key=='r' || key =='f'|| key =='c'|| key =='m' || key=='t'||key == 'arrowup' || key == 'arrowleft' || key == 'arrowdown' || key == 'arrowright'|| key == 'l')) {
         shapes.forEach((shape) => {
             if (shape.selected) {
                 add_z_save();
                 switch (key) {
-                    case "ArrowUp":
+                    case "arrowup":
                     case "w":
                         shape.y -= 1;
                         break;
-                    case 'ArrowLeft':
+                    case 'arrowleft':
                     case 'a':
                         shape.x -= 1;
                         break;
-                    case 'ArrowDown':
+                    case 'arrowdown':
                     case 's':
                         shape.y += 1;
                         break;
-                    case 'ArrowRight':
+                    case 'arrowright':
                     case 'd':
                         shape.x += 1;
                         break;

@@ -761,9 +761,13 @@ document.getElementById('defaultring').onclick = () =>{
     saveRing();
     reload();
 }
-document.getElementById('save').onclick = () =>{
+document.getElementById('submitsave').onclick = () =>{
     console.log('save pressed')
     generateURL();
+}
+document.getElementById('save').onclick = () =>{
+    holeExport()
+    reload();
 }
 document.getElementById('textfield').onchange = saveTextField;
 
