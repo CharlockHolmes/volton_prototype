@@ -320,7 +320,7 @@ ul {
   position: absolute;
   z-index: 15;
   top:0px;
-  right:107%;
+  left:107%;
 
   opacity: 0;
   /*transition: opacity 2s;
@@ -335,9 +335,9 @@ ul {
   content: " ";
   position: absolute;
   top: 50%;
-  left: 100%; /* To the right of the tooltip */
+  right: 100%; /* To the left of the tooltip */
   margin-top: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent transparent transparent black;
+  border-color: transparent black transparent transparent;
 }

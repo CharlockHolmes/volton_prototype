@@ -111,17 +111,7 @@ function setup() {
     scrollbar.w = (canvasWidth-mleft-mright)/pwidth*canvasWidth;
     //Here we toggle the drawing thing
     if(STARTHIDDEN)p5canvas.hide();
-    document.getElementById('drawing').onclick = () => {
-        if (!hidden) {
-            p5canvas.hide();
-            console.log('the canvas got spooked away')
-            hidden = true;
-        } else {
-            p5canvas.show();
-            console.log('guess whoss back baby')
-            hidden = false;
-        }
-    };
+
     document.getElementById('selectall').onclick = () => seeAll = !seeAll; 
     holeImport();
     itemImport();
