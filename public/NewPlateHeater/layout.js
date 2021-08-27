@@ -35,6 +35,7 @@ class LayoutHandler{
     }
     layoutToBuffer(){
         let tempBuff = localStorage.getItem('layoutbuff');
+        console.log(tempBuff)
         if(tempBuff!=null){
             this.buffer = JSON.parse(tempBuff);
             this.bufferToLayout();
@@ -60,7 +61,7 @@ class LayoutHandler{
     loadButtonLayout(){
         let temp = JSON.parse(localStorage.getItem('layoutsave'))
         if(temp!=null){
-            localStorage.setItem('layoutbuff', JSON.stringify())
+            localStorage.setItem('layoutbuff', JSON.stringify(temp))
             this.layoutToBuffer();
         }
     }

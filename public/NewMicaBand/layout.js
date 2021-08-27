@@ -62,7 +62,7 @@ class LayoutHandler{
     loadButtonLayout(){
         let temp = JSON.parse(localStorage.getItem('layoutsave'))
         if(temp!=null){
-            localStorage.setItem('layoutbuff', JSON.stringify())
+            localStorage.setItem('layoutbuff', JSON.stringify(temp))
             this.layoutToBuffer();
         }
     }
