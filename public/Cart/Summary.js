@@ -77,7 +77,7 @@ class HeatingItem{
     }
 
     createButtons(){
-        let str = '<div style="position:relative;left:100px;top:-10px;z-index:11;"><button id="remove'+this.id+'">Remove</button>  <button id="modify'+this.id+'">Modify</button>      <button id="add'+this.id+'">+</button><input max="999"min="1"type="number"style = "width: 30px"id="quant'+this.id+'" value = "'+this.quantity+'"><button id="sub'+this.id+'">-</button></div>'
+        let str = '<div style="position:relative;left:100px;top:-10px;z-index:11;"><button id="remove'+this.id+'">Remove</button>  <button id="modify'+this.id+'">Modify</button> <span style="background:rgb(240,240,240);border-radius:2px;border-color:grey;border-style:groove;">Quantity : </span>     <button id="add'+this.id+'">+</button><input max="999"min="1"type="number"style = "width: 30px"id="quant'+this.id+'" value = "'+this.quantity+'"><button id="sub'+this.id+'">-</button> </div>'
         this.ref.innerHTML+=str;
 
         document.getElementById('remove'+this.id).onclick = ()=>{this.removeSelf()}

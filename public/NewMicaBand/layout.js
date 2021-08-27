@@ -98,7 +98,7 @@ class LayoutHandler{
         }
         else{
             this.hidden = false; 
-            this.domElements.forEach(e=>{if(e.id!='taskbar') document.getElementById(e.id).style.display = 'block'})
+            this.domElements.forEach(e=>{if(e.id!='taskbar'&&!(e.id=='tutorialdrag'&&localStorage.getItem('tutoen')=='false')) document.getElementById(e.id).style.display = 'block'})
             this.manageVariables();
             this.update();
         }
