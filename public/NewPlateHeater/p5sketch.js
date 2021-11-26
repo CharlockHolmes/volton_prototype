@@ -669,6 +669,7 @@ function pointArrow(hole,txt){
 }
 document.getElementById('exportholes').onclick = ()=>{
     holeExport();  
+    reload();
 }
 
 // document.getElementById('importholes').onclick = ()=>{
