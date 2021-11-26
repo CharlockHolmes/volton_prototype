@@ -26,30 +26,30 @@
         <div style="background-color: white;z-index: 21;position:fixed;top:60px;">...Loading</div>
     </div>
     <ul id="navbar" style="background-image: url(ressources/srcimg/banner.jpg);background-size: 100% 50px;">
-        <li><a href="../NewPlateHeater/FR.html">FR</a></li>
+        <li><a href="../NewPlateHeater">EN</a></li>
         <li><a href="../">Home</a></li>
         <li class="dropdown">
-          <a class="dropbtn">File</a>
+          <a class="dropbtn">Fichier</a>
           <div class="dropdown-content">
             <a id="save">Save <span class="shortcut-text">ctrl+s</span></a>
-            <a id="submitsave">Submit</a>
+            <a id="submitsave">Soumettre</a>
           </div>
         </li>
         <li class="dropdown">
           <a class="dropbtn">Edit</a>
           <div class="dropdown-content">
-            <a id="exportholes">Export Holes</a>
-            <a id="defaultring">Demo</a>
-            <a id="blankring">Blank</a>
-            <a id="practicering">Practice</a>
-            <a id="lockall">Lock All</a>
+            <a id="exportholes">Exporter Planner</a>
+            <a id="defaultring">Démo</a>
+            <a id="blankring">Plaque vide</a>
+            <a id="practicering">Pratique</a>
+            <a id="lockall">Barrer tout</a>
             </div>
         </li>
         <li class="dropdown">
-          <a class="dropbtn">View</a>
+          <a class="dropbtn">Vue</a>
           <div class="dropdown-content">
-            <a id="selectall">Measurements</a>
-            <a id="clocktoggle">Band Clock</a>
+            <a id="selectall">Mesures</a>
+            <a id="clocktoggle">Degré bande</a>
             <a id="resetcamera">Reset Camera</a>
             <a href="ressources/DemoPage">Terminals</a>
             <a id='retro'>Retro Mode</a>
@@ -58,21 +58,20 @@
         <li class="dropdown">
             <a class="dropbtn">Windows</a>
             <div class="dropdown-content">
-              <a>Band Size         <input type="checkbox" id="toggle1" style="float:right"checked='true'></a>
+              <a>Dim. Plaque       <input type="checkbox" id="toggle1" style="float:right"checked='true'></a>
               <a>Power Rating      <input type="checkbox" id="toggle2" style="float:right"checked='true'></a>
               <a>Planner           <input type="checkbox" id="toggle4" style="float:right"checked='true'></a>
-              <a>Hole              <input type="checkbox" id="toggle5" style="float:right"checked='true'></a>
               <a>Terminal          <input type="checkbox" id="toggle6" style="float:right"checked='true'></a>
-              <a >Additional Notes <input type="checkbox" id="toggle7" style="float:right"checked='true'></a>
-              <a >Tutorial         <input type="checkbox" id="toggletuto" style="float:right"checked='true'></a>
+              <a >Notes Additionelles <input type="checkbox" id="toggle7" style="float:right"checked='true'></a>
+              <a >Tutoriel         <input type="checkbox" id="toggletuto" style="float:right"checked='true'></a>
               <a >Toolbar          <input type="checkbox" id="toggletoolbar" style="float:right"checked='true'></a>
             </div>
           </li>
         <li class="dropdown">
           <a class="dropbtn">Layout</a>
           <div class="dropdown-content">
-            <a id="tutoriallayout">Tutorial</a>
-            <a id="defaultlayout">Default</a>
+            <a id="tutoriallayout">Tutoriel</a>
+            <a id="defaultlayout">Défault</a>
             <a id="savelayout">Save Layout</a>
             <a id="loadlayout">Load Layout</a>
           </div>
@@ -116,13 +115,13 @@
               }
   </script>
         <li class="dropdown">
-          <a class="dropbtn">Help</a>
+          <a class="dropbtn">Aide</a>
           <div class="dropdown-content">
             <a href="../Shortcuts/">Shortcuts</a>
           </div>
         </li>
         <li class="dropdown">
-          <a class="dropbtn">About</a>
+          <a class="dropbtn">À propos</a>
           <div class="dropdown-content">
             <a href="../Info">Info</a>
           </div>
@@ -132,32 +131,32 @@
     <div id="main">
         <div id='taskbar' class='dragpos'style='position:absolute; z-index: 12; background-color:#F2F2F2 ;top:80px;right:5px; width:40px;'>
             <div id="taskbarheader"class="headerthing"style='cursor:move;width:40px;height:15px; background-color: #1A4082;position:relative;left:-1px;border: 1px solid #ddd;'></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons6.png'style="width:40px;height:40px;float:right" id="taskterminal"><span class='tooltiptext'>add Terminal</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons1.png'style="width:40px;height:40px;float:right" id="taskcircle"><span class='tooltiptext'>add Circular Hole</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons2.png'style="width:40px;height:40px;float:right" id="taskrect"><span class='tooltiptext'>add Rectangular Hole</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons3.png'style="width:40px;height:40px;float:right" id="taskhslot"><span class='tooltiptext'>add Vertical Slot</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons4.png'style="width:40px;height:40px;float:right" id="taskvslot"><span class='tooltiptext'>add Horizontal Slot</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons6.png'style="width:40px;height:40px;float:right" id="taskterminal"><span class='tooltiptext'>ajouter Terminal</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons1.png'style="width:40px;height:40px;float:right" id="taskcircle"><span class='tooltiptext'>ajouter Trou</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons2.png'style="width:40px;height:40px;float:right" id="taskrect"><span class='tooltiptext'>ajouter Trou Rectangulaire</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons3.png'style="width:40px;height:40px;float:right" id="taskhslot"><span class='tooltiptext'>ajouter Trou Slot Vertical</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons4.png'style="width:40px;height:40px;float:right" id="taskvslot"><span class='tooltiptext'>ajouter Trou Slot Horizontal</span></div>
             <!--div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons5.png'style="width:40px;height:40px;float:right" id="taskimport"><span class='tooltiptext'>Import</span></div-->
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons8.png'style="width:40px;height:40px;float:right" id="taskcenter"><span class='tooltiptext'>Center Component</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons8.png'style="width:40px;height:40px;float:right" id="taskcenter"><span class='tooltiptext'>Centrer Component</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons9.png'style="width:40px;height:40px;float:right" id="taskmirror"><span class='tooltiptext'>Mirror Component</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/lock1.png'style="width:40px;height:40px;float:right" id="tasklock"><span class='tooltiptext'>Lock Component</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons7.png'style="width:40px;height:40px;float:right" id="tasksave"><span class='tooltiptext'>Save Changes</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/lock1.png'style="width:40px;height:40px;float:right" id="tasklock"><span class='tooltiptext'>Barrer Component</span></div>
+            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons7.png'style="width:40px;height:40px;float:right" id="tasksave"><span class='tooltiptext'>Save changements</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons10.png'style="width:40px;height:40px;float:right" id="tasksendmail"><span class='tooltiptext'>Submit Project</span></div>
             <div class="tooltip"><input type="image" src='ressources/2dtextures/menueyes1.png'style="width:40px;height:40px;float:right" id="taskview"><span class='tooltiptext'>Show/Hide UI</span></div>
         </div>
         <div id="ringboxdrag"class='dragpos' class = 'draggables'>
-            <div id="ringboxdragheader" class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;"> 1</span> Plate Size <span class = "collapsible">-</span></div>
+            <div id="ringboxdragheader" class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;"> 1</span> Dim. Plaque <span class = "collapsible">-</span></div>
             <table class="ring-info" class="content">
                 <tr>
-                    <td>Length</td>
+                    <td>Longueur</td>
                     <td><input class="input-data"id='ringdiameter'> in</td>
                 </tr>
                 <tr>
-                    <td>Width</td>
+                    <td>Largeur</td>
                     <td><input class="input-data" id="ringwidth"> in</td>
                 </tr>
                 <tr>
-                    <td>Resolution</td>
+                    <td>Résolution</td>
                     <td><input class="input-data"id='ringresolution'> vrx</td>
                 </tr>
                 <tr >
@@ -215,22 +214,22 @@
                     <td><input class="input-data"id='h_offset'> in</td>
                 </tr>
                 <tr id='holeheight'>
-                    <td >Height</td>
+                    <td >Hauteur</td>
                     <td><input class="input-data"id='h_height'> in</td>
                 </tr>
                 <tr>
-                    <td id='holediam'>Width</td>
+                    <td id='holediam'>Largeur</td>
                     <td><input class="input-data"id='h_width'> in</td>
                 </tr>
             </table>
             <table class='ring-info'id='emptytable'>
                 <tr id='tr1'>
-                    <td>Select Component<br> or<br>Place Marker</td>
+                    <td>Sélectionnez Component<br> ou <br>Placez un Marqueur</td>
                 </tr>
             </table>
             <table class='ring-info'id='markertable'>
                 <tr id='tr1'>
-                    <td>Marker Placed</td>
+                    <td>Marqueur placé</td>
                 </tr>
             </table>
         </div>
@@ -243,7 +242,7 @@
                     <td><input class="input-data"id='voltage'value = '120'> V</td>
                 </tr>
                 <tr>
-                    <td>Power</td>
+                    <td>Puissance</td>
                     <td><input class="input-data"id='powerasked'value='500'> W</td>
                 </tr>
                 <tr>
@@ -251,7 +250,7 @@
                     <td><span class="input-data"id='powerpersqrinch'> </span>  W/In^2</td>
                 </tr>
                 <tr>
-                    <td>Current</td>
+                    <td>Courant</td>
                     <td><span class="input-data"id='current'> </span>   A</td>
                 </tr>
             </table>
@@ -297,7 +296,7 @@
         </div>
 
         <div id="tutorialdrag"class='dragpos' class = 'draggables'>
-            <div id="tutorialdragheader"class="headerthing">=============== Tutorial ============= <span class = "collapsible">-</span></div>
+            <div id="tutorialdragheader"class="headerthing">=============== Tutoriel ============= <span class = "collapsible">-</span></div>
             <div>
                 
                 <div id="tutorialnext"class="tutob"style='background-color: rgb(13, 42, 97);width:20%;position:relative;left:80%;color:cornsilk;cursor:pointer;float:left'>next</div>
