@@ -113,6 +113,7 @@ input:valid+span:after {
 }
     </style>
   </head>
+  <div style="position:absolute;z-index:12; background-image:url(../../voltonbanner.jpg); height:180px;width:100%" ><image src="../../logo.png" width='500' style='border:3px;padding:10px; margin: 20px;'></image></div>
   <body>
     <div class="main-block">
       <div class="left-part">
@@ -123,9 +124,9 @@ input:valid+span:after {
       <form id="myForm">
         <h1>Submit</h1>
         <div class="info">
-          <input class="fname" id="name"type="text" name="name" placeholder="Full name"pattern="[a-zA-Z-]+ +[a-zA-Z -]*" required><span class="validity"></span>
-          <input type="email" id="email" placeholder="Email"pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" size="30" required><span class="validity"></span>
-          <input type='tel'id="telNo" name="telNo" placeholder="Phone number (in format xxx-xxx-xxxx)"type="tel" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" width="300px"><span class="validity"></span>
+          <input class="fname" id="name"type="text" name="name" placeholder="Name and Last name (required)"pattern="[a-zA-Z-]+ +[a-zA-Z -]*" required><span class="validity"></span>
+          <input type="email" id="email" placeholder="Email (required)"pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" size="30" required><span class="validity"></span>
+          <input type='tel'id="telNo" name="telNo" placeholder="Phone number (required)"type="tel" required pattern="^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$" width="300px"><span class="validity"></span>
           <input type="text" id="company" name="name" placeholder="Company">
         </div>
         <p>Message</p>

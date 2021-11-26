@@ -11,14 +11,110 @@
 
 </head>
 
+<style>
+/* CSS */
+.button-5 {
+    position: absolute;
+    top:212px;
+    left:200px;
+  align-items: center;
+  background-clip: padding-box;
+  background-color: #EFB105;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1.25;
+  margin: 0;
+  min-height: 3rem;
+  padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  width: auto;
+}
 
+.button-5:hover,
+.button-5:focus {
+  background-color: #fbb532;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+.button-5:hover {
+  transform: translateY(-1px);
+}
+
+.button-5:active {
+  background-color: #c89900;
+  box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+  transform: translateY(0);
+}
+.button-6 {
+    position: absolute;
+    top:212px;
+    left:360px;
+  align-items: center;
+  background-clip: padding-box;
+  background-color: #033C8D;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1.25;
+  margin: 0;
+  min-height: 3rem;
+  padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+ 
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  width: auto;
+}
+
+.button-6:hover,
+.button-6:focus {
+  background-color: #3f32fb;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+.button-6:hover {
+  transform: translateY(-1px);
+}
+
+.button-6:active {
+  background-color: #006ec8;
+  box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+  transform: translateY(0);
+}
+</style>
 <body id="body">
-    
-    <div id='listi'> List of items
+    <div style="background-image:url(../voltonbanner.jpg); height:200px;" ><image src="../logo.png" width='500' style=' border:3px;padding:10px; margin: 20px;'></image></div>
+    <div style="background-color:rgb(231, 231, 231);border-color: #3f32fb; border-radius:2px;border:#0043fa">
+        <div id='listi'> <span style="margin:10px; margin-top:10px;position: relative;top:10px;font: italic 25px Arial bolder, sans-serif;">List of items:</span></div>
     </div>
     <br><br>
-    <button id = 'addnewitem'> Add New Item</button>
-    <button id = 'StartSubmission'> Begin Submission</button>
+    <button class='button-5'id = 'addnewitem'> Add New Item</button>
+    <button class='button-6'id = 'StartSubmission'> Begin Submission</button>
     <script src='Summary.js'></script>
     <script>
         let sum = new Summary()
