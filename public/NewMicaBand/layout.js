@@ -23,7 +23,6 @@ class LayoutHandler{
         document.getElementById('toggle2').onclick = ()=> this.toggleSpecificDisplay('powerboxdrag')
         document.getElementById('toggle3').onclick = ()=> this.toggleSpecificDisplay('gapdiv')
         document.getElementById('toggle4').onclick = ()=> this.toggleSpecificDisplay('p5holder')
-        document.getElementById('toggle5').onclick = ()=> this.toggleSpecificDisplay('selectedholeboxdrag')
         document.getElementById('toggle6').onclick = ()=> this.toggleSpecificDisplay('selectedconboxdrag')
         document.getElementById('toggle7').onclick = ()=> this.toggleSpecificDisplay('textdrag')
         document.getElementById('toggletoolbar').onclick = ()=> this.toggleSpecificDisplay('taskbar')
