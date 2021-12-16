@@ -67,7 +67,6 @@ class LayoutHandler{
     bufferToLayout(){
         this.buffer.forEach(e=>{
             if(e.id != 'gapboxdrag'){
-
                 let ref = document.getElementById(e.id);
                 ref.style.left = e.left+'px';
                 ref.style.top = e.top+'px';

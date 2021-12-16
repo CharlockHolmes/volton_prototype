@@ -72,7 +72,7 @@ function sendMail(text = 'nothing was inserted', clientmail){
 
     var mailOptions = {
         from: 'testvolton2021@gmail.com',
-        to: ['csimon9999@gmail.com', clientmail],
+        to: ['info@volton.com', clientmail],
         subject: 'Submission Volton Design',
         html: '<p>'+'Click on the submission to view the order. Click on the links to review any item designed in the submission'+'</p>',
         attachments: {   // utf-8 string as an attachment
