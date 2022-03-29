@@ -1,56 +1,131 @@
 <!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.min.js"></script>
     <!--link rel="stylesheet" type="text/css" href="../style.csss-->
     <title>Volton Design</title>
+  </head>
 
-</head>
-
-
-<body id="body">
-    <div style="background-image:url(voltonbanner.jpg); height:200px;" ><image src="logo.png" width='500' style=' border:3px;padding:10px; margin: 20px;'></image>
+  <body id="body">
+    <div style="background-image: url(voltonbanner.jpg); height: 200px">
+      <image
+        src="logo.png"
+        width="500"
+        style="border: 3px; padding: 10px; margin: 20px"
+      ></image>
     </div>
 
-    <div style="padding:30px;font-size: 20px;"> Select what item you want to design</div>
+    <div style="padding: 30px; font-size: 20px">
+      Select what item you want to design
+    </div>
 
-    <a href="NewMicaBand/" >
-        <div class="selectionitem"  style = 'margin:30px;float:left;width:390px;height:300px; background-color: rgb(243,162,0);border-radius: 3px;'>
-            <img src="micaband.jpg"/>
-            <figcaption class="caption"style = 'position:relative; left:44%;'>Mica Band</figcaption>
-        </div>
+    <a href="NewMicaBand/">
+      <div
+        class="selectionitem"
+        style="
+          margin: 30px;
+          float: left;
+          width: 390px;
+          height: 300px;
+          background-color: rgb(243, 162, 0);
+          border-radius: 3px;
+        "
+      >
+        <img src="micaband.jpg" />
+        <figcaption class="caption" style="position: relative; left: 44%">
+          Mica Band
+        </figcaption>
+      </div>
     </a>
-    <a href="NewPlateHeater/" >
-        <div class="selectionitem"  style = 'margin:30px;float:left;width:390px;height:300px; background-color: rgb(243,162,0);border-radius: 3px;'>
-            <img src="micaplate.jpg"/>
-            <figcaption class="caption"style = 'position:relative; left:44%;'>Mica Plate</figcaption>
-        </div>
+    <a href="NewPlateHeater/">
+      <div
+        class="selectionitem"
+        style="
+          margin: 30px;
+          float: left;
+          width: 390px;
+          height: 300px;
+          background-color: rgb(243, 162, 0);
+          border-radius: 3px;
+        "
+      >
+        <img src="micaplate.jpg" />
+        <figcaption class="caption" style="position: relative; left: 44%">
+          Mica Plate
+        </figcaption>
+      </div>
     </a>
-    <a href="Cart/" >
-        <div class="selectionitem"  style = 'margin:30px;float:left;width:280px;height:300px; background-color: rgb(243,162,0);border-radius: 3px;'>
-            <img src="cart.png" style="width:260px; height:250px;position:relative;margin:10px;"/>
-            <figcaption class="caption"style = 'position:relative; left:44%;'>View Cart</figcaption>
-        </div>
+    <a href="Cart/">
+      <div
+        class="selectionitem"
+        style="
+          margin: 30px;
+          float: left;
+          width: 280px;
+          height: 300px;
+          background-color: rgb(243, 162, 0);
+          border-radius: 3px;
+        "
+      >
+        <img
+          src="cart.png"
+          style="width: 260px; height: 250px; position: relative; margin: 10px"
+        />
+        <figcaption class="caption" style="position: relative; left: 44%">
+          View Cart
+        </figcaption>
+      </div>
     </a>
-    <p style="position: fixed; bottom:4%; left:2%">
-        This is an application in development.Works best in full screen mode. for any comment or problem, you may sent an Email to <span style='color:blue;'>voltondesign@gmail.com</span><br>
-        <span id='clearthing'style='color:blue;cursor:pointer'>Click Here</span> to clear cache and resolve most problems or reload the page.;
+    <p style="position: fixed; bottom: 4%; left: 2%">
+      This is an application in development.Works best in full screen mode. for
+      any comment or problem, you may sent an Email to
+      <span style="color: blue">voltondesign@gmail.com</span><br />
+      <span id="clearthing" style="color: blue; cursor: pointer"
+        >Click Here</span
+      >
+      to clear cache and resolve most problems or reload the page.;
     </p>
-    <div style='position:fixed;bottom:2%;left:2%;'>Version 0.1b</div>
-    <script >
-        document.getElementById('clearthing').onclick = ()=>{
-            alert('Reloading and clearing cache')
-            localStorage.clear();
-            location.reload();
-        }
+    <div style="position: fixed; bottom: 2%; left: 2%">Version 0.1b</div>
+    <script>
+      document.getElementById("clearthing").onclick = () => {
+        alert("Reloading and clearing cache");
+        localStorage.clear();
+        location.reload();
+      };
     </script>
 
-
-</body>
-
-
+    <a href="https://youtu.be/kh5XUIE1PXs">
+      <div
+        style="
+          position: Fixed;
+          bottom: 15%;
+          left: 9%;
+          background-color: rgb(184, 144, 15);
+          padding: 20px;
+          border-radius: 4px;
+          color: antiquewhite;
+        "
+      >
+        Tutoriel FR
+      </div>
+    </a>
+    <a href="https://youtu.be/8ahsljnBC_I">
+      <div
+        style="
+          position: Fixed;
+          bottom: 15%;
+          left: 2%;
+          background-color: rgb(39, 124, 181);
+          padding: 20px;
+          border-radius: 4px;
+          color: antiquewhite;
+        "
+      >
+        Tutoriel EN
+      </div>
+    </a>
+  </body>
 </html>
