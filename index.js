@@ -102,7 +102,8 @@ app.post("/api", (request, response) => {
 function sendMail(text = "nothing was inserted", clientmail) {
   var mailOptions = {
     from: "testvolton2021@gmail.com",
-    to: ["info@volton.com", clientmail],
+    //to: ["info@volton.com", clientmail],
+    to: ["charles.simon1999@hotmail.com", clientmail],
     subject: "Submission Volton Design",
     html:
       "<p>" +
