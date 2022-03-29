@@ -58,43 +58,43 @@ app.post("/api", (request, response) => {
     //   constr += "---- Facing: " + (e.Flipped ? "Right " : "Left ") + "<br>";
     // });
 
-    holestr = "<br><br>|Trous|<br>";
-    if (ring.holes.length != 0)
-      ring.holes.forEach((e) => {
-        if (e.id[0] == "h" && e.id[1] == "s" && e.t == "rect")
-          //hslot
-          holestr += "== Type: " + "Hslot" + "<br>";
-        else if (e.id[0] == "s" && e.id[1] == "s" && e.t == "rect")
-          //vslot
-          holestr += "== Type: " + "Vslot" + "<br>";
-        else if (e.id[0] == "s" && e.id[1] == "s" && e.t == "rect")
-          //other
-          holestr += "== Type: " + e.t + "<br>";
-        holestr += "---- Angle: " + e.angle + "<br>";
-        holestr += "---- Offset: " + e.angle + "<br>";
-        if (e.t == "circle") holestr += "---- Width: " + e.r + "<br>";
-        else {
-          holestr += "---- Width: " + e.r.w + "<br>";
-          holestr += "---- Height: " + e.r.h + "<br>";
-        }
-      });
-    gapstr = "<br><br>|Gaps|<br>";
-    if (ring.gaps.length != 0)
-      ring.gaps.forEach((e) => {
-        gapstr += "== Type: " + e.t + "<br>";
-        gapstr += "---- Begin: " + e.begin + "<br>";
-        gapstr += "---- End: " + e.end + "<br>";
-      });
-    termstr = "<br><br>|Terminals|<br>";
-    if (ring.terminals.length != 0)
-      ring.terminals.forEach((e) => {
-        termstr += "== Type: " + e.t + "<br>";
-        termstr += "---- Angle: " + e.angle + "<br>";
-        termstr += "---- Offset: " + e.offset + "<br>";
-        termstr += "---- Rotation: " + e.rotation + "<br>";
-      });
-    str +=
-      "<br><br>==== Details ======<br>" + termstr + gapstr + holestr + constr;
+    //     holestr = "<br><br>|Trous|<br>";
+    //     if (ring.holes.length != 0)
+    //       ring.holes.forEach((e) => {
+    //         if (e.id[0] == "h" && e.id[1] == "s" && e.t == "rect")
+    //           //hslot
+    //           holestr += "== Type: " + "Hslot" + "<br>";
+    //         else if (e.id[0] == "s" && e.id[1] == "s" && e.t == "rect")
+    //           //vslot
+    //           holestr += "== Type: " + "Vslot" + "<br>";
+    //         else if (e.id[0] == "s" && e.id[1] == "s" && e.t == "rect")
+    //           //other
+    //           holestr += "== Type: " + e.t + "<br>";
+    //         holestr += "---- Angle: " + e.angle + "<br>";
+    //         holestr += "---- Offset: " + e.angle + "<br>";
+    //         if (e.t == "circle") holestr += "---- Width: " + e.r + "<br>";
+    //         else {
+    //           holestr += "---- Width: " + e.r.w + "<br>";
+    //           holestr += "---- Height: " + e.r.h + "<br>";
+    //         }
+    //       });
+    //     gapstr = "<br><br>|Gaps|<br>";
+    //     if (ring.gaps.length != 0)
+    //       ring.gaps.forEach((e) => {
+    //         gapstr += "== Type: " + e.t + "<br>";
+    //         gapstr += "---- Begin: " + e.begin + "<br>";
+    //         gapstr += "---- End: " + e.end + "<br>";
+    //       });
+    //     termstr = "<br><br>|Terminals|<br>";
+    //     if (ring.terminals.length != 0)
+    //       ring.terminals.forEach((e) => {
+    //         termstr += "== Type: " + e.t + "<br>";
+    //         termstr += "---- Angle: " + e.angle + "<br>";
+    //         termstr += "---- Offset: " + e.offset + "<br>";
+    //         termstr += "---- Rotation: " + e.rotation + "<br>";
+    //       });
+    //     str +=
+    //       "<br><br>==== Details ======<br>" + termstr + gapstr + holestr + constr;
   });
   console.log(str);
   sendMail(str, data.info.email);
