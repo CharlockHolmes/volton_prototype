@@ -1,275 +1,662 @@
 <!DOCTYPE html>
-<html lang='en'>
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="styleTest.css">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="styleTest.css" />
 
     <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"
-		integrity="sha512-LF8ZB1iTwi4Qvkm4pekHG4a437Y9Af5ZuwbnW4GTbAWQeR2E4KW8WF+xH8b9psevV7wIlDMx1MH9YfPqgKhA/Q=="
-		crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-	<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
-	<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js" ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"
+      integrity="sha512-LF8ZB1iTwi4Qvkm4pekHG4a437Y9Af5ZuwbnW4GTbAWQeR2E4KW8WF+xH8b9psevV7wIlDMx1MH9YfPqgKhA/Q=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+      integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
 
     <!--script id="lzutf8" src="https://cdn.jsdelivr.net/npm/lzutf8/build/production/lzutf8.min.js"></script-->
-	<!--script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld05UwbAAAAACikqGC49Y8kDJEekhzQcbqRlenm"></script-->
-	<link rel='icon' href='ressources/srcimg/favicon.ico'>
+    <!--script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld05UwbAAAAACikqGC49Y8kDJEekhzQcbqRlenm"></script-->
+    <link rel="icon" href="ressources/srcimg/favicon.ico" />
 
-	<title>Volton Design</title>
-</head>
-<body style="user-select: none;"id = 'body'>
-    <div id="loadingbanner">    
-        <div style="background-color: white;position:fixed;width:100%;height: 100%;z-index: 20;top:55px;"></div>
-        <div style="background-color: white;z-index: 21;position:fixed;top:60px;">...Loading</div>
+    <title>Volton Design</title>
+  </head>
+  <body style="user-select: none" id="body">
+    <div id="loadingbanner">
+      <div
+        style="
+          background-color: white;
+          position: fixed;
+          width: 100%;
+          height: 100%;
+          z-index: 20;
+          top: 55px;
+        "
+      ></div>
+      <div
+        style="background-color: white; z-index: 21; position: fixed; top: 60px"
+      >
+        ...Loading
+      </div>
     </div>
-    <ul id="navbar" style="background-image: url(ressources/srcimg/banner.jpg);background-size: 100% 50px;">
-        <li><a href="../NewMicaBand/FR.html">FR</a></li>
-        <li><a href="../">Home</a></li>
-        <li class="dropdown">
-          <a class="dropbtn">File</a>
-          <div class="dropdown-content">
-            <a id="save">Save <span class="shortcut-text">ctrl+s</span></a>
-            <a id="submitsave">Submit</a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a class="dropbtn">Edit</a>
-          <div class="dropdown-content">
-            <a id="exportholes">Save changes</a>
-            <a id="defaultring">Demo</a>
-            <a id="blankring">Blank</a>
-            <a id="practicering">Practice</a>
-            <a id="lockall">Lock All</a>
-            </div>
-        </li>
-        <li class="dropdown">
-          <a class="dropbtn">View</a>
-          <div class="dropdown-content">
-            <a id="selectall">Measurements</a>
-            <a id="clocktoggle">Band Clock</a>
-            <a id="resetcamera">Reset Camera</a>
-            <a href="ressources/DemoPage">Terminals</a>
-            <a id='retro'>Retro Mode</a>
-          </div>
-        </li>
-        <li class="dropdown">
-            <a class="dropbtn">Windows</a>
-            <div class="dropdown-content">
-              <a>Band Size         <input type="checkbox" id="toggle1" style="float:right"checked='true'></a>
-              <a>Power Rating      <input type="checkbox" id="toggle2" style="float:right"checked='true'></a>
-              <a>Gap / Sections    <input type="checkbox" id="toggle3" style="float:right"checked='true'></a>
-              <a>Planner           <input type="checkbox" id="toggle4" style="float:right"checked='true'></a>
-              <a>Hole              <input type="checkbox" id="toggle5" style="float:right"checked='true'></a>
-              <a>Terminal          <input type="checkbox" id="toggle6" style="float:right"checked='true'></a>
-              <a >Additional Notes <input type="checkbox" id="toggle7" style="float:right"checked='true'></a>
-              <a >Tutorial         <input type="checkbox" id="toggletuto" style="float:right"checked='true'></a>
-              <a >Toolbar          <input type="checkbox" id="toggletoolbar" style="float:right"checked='true'></a>
-            </div>
-          </li>
-        <li class="dropdown">
-          <a class="dropbtn">Layout</a>
-          <div class="dropdown-content">
-            <a id="tutoriallayout">Tutorial</a>
-            <a id="defaultlayout">Default</a>
-            <a id="savelayout">Save Layout</a>
-            <a id="loadlayout">Load Layout</a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a class="dropbtn"> Presets</a>
-          <div class="dropdown-content">
-            <a id="typea">Type A</a>
-            <a id="typeb">Type B</a>
-            <a id="typec">Type C</a>
-            <a id="typed">Type D</a>
-            <a id="typef">Type F</a>
-            <a id="typeg">Type G</a>
-            <a id="typeh">Type H</a>
-            <a id="typej">Type J</a>
-          </div>
-        </li>
-        <script>
-            // This is the presets javascript
-            document.getElementById('typea').onclick = ()=>{
-                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.08314,"end":0.08314,"t":"screws"}],"connectors":[],"terminals":[{"angle":0.2618,"offset":0,"t":"bornier","rotation":6.283},{"angle":6.02139,"offset":0,"t":"bornier","rotation":6.283}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
-                reload();
-            }
-            document.getElementById('typeb').onclick = ()=>{
-                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.08314,"end":0.08314,"t":"screws"}],"connectors":[],"terminals":[{"angle":0.2618,"offset":-0.167,"t":"bornier","rotation":6.283},{"angle":0.2618,"offset":0.129,"t":"bornier","rotation":6.283}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
-                reload();
-            }
-            document.getElementById('typec').onclick = ()=>{
-                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.08314,"end":0.08314,"t":"screws"}],"connectors":[],"terminals":[{"angle":0.2618,"offset":0,"t":"wire_spring","rotation":6.283}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
-                reload();
-            }
-            document.getElementById('typed').onclick = ()=>{
-                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.08314,"end":0.08314,"t":"screws"}],"connectors":[],"terminals":[{"angle":0.38397,"offset":0,"t":"boitier","rotation":1.571}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
-                reload();
-            }
-            document.getElementById('typef').onclick = ()=>{
-                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.0637,"end":0.0637,"t":"screws"},{"begin":3.07789,"end":3.2053,"t":"screws"}],"connectors":[],"terminals":[{"angle":5.75959,"offset":0,"t":"bornier","rotation":6.283},{"angle":0.5236,"offset":0,"t":"bornier","rotation":6.283},{"angle":3.66519,"offset":0,"t":"bornier","rotation":6.283},{"angle":2.61799,"offset":0,"t":"bornier","rotation":6.283}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
-                reload();
-            }
-            document.getElementById('typeg').onclick = ()=>{
-                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.0637,"end":0.0637,"t":"screws"},{"begin":3.07789,"end":3.2053,"t":"screws"}],"connectors":[],"terminals":[{"angle":0.5236,"offset":0.167,"t":"bornier","rotation":6.283},{"angle":0.5236,"offset":-0.167,"t":"bornier","rotation":1.571},{"angle":5.75959,"offset":0.167,"t":"bornier","rotation":6.283},{"angle":5.75959,"offset":-0.167,"t":"bornier","rotation":1.571}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
-                reload();
-            }
-            document.getElementById('typeh').onclick = ()=>{
-                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.0637,"end":0.0637,"t":"screws"},{"begin":3.07789,"end":3.2053,"t":"screws"}],"connectors":[],"terminals":[{"angle":0.5236,"offset":0,"t":"wire_spring","rotation":1.571},{"angle":5.75959,"offset":0,"t":"wire_spring","rotation":1.571}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
-                reload();
-            }
-            document.getElementById('typej').onclick = ()=>{
-                saveRing({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.0637,"end":0.0637,"t":"screws"},{"begin":3.07789,"end":3.2053,"t":"screws"}],"connectors":[],"terminals":[{"angle":0.5236,"offset":0,"t":"boitier","rotation":1.571},{"angle":5.75959,"offset":0,"t":"boitier","rotation":1.571}],"thickness":0.9583333333333334,"voltage":"120","power":"500"});
-                reload();
-            }
-
-        </script>
-        <li class="dropdown">
-          <a class="dropbtn">Help</a>
-          <div class="dropdown-content">
-            <a href="../Shortcuts/">Shortcuts</a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a class="dropbtn">About</a>
-          <div class="dropdown-content">
-            <a href="../Info">Info</a>
-          </div>
-        </li>
+    <ul
+      id="navbar"
+      style="
+        background-image: url(ressources/srcimg/banner.jpg);
+        background-size: 100% 50px;
+      "
+    >
+      <li><a href="../NewMicaBand/FR.html">FR</a></li>
+      <li><a href="../">Home</a></li>
+      <li class="dropdown">
+        <a class="dropbtn">File</a>
+        <div class="dropdown-content">
+          <a id="save">Save <span class="shortcut-text">ctrl+s</span></a>
+          <a id="submitsave">Submit</a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a class="dropbtn">Edit</a>
+        <div class="dropdown-content">
+          <a id="exportholes">Save changes</a>
+          <a id="defaultring">Demo</a>
+          <a id="blankring">Blank</a>
+          <a id="practicering">Practice</a>
+          <a id="lockall">Lock All</a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a class="dropbtn">View</a>
+        <div class="dropdown-content">
+          <a id="selectall">Measurements</a>
+          <a id="clocktoggle">Band Clock</a>
+          <a id="resetcamera">Reset Camera</a>
+          <a href="ressources/DemoPage">Terminals</a>
+          <a id="retro">Retro Mode</a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a class="dropbtn">Windows</a>
+        <div class="dropdown-content">
+          <a
+            >Band Size
+            <input
+              type="checkbox"
+              id="toggle1"
+              style="float: right"
+              checked="true"
+          /></a>
+          <a
+            >Power Rating
+            <input
+              type="checkbox"
+              id="toggle2"
+              style="float: right"
+              checked="true"
+          /></a>
+          <a
+            >Gap / Sections
+            <input
+              type="checkbox"
+              id="toggle3"
+              style="float: right"
+              checked="true"
+          /></a>
+          <a
+            >Planner
+            <input
+              type="checkbox"
+              id="toggle4"
+              style="float: right"
+              checked="true"
+          /></a>
+          <a
+            >Hole
+            <input
+              type="checkbox"
+              id="toggle5"
+              style="float: right"
+              checked="true"
+          /></a>
+          <a
+            >Terminal
+            <input
+              type="checkbox"
+              id="toggle6"
+              style="float: right"
+              checked="true"
+          /></a>
+          <a
+            >Additional Notes
+            <input
+              type="checkbox"
+              id="toggle7"
+              style="float: right"
+              checked="true"
+          /></a>
+          <a
+            >Tutorial
+            <input
+              type="checkbox"
+              id="toggletuto"
+              style="float: right"
+              checked="true"
+          /></a>
+          <a
+            >Toolbar
+            <input
+              type="checkbox"
+              id="toggletoolbar"
+              style="float: right"
+              checked="true"
+          /></a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a class="dropbtn">Layout</a>
+        <div class="dropdown-content">
+          <a id="tutoriallayout">Tutorial</a>
+          <a id="defaultlayout">Default</a>
+          <a id="savelayout">Save Layout</a>
+          <a id="loadlayout">Load Layout</a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a class="dropbtn"> Presets</a>
+        <div class="dropdown-content">
+          <a id="typea">Type A</a>
+          <a id="typeb">Type B</a>
+          <a id="typec">Type C</a>
+          <a id="typed">Type D</a>
+          <a id="typef">Type F</a>
+          <a id="typeg">Type G</a>
+          <a id="typeh">Type H</a>
+          <a id="typej">Type J</a>
+        </div>
+      </li>
+      <script>
+        // This is the presets javascript
+        document.getElementById("typea").onclick = () => {
+          saveRing({
+            holes: [],
+            radius: 1,
+            width: 1,
+            resolution: 1000,
+            gaps: [{ begin: -0.08314, end: 0.08314, t: "screws" }],
+            connectors: [],
+            terminals: [
+              { angle: 0.2618, offset: 0, t: "bornier", rotation: 6.283 },
+              { angle: 6.02139, offset: 0, t: "bornier", rotation: 6.283 },
+            ],
+            thickness: 0.9583333333333334,
+            voltage: "120",
+            power: "500",
+          });
+          reload();
+        };
+        document.getElementById("typeb").onclick = () => {
+          saveRing({
+            holes: [],
+            radius: 1,
+            width: 1,
+            resolution: 1000,
+            gaps: [{ begin: -0.08314, end: 0.08314, t: "screws" }],
+            connectors: [],
+            terminals: [
+              { angle: 0.2618, offset: -0.167, t: "bornier", rotation: 6.283 },
+              { angle: 0.2618, offset: 0.129, t: "bornier", rotation: 6.283 },
+            ],
+            thickness: 0.9583333333333334,
+            voltage: "120",
+            power: "500",
+          });
+          reload();
+        };
+        document.getElementById("typec").onclick = () => {
+          saveRing({
+            holes: [],
+            radius: 1,
+            width: 1,
+            resolution: 1000,
+            gaps: [{ begin: -0.08314, end: 0.08314, t: "screws" }],
+            connectors: [],
+            terminals: [
+              { angle: 0.2618, offset: 0, t: "wire_spring", rotation: 6.283 },
+            ],
+            thickness: 0.9583333333333334,
+            voltage: "120",
+            power: "500",
+          });
+          reload();
+        };
+        document.getElementById("typed").onclick = () => {
+          saveRing({
+            holes: [],
+            radius: 1,
+            width: 1,
+            resolution: 1000,
+            gaps: [{ begin: -0.08314, end: 0.08314, t: "screws" }],
+            connectors: [],
+            terminals: [
+              { angle: 0.38397, offset: 0, t: "boitier", rotation: 1.571 },
+            ],
+            thickness: 0.9583333333333334,
+            voltage: "120",
+            power: "500",
+          });
+          reload();
+        };
+        document.getElementById("typef").onclick = () => {
+          saveRing({
+            holes: [],
+            radius: 1,
+            width: 1,
+            resolution: 1000,
+            gaps: [
+              { begin: -0.0637, end: 0.0637, t: "screws" },
+              { begin: 3.07789, end: 3.2053, t: "screws" },
+            ],
+            connectors: [],
+            terminals: [
+              { angle: 5.75959, offset: 0, t: "bornier", rotation: 6.283 },
+              { angle: 0.5236, offset: 0, t: "bornier", rotation: 6.283 },
+              { angle: 3.66519, offset: 0, t: "bornier", rotation: 6.283 },
+              { angle: 2.61799, offset: 0, t: "bornier", rotation: 6.283 },
+            ],
+            thickness: 0.9583333333333334,
+            voltage: "120",
+            power: "500",
+          });
+          reload();
+        };
+        document.getElementById("typeg").onclick = () => {
+          saveRing({
+            holes: [],
+            radius: 1,
+            width: 1,
+            resolution: 1000,
+            gaps: [
+              { begin: -0.0637, end: 0.0637, t: "screws" },
+              { begin: 3.07789, end: 3.2053, t: "screws" },
+            ],
+            connectors: [],
+            terminals: [
+              { angle: 0.5236, offset: 0.167, t: "bornier", rotation: 6.283 },
+              { angle: 0.5236, offset: -0.167, t: "bornier", rotation: 1.571 },
+              { angle: 5.75959, offset: 0.167, t: "bornier", rotation: 6.283 },
+              { angle: 5.75959, offset: -0.167, t: "bornier", rotation: 1.571 },
+            ],
+            thickness: 0.9583333333333334,
+            voltage: "120",
+            power: "500",
+          });
+          reload();
+        };
+        document.getElementById("typeh").onclick = () => {
+          saveRing({
+            holes: [],
+            radius: 1,
+            width: 1,
+            resolution: 1000,
+            gaps: [
+              { begin: -0.0637, end: 0.0637, t: "screws" },
+              { begin: 3.07789, end: 3.2053, t: "screws" },
+            ],
+            connectors: [],
+            terminals: [
+              { angle: 0.5236, offset: 0, t: "wire_spring", rotation: 1.571 },
+              { angle: 5.75959, offset: 0, t: "wire_spring", rotation: 1.571 },
+            ],
+            thickness: 0.9583333333333334,
+            voltage: "120",
+            power: "500",
+          });
+          reload();
+        };
+        document.getElementById("typej").onclick = () => {
+          saveRing({
+            holes: [],
+            radius: 1,
+            width: 1,
+            resolution: 1000,
+            gaps: [
+              { begin: -0.0637, end: 0.0637, t: "screws" },
+              { begin: 3.07789, end: 3.2053, t: "screws" },
+            ],
+            connectors: [],
+            terminals: [
+              { angle: 0.5236, offset: 0, t: "boitier", rotation: 1.571 },
+              { angle: 5.75959, offset: 0, t: "boitier", rotation: 1.571 },
+            ],
+            thickness: 0.9583333333333334,
+            voltage: "120",
+            power: "500",
+          });
+          reload();
+        };
+      </script>
+      <li class="dropdown">
+        <a class="dropbtn">Help</a>
+        <div class="dropdown-content">
+          <a href="../Shortcuts/">Shortcuts</a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a class="dropbtn">About</a>
+        <div class="dropdown-content">
+          <a href="../Info">Info</a>
+        </div>
+      </li>
     </ul>
-    <div style='position: fixed; right: 20px; bottom:20px;z-index: 40;font:xx-large bold;color:rgb(244,165,0); background-color: rgb(26,64,130); padding: 10px;border-style:solid; border-width: 10; border-radius: 5px; border-color: rgb(244,165,0); opacity: 80%;'> Volton design</div>
+    <div
+      style="
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 40;
+        font: xx-large bold;
+        color: rgb(244, 165, 0);
+        background-color: rgb(26, 64, 130);
+        padding: 10px;
+        border-style: solid;
+        border-width: 10;
+        border-radius: 5px;
+        border-color: rgb(244, 165, 0);
+        opacity: 80%;
+      "
+    >
+      Volton design
+    </div>
     <div id="main">
-        <div id='taskbar' class='dragpos'style='position:absolute; z-index: 14; background-color:#F2F2F2 ;top:80px;right:5px; width:40px;'>
-            <div id="taskbarheader"class="headerthing"style='cursor:move;width:40px;height:15px; background-color: #1A4082;position:relative;left:-1px;border: 1px solid #ddd;'></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons6.png'style="width:40px;height:40px;float:right" id="taskterminal"><span class='tooltiptext'>add Terminal</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons1.png'style="width:40px;height:40px;float:right" id="taskcircle"><span class='tooltiptext'>add Circular Hole</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons2.png'style="width:40px;height:40px;float:right" id="taskrect"><span class='tooltiptext'>add Rectangular Hole</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons3.png'style="width:40px;height:40px;float:right" id="taskhslot"><span class='tooltiptext'>add Vertical Slot</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons4.png'style="width:40px;height:40px;float:right" id="taskvslot"><span class='tooltiptext'>add Horizontal Slot</span></div>
-            <!--div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons5.png'style="width:40px;height:40px;float:right" id="taskimport"><span class='tooltiptext'>Import</span></div-->
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons8.png'style="width:40px;height:40px;float:right" id="taskcenter"><span class='tooltiptext'>Center Component</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons9.png'style="width:40px;height:40px;float:right" id="taskmirror"><span class='tooltiptext'>Mirror Component</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/lock1.png'style="width:40px;height:40px;float:right" id="tasklock"><span class='tooltiptext'>Lock Component</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons7.png'style="width:40px;height:40px;float:right" id="tasksave"><span class='tooltiptext'>Save Changes</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons10.png'style="width:40px;height:40px;float:right" id="tasksendmail"><span class='tooltiptext'>Submit Project</span></div>
-            <div class="tooltip"><input type="image" src='ressources/2dtextures/menueyes1.png'style="width:40px;height:40px;float:right" id="taskview"><span class='tooltiptext'>Show/Hide UI</span></div>
+      <div
+        id="taskbar"
+        class="dragpos"
+        style="
+          position: absolute;
+          z-index: 14;
+          background-color: #f2f2f2;
+          top: 80px;
+          right: 5px;
+          width: 40px;
+        "
+      >
+        <div
+          id="taskbarheader"
+          class="headerthing"
+          style="
+            cursor: move;
+            width: 40px;
+            height: 15px;
+            background-color: #1a4082;
+            position: relative;
+            left: -1px;
+            border: 1px solid #ddd;
+          "
+        ></div>
+        <div class="tooltip">
+          <input
+            type="image"
+            src="ressources/2dtextures/menuicons6.png"
+            style="width: 40px; height: 40px; float: right"
+            id="taskterminal"
+          /><span class="tooltiptext">add Terminal</span>
         </div>
-        <div id="ringboxdrag"class='dragpos' class = 'draggables'>
-            <div id="ringboxdragheader" class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;"> 1</span> Band Size <span class = "collapsible">-</span></div>
-            <table class="ring-info" class="content">
-                <tr>
-                    <td>Diameter</td>
-                    <td><input class="input-data"id='ringdiameter'> in</td>
-                </tr>
-                <tr>
-                    <td>Width</td>
-                    <td><input class="input-data" id="ringwidth"> in</td>
-                </tr>
-                <tr>
-                    <td>Resolution</td>
-                    <td><input class="input-data"id='ringresolution'> vrx</td>
-                </tr>
-                <tr >
-                    <td></td>
-                    <td style='background-color:rgb(177, 0, 0);color:white'id='submitbutton'><div > Submit</div></td>
-                </tr>
-            </table>
+        <div class="tooltip">
+          <input
+            type="image"
+            src="ressources/2dtextures/menuicons1.png"
+            style="width: 40px; height: 40px; float: right"
+            id="taskcircle"
+          /><span class="tooltiptext">add Circular Hole</span>
         </div>
-       
-        <div id="selectedconboxdrag"class='dragpos' class = 'draggables'>
-            <div id="selectedconboxdragheader"class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;">5</span> <span id='componenttitle'>Terminal</span> <span class = "collapsible">-</span></div>
-            <div>
-            <table class="ring-info" id='terminaltable'>
-                <tr>
-                    <td>Angle</td>
-                    <td><input class="input-data" id="c_angle"> deg</td>
-                </tr>
-                <tr>
-                    <td>Offset</td>
-                    <td><input class="input-data" id="c_offset"> in</td>
-                </tr>
-                <tr>
-                    <td>Rotation</td>
-                    <td><select id="c_rotation" name="Direction">
-                        <option value="180">0</option>
-                        <option value="90">90</option>
-                        <option value="0">180</option>
-                        <option value="270">270</option>
-                    </select>	</td>
-                </tr>
-                <tr>
-                    <td>Type</td>
-                    <td><select id="c_type" name="Type" >
-                        <option value="armaturebx_h">Armor 90°</option>
-                        <option value="armaturebx_v">Armor</option>
-                        <option value="boitier">Box</option>
-                        <option value="bornier">Post-Term</option>
-                        <option value="wire_spring">Spring</option>
-                        <option value="wire_tress">S/S Braid</option>
-                        <option value="tressh">S/S B. 90°</option>
-                        <option value="eurov">Euro Plug</option>
-                        <option value="euroh">Euro 90°</option>
-                        <option value="thermo">T/C adapt</option>
-                    </select>	</td>
-                </tr>
-                
-            </table>
-            <table class="ring-info" id='holetable'>
-                <tr>
-                    <td>Angle</td>
-                    <td><input class="input-data"id='h_angle'> deg</td>
-                </tr>
-                <tr>
-                    <td>Offset</td>
-                    <td><input class="input-data"id='h_offset'> in</td>
-                </tr>
-                <tr id='holeheight'>
-                    <td >Height</td>
-                    <td><input class="input-data"id='h_height'> in</td>
-                </tr>
-                <tr>
-                    <td id='holediam'>Width</td>
-                    <td><input class="input-data"id='h_width'> in</td>
-                </tr>
-            </table>
-            <table class='ring-info'id='emptytable'>
-                <tr id='tr1'>
-                    <td>Select Component<br> or<br>Place Marker</td>
-                </tr>
-            </table>
-            <table class='ring-info'id='markertable'>
-                <tr id='tr1'>
-                    <td>Marker Placed</td>
-                </tr>
-            </table>
+        <div class="tooltip">
+          <input
+            type="image"
+            src="ressources/2dtextures/menuicons2.png"
+            style="width: 40px; height: 40px; float: right"
+            id="taskrect"
+          /><span class="tooltiptext">add Rectangular Hole</span>
         </div>
+        <div class="tooltip">
+          <input
+            type="image"
+            src="ressources/2dtextures/menuicons3.png"
+            style="width: 40px; height: 40px; float: right"
+            id="taskhslot"
+          /><span class="tooltiptext">add Vertical Slot</span>
         </div>
-        <div id="powerboxdrag"class='dragpos' class = 'draggables'>
-            <div id="powerboxdragheader"class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;"> 2</span> Power Rating <span class = "collapsible">-</span></div>
-            <table class="ring-info">
-                <tr>
-                    <td>Voltage</td>
-                    <td><input class="input-data"id='voltage'value = '120'> V</td>
-                </tr>
-                <tr>
-                    <td>Power</td>
-                    <td><input class="input-data"id='powerasked'value='500'> W</td>
-                </tr>
-                <tr>
-                    <td>W Density</td>
-                    <td><span class="input-data"id='powerpersqrinch'> </span>  W/In^2</td>
-                </tr>
-                <tr>
-                    <td>Current</td>
-                    <td><span class="input-data"id='current'> </span>   A</td>
-                </tr>
-            </table>
+        <div class="tooltip">
+          <input
+            type="image"
+            src="ressources/2dtextures/menuicons4.png"
+            style="width: 40px; height: 40px; float: right"
+            id="taskvslot"
+          /><span class="tooltiptext">add Horizontal Slot</span>
         </div>
-        <div id="gapdiv"></div>
-        <!--div id="gapboxdrag" class = 'draggables'>
+        <!--div class="tooltip"><input type="image" src='ressources/2dtextures/menuicons5.png'style="width:40px;height:40px;float:right" id="taskimport"><span class='tooltiptext'>Import</span></div-->
+        <div class="tooltip">
+          <input
+            type="image"
+            src="ressources/2dtextures/menuicons8.png"
+            style="width: 40px; height: 40px; float: right"
+            id="taskcenter"
+          /><span class="tooltiptext">Center Component</span>
+        </div>
+        <div class="tooltip">
+          <input
+            type="image"
+            src="ressources/2dtextures/menuicons9.png"
+            style="width: 40px; height: 40px; float: right"
+            id="taskmirror"
+          /><span class="tooltiptext">Mirror Component</span>
+        </div>
+        <div class="tooltip">
+          <input
+            type="image"
+            src="ressources/2dtextures/lock1.png"
+            style="width: 40px; height: 40px; float: right"
+            id="tasklock"
+          /><span class="tooltiptext">Lock Component</span>
+        </div>
+        <div class="tooltip">
+          <input
+            type="image"
+            src="ressources/2dtextures/menuicons7.png"
+            style="width: 40px; height: 40px; float: right"
+            id="tasksave"
+          /><span class="tooltiptext">Save Changes</span>
+        </div>
+        <div class="tooltip">
+          <input
+            type="image"
+            src="ressources/2dtextures/menuicons10.png"
+            style="width: 40px; height: 40px; float: right"
+            id="tasksendmail"
+          /><span class="tooltiptext">Submit Project</span>
+        </div>
+        <div class="tooltip">
+          <input
+            type="image"
+            src="ressources/2dtextures/menueyes1.png"
+            style="width: 40px; height: 40px; float: right"
+            id="taskview"
+          /><span class="tooltiptext">Show/Hide UI</span>
+        </div>
+      </div>
+      <div id="ringboxdrag" class="dragpos" class="draggables">
+        <div id="ringboxdragheader" class="headerthing">
+          <span
+            style="
+              background-color: #f4a500;
+              color: black;
+              margin: 2px;
+              padding-left: 2px;
+              padding-right: 2px;
+              border-radius: 2px;
+            "
+          >
+            1</span
+          >
+          Band Size <span class="collapsible">-</span>
+        </div>
+        <table class="ring-info" class="content">
+          <tr>
+            <td>Diameter</td>
+            <td><input class="input-data" id="ringdiameter" /> in</td>
+          </tr>
+          <tr>
+            <td>Width</td>
+            <td><input class="input-data" id="ringwidth" /> in</td>
+          </tr>
+          <tr>
+            <td>Resolution</td>
+            <td><input class="input-data" id="ringresolution" /> vrx</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td
+              style="background-color: rgb(177, 0, 0); color: white"
+              id="submitbutton"
+            >
+              <div>Submit</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div id="selectedconboxdrag" class="dragpos" class="draggables">
+        <div id="selectedconboxdragheader" class="headerthing">
+          <span
+            style="
+              background-color: #f4a500;
+              color: black;
+              margin: 2px;
+              padding-left: 2px;
+              padding-right: 2px;
+              border-radius: 2px;
+            "
+            >5</span
+          >
+          <span id="componenttitle">Terminal</span>
+          <span class="collapsible">-</span>
+        </div>
+        <div>
+          <table class="ring-info" id="terminaltable">
+            <tr>
+              <td>Angle</td>
+              <td><input class="input-data" id="c_angle" /> deg</td>
+            </tr>
+            <tr>
+              <td>Offset</td>
+              <td><input class="input-data" id="c_offset" /> in</td>
+            </tr>
+            <tr>
+              <td>Rotation</td>
+              <td>
+                <select id="c_rotation" name="Direction">
+                  <option value="180">0</option>
+                  <option value="90">90</option>
+                  <option value="0">180</option>
+                  <option value="270">270</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Type</td>
+              <td>
+                <select id="c_type" name="Type">
+                  <option value="armaturebx_h">Armor 90°</option>
+                  <option value="armaturebx_v">Armor</option>
+                  <option value="boitier">Box</option>
+                  <option value="bornier">Post-Term</option>
+                  <option value="wire_spring">Spring</option>
+                  <option value="wire_tress">S/S Braid</option>
+                  <option value="tressh">S/S B. 90°</option>
+                  <option value="eurov">Euro Plug</option>
+                  <option value="euroh">Euro 90°</option>
+                  <option value="thermo">T/C adapt</option>
+                </select>
+              </td>
+            </tr>
+          </table>
+          <table class="ring-info" id="holetable">
+            <tr>
+              <td>Angle</td>
+              <td><input class="input-data" id="h_angle" /> deg</td>
+            </tr>
+            <tr>
+              <td>Offset</td>
+              <td><input class="input-data" id="h_offset" /> in</td>
+            </tr>
+            <tr id="holeheight">
+              <td>Height</td>
+              <td><input class="input-data" id="h_height" /> in</td>
+            </tr>
+            <tr>
+              <td id="holediam">Width</td>
+              <td><input class="input-data" id="h_width" /> in</td>
+            </tr>
+          </table>
+          <table class="ring-info" id="emptytable">
+            <tr id="tr1">
+              <td>
+                Select Component<br />
+                or<br />Place Marker
+              </td>
+            </tr>
+          </table>
+          <table class="ring-info" id="markertable">
+            <tr id="tr1">
+              <td>Marker Placed</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="powerboxdrag" class="dragpos" class="draggables">
+        <div id="powerboxdragheader" class="headerthing">
+          <span
+            style="
+              background-color: #f4a500;
+              color: black;
+              margin: 2px;
+              padding-left: 2px;
+              padding-right: 2px;
+              border-radius: 2px;
+            "
+          >
+            2</span
+          >
+          Power Rating <span class="collapsible">-</span>
+        </div>
+        <table class="ring-info">
+          <tr>
+            <td>Voltage</td>
+            <td><input class="input-data" id="voltage" value="120" /> V</td>
+          </tr>
+          <tr>
+            <td>Power</td>
+            <td><input class="input-data" id="powerasked" value="500" /> W</td>
+          </tr>
+          <tr>
+            <td>W Density</td>
+            <td>
+              <span class="input-data" id="powerpersqrinch"> </span> W/In^2
+            </td>
+          </tr>
+          <tr>
+            <td>Current</td>
+            <td><span class="input-data" id="current"> </span> A</td>
+          </tr>
+        </table>
+      </div>
+      <div id="gapdiv"></div>
+      <!--div id="gapboxdrag" class = 'draggables'>
             <div id="gapboxdragheader">Gaps <span class = "collapsible">-</span></div>
             <table class="ring-info" style="width:340px;">
                 <tr>
@@ -302,151 +689,227 @@
                 </tr>
             </table>
         </div-->
-    
-        <div id="textdrag"class='dragpos' class = 'draggables'>
-            <div id="textdragheader"class="headerthing"><span style="background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;"> 7</span> Additional notes <span class = "collapsible">-</span></div>
-            <textarea id="textfield" name="notes" rows="9"style="width:98.5%" ></textarea>
-        </div>
 
-        <div id="tutorialdrag"class='dragpos' class = 'draggables'>
-            <div id="tutorialdragheader"class="headerthing">=============== Tutorial ============= <span class = "collapsible">-</span></div>
-            <div>
-                
-                <div id="tutorialnext"class="tutob"style='background-color: rgb(13, 42, 97);width:20%;position:relative;left:80%;color:cornsilk;cursor:pointer;float:left'>next</div>
-                <div id="tutoriallast"class="tutob"style='background-color: rgb(13, 42, 97);width:20%;position:relative;right:80%;color:cornsilk;cursor:pointer;float:right'>prev</div>
-                <span id="tutorialcontent">loading tutorial</span>
-                <div>_________________________________________</div>
-            </div>
-            <!--textarea id="textfield" name="notes" rows="1" cols='50'></textarea-->
+      <div id="textdrag" class="dragpos" class="draggables">
+        <div id="textdragheader" class="headerthing">
+          <span
+            style="
+              background-color: #f4a500;
+              color: black;
+              margin: 2px;
+              padding-left: 2px;
+              padding-right: 2px;
+              border-radius: 2px;
+            "
+          >
+            7</span
+          >
+          Additional notes <span class="collapsible">-</span>
         </div>
-    
+        <textarea
+          id="textfield"
+          name="notes"
+          rows="9"
+          style="width: 98.5%"
+        ></textarea>
+      </div>
+
+      <div id="tutorialdrag" class="dragpos" class="draggables">
+        <div id="tutorialdragheader" class="headerthing">
+          =============== Tutorial =============
+          <span class="collapsible">-</span>
+        </div>
+        <div>
+          <div
+            id="tutorialnext"
+            class="tutob"
+            style="
+              background-color: rgb(13, 42, 97);
+              width: 20%;
+              position: relative;
+              left: 80%;
+              color: cornsilk;
+              cursor: pointer;
+              float: left;
+            "
+          >
+            next
+          </div>
+          <div
+            id="tutoriallast"
+            class="tutob"
+            style="
+              background-color: rgb(13, 42, 97);
+              width: 20%;
+              position: relative;
+              right: 80%;
+              color: cornsilk;
+              cursor: pointer;
+              float: right;
+            "
+          >
+            prev
+          </div>
+          <span id="tutorialcontent">loading tutorial</span>
+          <div>_________________________________________</div>
+        </div>
+        <!--textarea id="textfield" name="notes" rows="1" cols='50'></textarea-->
+      </div>
     </div>
     <style>
-        .webgl{
-            cursor:grab
-        }
-        .webgl:active{
-            cursor:grabbing;
-        }
+      .webgl {
+        cursor: grab;
+      }
+      .webgl:active {
+        cursor: grabbing;
+      }
     </style>
-    <canvas class='webgl' id='three'></canvas>
+    <canvas class="webgl" id="three"></canvas>
     <div>
-        <div id="p5holder"class='dragpos' class ="draggables">
-            <div id="p5holderheader"class="headerthing"><span style="position:relative;float:left;background-color:#F4A500; color:black;margin:2px;padding-left:2px;padding-right:2px;border-radius: 2px;"> 4</span>
-                Planner <span class="collapsible"id='isplan'>-</span>
-            </div>
+      <div id="p5holder" class="dragpos" class="draggables">
+        <div id="p5holderheader" class="headerthing">
+          <span
+            style="
+              position: relative;
+              float: left;
+              background-color: #f4a500;
+              color: black;
+              margin: 2px;
+              padding-left: 2px;
+              padding-right: 2px;
+              border-radius: 2px;
+            "
+          >
+            4</span
+          >
+          Planner <span class="collapsible" id="isplan">-</span>
         </div>
+      </div>
     </div>
     <!-- Collapsed script-->
     <script>
-        var coll = document.getElementsByClassName("collapsible");
+      var coll = document.getElementsByClassName("collapsible");
 
-        for (let i = 0; i < coll.length; i++) {
-            coll[i].addEventListener("click", function() {
-                addCollapse(this);
-            });
+      for (let i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+          addCollapse(this);
+        });
+      }
+      let plannerBoxFlag = true;
+      function addCollapse(item) {
+        item.classList.toggle("active");
+        const content = item.parentElement.nextElementSibling;
+        if (content.style.display !== "none") {
+          content.style.display = "none";
+          if (item.id == "isplan") plannerBoxFlag = false;
+        } else {
+          content.style.display = "block";
+          if (item.id == "isplan") plannerBoxFlag = true;
         }
-        let plannerBoxFlag = true;
-        function addCollapse(item) {
-            item.classList.toggle("active");
-            const content = item.parentElement.nextElementSibling;
-            if (content.style.display !== "none") {
-                content.style.display = "none";
-                if(item.id=='isplan')plannerBoxFlag = false;
-            } else {
-                content.style.display = "block";
-                if(item.id=='isplan')plannerBoxFlag = true; 
-            }
-            build.layout.update();
-        }
+        build.layout.update();
+      }
     </script>
     <!-- Dragged elements script-->
     <script>
-        let writingBoxFlag = false;
-        let infoBoxFlag = false;
-        //Make the DIV element draggagle:
-        dragElement(document.getElementById("ringboxdrag"));
-        //dragElement(document.getElementById("selectedholeboxdrag"));
-        dragElement(document.getElementById("selectedconboxdrag"));
-        
-        dragElement(document.getElementById("powerboxdrag"));
-        dragElement(document.getElementById("p5holder"));
-        dragElement(document.getElementById("taskbar"));
-        dragElement(document.getElementById("textdrag"));
-        dragElement(document.getElementById("tutorialdrag"));
-        
-        function dragElement(elmnt) {
-          var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-          if (document.getElementById(elmnt.id + "header")) {
-            /* if present, the header is where you move the DIV from:*/
-            if(elmnt.id!='p5holder')document.getElementById(elmnt.id).onmousedown = ()=>{infoBoxFlag = true;document.onmouseup= closeDragElement};  
-            if(elmnt.id=='textdrag')document.getElementById(elmnt.id).onmousedown = ()=>{infoBoxFlag = true;clearSelect();document.onmouseup= closeDragElement};  
-            document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-          } else {
-            /* otherwise, move the DIV from anywhere inside the DIV:*/
-            elmnt.onmousedown = dragMouseDown;
-          }
-        
-          function dragMouseDown(e) {
-            infoBoxFlag = true;
-            e = e || window.event;
-            e.preventDefault();
-            // get the mouse cursor position at startup:
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            // call a function whenever the cursor moves:
-            document.onmousemove = elementDrag;
-          }
-        
-          function elementDrag(e) {
-            e = e || window.event;
-            e.preventDefault();
-            // calculate the new cursor position:
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            // set the element's new position:
-            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-          }
-        
-          function closeDragElement() {
-            /* stop moving when mouse button is released:*/
-            infoBoxFlag = false;
-            document.onmouseup = null;
-            document.onmousemove = null;
-            build.layout.update();
-          }
+      let writingBoxFlag = false;
+      let infoBoxFlag = false;
+      //Make the DIV element draggagle:
+      dragElement(document.getElementById("ringboxdrag"));
+      //dragElement(document.getElementById("selectedholeboxdrag"));
+      dragElement(document.getElementById("selectedconboxdrag"));
+
+      dragElement(document.getElementById("powerboxdrag"));
+      dragElement(document.getElementById("p5holder"));
+      dragElement(document.getElementById("taskbar"));
+      dragElement(document.getElementById("textdrag"));
+      dragElement(document.getElementById("tutorialdrag"));
+
+      function dragElement(elmnt) {
+        var pos1 = 0,
+          pos2 = 0,
+          pos3 = 0,
+          pos4 = 0;
+        if (document.getElementById(elmnt.id + "header")) {
+          /* if present, the header is where you move the DIV from:*/
+          if (elmnt.id != "p5holder")
+            document.getElementById(elmnt.id).onmousedown = () => {
+              infoBoxFlag = true;
+              document.onmouseup = closeDragElement;
+            };
+          if (elmnt.id == "textdrag")
+            document.getElementById(elmnt.id).onmousedown = () => {
+              infoBoxFlag = true;
+              clearSelect();
+              document.onmouseup = closeDragElement;
+            };
+          document.getElementById(elmnt.id + "header").onmousedown =
+            dragMouseDown;
+        } else {
+          /* otherwise, move the DIV from anywhere inside the DIV:*/
+          elmnt.onmousedown = dragMouseDown;
         }
+
+        function dragMouseDown(e) {
+          infoBoxFlag = true;
+          e = e || window.event;
+          e.preventDefault();
+          // get the mouse cursor position at startup:
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          document.onmouseup = closeDragElement;
+          // call a function whenever the cursor moves:
+          document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+          e = e || window.event;
+          e.preventDefault();
+          // calculate the new cursor position:
+          pos1 = pos3 - e.clientX;
+          pos2 = pos4 - e.clientY;
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          // set the element's new position:
+          elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+          elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+        }
+
+        function closeDragElement() {
+          /* stop moving when mouse button is released:*/
+          infoBoxFlag = false;
+          document.onmouseup = null;
+          document.onmousemove = null;
+          build.layout.update();
+        }
+      }
     </script>
 
     <!-- Get URL parameter name -->
     <script>
-        function getParameter(parameterName){
-            let parameters = new URLSearchParams( window.location.search)
-            return parameters.get( parameterName)
-        }
+      function getParameter(parameterName) {
+        let parameters = new URLSearchParams(window.location.search);
+        return parameters.get(parameterName);
+      }
     </script>
 
-<script src="globalConst.js"></script>
-<script src="domTable.js"></script>
-<script src="conversion.js"></script>
-<script src="ring.js"></script>
-<script src="sketch.js"></script>
-<script src="p5sketch.js"></script>
-<script src="forms.js"></script>
-<script src="layout.js"></script>
-<script src="tutorial.js"></script>
-<script src="builder.js"></script>
-<script>
-    window.onerror=()=>{
-       localStorage.clear();
-       location.reload(); 
-    }
-</script>
-<!--
+    <script src="globalConst.js"></script>
+    <script src="domTable.js"></script>
+    <script src="conversion.js"></script>
+    <script src="ring.js"></script>
+    <script src="sketch.js"></script>
+    <script src="p5sketch.js"></script>
+    <script src="forms.js"></script>
+    <script src="layout.js"></script>
+    <script src="tutorial.js"></script>
+    <script src="builder.js"></script>
+    <script>
+      window.onerror = () => {
+        localStorage.clear();
+        location.reload();
+      };
+    </script>
+    <!--
     -->
-</body>
+    <script></script>
+  </body>
 </html>
