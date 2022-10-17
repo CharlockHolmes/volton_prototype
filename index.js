@@ -37,68 +37,68 @@ app.post("/api", (request, response) => {
   str += "Company: " + data.info.company + "<br>";
   str += "Message: " + data.info.message + "<br>";
 
-  data.items.forEach((item) => {
-    const ring = item.ring;
-    str += "<br><br>";
-    str += "Quantity:" + item.quantity + "<br>";
-    str += "Voltage:" + item.voltage + "V<br>";
-    str += "Power:" + item.power + "W<br>";
-    str += "Diameter:" + ring.radius * 2 * 3 + "inch<br>";
-    str += "Width:" + ring.width * 3 + "inch<br>";
-    str += "Type:" + item.type + "<br>";
-    str += "Holes:" + ring.holes.length + "<br>";
-    str += "Connectors:" + ring.terminals.length + "<br>";
-    //str += "id:"+num+'<br>';
-    str += "Additional Notes: " + item.text + "<br>";
-    str += '<a href="' + item.url + '">' + item.url + "</a>";
+  // data.items.forEach((item) => {
+  //   const ring = item.ring;
+  //   str += "<br><br>";
+  //   str += "Quantity:" + item.quantity + "<br>";
+  //   str += "Voltage:" + item.voltage + "V<br>";
+  //   str += "Power:" + item.power + "W<br>";
+  //   str += "Diameter:" + ring.radius * 2 * 3 + "inch<br>";
+  //   str += "Width:" + ring.width * 3 + "inch<br>";
+  //   str += "Type:" + item.type + "<br>";
+  //   str += "Holes:" + ring.holes.length + "<br>";
+  //   str += "Connectors:" + ring.terminals.length + "<br>";
+  //   //str += "id:"+num+'<br>';
+  //   str += "Additional Notes: " + item.text + "<br>";
+  //   str += '<a href="' + item.url + '">' + item.url + "</a>";
 
-    ////////////////////////////////////////////////////////
-    // constr = "<br><br>|Serrage|<br>";
-    // ring.connectors.forEach((e) => {
-    //   constr += "== Type: " + e.t + "<br>";
-    //   constr += "---- Angle: " + e.angle + "<br>";
-    //   constr += "---- Offset: " + e.angle + "<br>";
-    //   constr += "---- Facing: " + (e.Flipped ? "Right " : "Left ") + "<br>";
-    // });
+  //   ////////////////////////////////////////////////////////
+  //   // constr = "<br><br>|Serrage|<br>";
+  //   // ring.connectors.forEach((e) => {
+  //   //   constr += "== Type: " + e.t + "<br>";
+  //   //   constr += "---- Angle: " + e.angle + "<br>";
+  //   //   constr += "---- Offset: " + e.angle + "<br>";
+  //   //   constr += "---- Facing: " + (e.Flipped ? "Right " : "Left ") + "<br>";
+  //   // });
 
-    //     holestr = "<br><br>|Trous|<br>";
-    //     if (ring.holes.length != 0)
-    //       ring.holes.forEach((e) => {
-    //         if (e.id[0] == "h" && e.id[1] == "s" && e.t == "rect")
-    //           //hslot
-    //           holestr += "== Type: " + "Hslot" + "<br>";
-    //         else if (e.id[0] == "s" && e.id[1] == "s" && e.t == "rect")
-    //           //vslot
-    //           holestr += "== Type: " + "Vslot" + "<br>";
-    //         else if (e.id[0] == "s" && e.id[1] == "s" && e.t == "rect")
-    //           //other
-    //           holestr += "== Type: " + e.t + "<br>";
-    //         holestr += "---- Angle: " + e.angle + "<br>";
-    //         holestr += "---- Offset: " + e.angle + "<br>";
-    //         if (e.t == "circle") holestr += "---- Width: " + e.r + "<br>";
-    //         else {
-    //           holestr += "---- Width: " + e.r.w + "<br>";
-    //           holestr += "---- Height: " + e.r.h + "<br>";
-    //         }
-    //       });
-    //     gapstr = "<br><br>|Gaps|<br>";
-    //     if (ring.gaps.length != 0)
-    //       ring.gaps.forEach((e) => {
-    //         gapstr += "== Type: " + e.t + "<br>";
-    //         gapstr += "---- Begin: " + e.begin + "<br>";
-    //         gapstr += "---- End: " + e.end + "<br>";
-    //       });
-    //     termstr = "<br><br>|Terminals|<br>";
-    //     if (ring.terminals.length != 0)
-    //       ring.terminals.forEach((e) => {
-    //         termstr += "== Type: " + e.t + "<br>";
-    //         termstr += "---- Angle: " + e.angle + "<br>";
-    //         termstr += "---- Offset: " + e.offset + "<br>";
-    //         termstr += "---- Rotation: " + e.rotation + "<br>";
-    //       });
-    //     str +=
-    //       "<br><br>==== Details ======<br>" + termstr + gapstr + holestr + constr;
-  });
+  //   //     holestr = "<br><br>|Trous|<br>";
+  //   //     if (ring.holes.length != 0)
+  //   //       ring.holes.forEach((e) => {
+  //   //         if (e.id[0] == "h" && e.id[1] == "s" && e.t == "rect")
+  //   //           //hslot
+  //   //           holestr += "== Type: " + "Hslot" + "<br>";
+  //   //         else if (e.id[0] == "s" && e.id[1] == "s" && e.t == "rect")
+  //   //           //vslot
+  //   //           holestr += "== Type: " + "Vslot" + "<br>";
+  //   //         else if (e.id[0] == "s" && e.id[1] == "s" && e.t == "rect")
+  //   //           //other
+  //   //           holestr += "== Type: " + e.t + "<br>";
+  //   //         holestr += "---- Angle: " + e.angle + "<br>";
+  //   //         holestr += "---- Offset: " + e.angle + "<br>";
+  //   //         if (e.t == "circle") holestr += "---- Width: " + e.r + "<br>";
+  //   //         else {
+  //   //           holestr += "---- Width: " + e.r.w + "<br>";
+  //   //           holestr += "---- Height: " + e.r.h + "<br>";
+  //   //         }
+  //   //       });
+  //   //     gapstr = "<br><br>|Gaps|<br>";
+  //   //     if (ring.gaps.length != 0)
+  //   //       ring.gaps.forEach((e) => {
+  //   //         gapstr += "== Type: " + e.t + "<br>";
+  //   //         gapstr += "---- Begin: " + e.begin + "<br>";
+  //   //         gapstr += "---- End: " + e.end + "<br>";
+  //   //       });
+  //   //     termstr = "<br><br>|Terminals|<br>";
+  //   //     if (ring.terminals.length != 0)
+  //   //       ring.terminals.forEach((e) => {
+  //   //         termstr += "== Type: " + e.t + "<br>";
+  //   //         termstr += "---- Angle: " + e.angle + "<br>";
+  //   //         termstr += "---- Offset: " + e.offset + "<br>";
+  //   //         termstr += "---- Rotation: " + e.rotation + "<br>";
+  //   //       });
+  //   //     str +=
+  //   //       "<br><br>==== Details ======<br>" + termstr + gapstr + holestr + constr;
+  // });
   console.log(str);
   sendMail(str, data.info.email);
   //response.json(data);
