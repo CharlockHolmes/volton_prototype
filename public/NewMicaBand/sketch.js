@@ -1236,5 +1236,5 @@ function exportToCart(data) {
 
 function CAPTCHA_Validate() {
   let hn = window.location.hostname;
-  if (hn == "voltondesign.com" || hn == "localhost") return true;
+  return true;
 }
