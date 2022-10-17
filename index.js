@@ -11,7 +11,7 @@ app.use(
     limit: "10mb",
   })
 );
-let testAccount = await nodemailer.createTestAccount();
+let testAccount = nodemailer.createTestAccount();
 
 let transporter = nodemailer.createTransport({
   host: "smtp.ethereal.email",
