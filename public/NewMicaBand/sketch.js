@@ -318,7 +318,8 @@ function loadSavedValues() {
     if (localStorage.getItem("camera") == null) resetToDefaultView();
     loadCustomItem();
   } else {
-    console.log("ayyaya");
+    console.log("got here");
+    localStorage.setItem("ring", JSON.stringify({"holes":[],"radius":1,"width":1,"resolution":1000,"gaps":[{"begin":-0.0637,"end":0.0637,"t":"barrel"},{"begin":3.07789,"end":3.2053,"t":"barrel"}],"connectors":[{"angle":-0.0637,"offset":0.333,"t":"barrel_screw","flipped":false,"id":"322717","rotation":0},{"angle":0.0637,"offset":0.333,"t":"barrel","flipped":true,"id":"322717","rotation":0},{"angle":-0.0637,"offset":-0.333,"t":"barrel_screw","flipped":false,"id":"5522107","rotation":0},{"angle":0.0637,"offset":-0.333,"t":"barrel","flipped":true,"id":"5522107","rotation":0},{"angle":3.07789,"offset":0.333,"t":"barrel","flipped":false,"id":"5059425","rotation":0},{"angle":3.2053,"offset":0.333,"t":"barrel_screw","flipped":true,"id":"5059425","rotation":0},{"angle":3.07789,"offset":-0.333,"t":"barrel","flipped":false,"id":"3416037","rotation":0},{"angle":3.2053,"offset":-0.333,"t":"barrel_screw","flipped":true,"id":"3416037","rotation":0}],"terminals":[{"angle":0.5236,"offset":0.167,"t":"bornier","rotation":6.283},{"angle":0.5236,"offset":-0.167,"t":"bornier","rotation":1.571},{"angle":5.75959,"offset":0.167,"t":"bornier","rotation":6.283},{"angle":5.75959,"offset":-0.167,"t":"bornier","rotation":1.571}],"thickness":0.9583333333333334,"voltage":"120","power":"500"}));
     defaultRing();
     saveRing();
     reload();
@@ -1031,9 +1032,11 @@ function reload() {
  * Saves the ring properties in the 'ring key.
  */
 function saveRing(ring = r) {
-  const position = {
-    position: {
-      x: camera.position.x,
+  if(ring!=undefined){
+
+    const position = {
+      position: {
+        x: camera.position.x,
       y: camera.position.y,
       z: camera.position.z,
     },
@@ -1049,10 +1052,10 @@ function saveRing(ring = r) {
     },
   };
   ringAnglesToDeg(ring);
-
+  
   ring.power = document.getElementById("powerasked").value;
   ring.voltage = document.getElementById("voltage").value;
-
+  
   localStorage.setItem("camera", JSON.stringify(position));
   localStorage.setItem("ring", JSON.stringify(ring));
   localStorage.setItem("shapesZ", "[]");
@@ -1060,34 +1063,42 @@ function saveRing(ring = r) {
   if (reloadCount > reloadValue) {
   } else loadCustomItem();
 }
+}
 /** Converts all ring angles to degrees*/
 function ringAnglesToDeg(ring = r) {
-  ring.holes.forEach((h) => {
-    h.angle = Math.round(h.angle * dcmpts) / dcmpts;
-    h.r.w = Math.round(dcmpts * h.r.w) / dcmpts;
-    h.r.h = Math.round(dcmpts * h.r.h) / dcmpts;
-    if (h.r.w == undefined && h.r.h == undefined)
+  if(ring!=undefined){
+    
+    console.log("this is a ring")
+    console.log(ring)
+    if(ring.holes.length!=0){
+      ring.holes.forEach((h) => {
+        h.angle = Math.round(h.angle * dcmpts) / dcmpts;
+      h.r.w = Math.round(dcmpts * h.r.w) / dcmpts;
+      h.r.h = Math.round(dcmpts * h.r.h) / dcmpts;
+      if (h.r.w == undefined && h.r.h == undefined)
       h.r = Math.round(dcmpts * h.r) / dcmpts;
-  });
-  ring.connectors.forEach((h) => {
-    h.angle = Math.round(h.angle * dcmpts) / dcmpts;
-    h.rotation = Math.round((h.rotation * 1000) / 1000);
-  });
-  ring.terminals.forEach((h) => {
-    h.angle = Math.round(h.angle * dcmpts) / dcmpts;
-    h.rotation = Math.round(h.rotation * 1000) / 1000;
-  });
-  ring.gaps.forEach((h) => {
-    h.begin = Math.round(h.begin * dcmpts) / dcmpts;
-    h.end = Math.round(h.end * dcmpts) / dcmpts;
-  });
+    });
+  }
+    ring.connectors.forEach((h) => {
+      h.angle = Math.round(h.angle * dcmpts) / dcmpts;
+      h.rotation = Math.round((h.rotation * 1000) / 1000);
+    });
+    ring.terminals.forEach((h) => {
+      h.angle = Math.round(h.angle * dcmpts) / dcmpts;
+      h.rotation = Math.round(h.rotation * 1000) / 1000;
+    });
+    ring.gaps.forEach((h) => {
+      h.begin = Math.round(h.begin * dcmpts) / dcmpts;
+      h.end = Math.round(h.end * dcmpts) / dcmpts;
+    });
+  }
 }
-
-/**
- * Loads the camera position then loads the ring.
- */
-function loadRing(ringImport) {
-  const ring = JSON.parse(ringImport);
+  
+  /**
+   * Loads the camera position then loads the ring.
+   */
+  function loadRing(ringImport) {
+    const ring = JSON.parse(ringImport);
   r = new Ring(
     ring.radius,
     ring.width,

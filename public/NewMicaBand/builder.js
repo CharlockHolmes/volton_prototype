@@ -1,7 +1,7 @@
 class Builder {
   constructor() {
     if (CAPTCHA_Validate()) {
-      console.log("ayyaya");
+      console.log('Begin')
       createRenderer();
       createScene();
       loadSavedValues();
