@@ -923,7 +923,7 @@ function generateURL(ring = r){
         
         ////////////////////////////////////////////////////////////////
         
-        const data = {type:'micaband',url:compressed,power:document.getElementById('powerasked').value, voltage:document.getElementById('voltage').value,text:document.getElementById('textfield').value, ring:ring,id:1}
+        const data = {type:'plateheater',url:compressed,power:document.getElementById('powerasked').value, voltage:document.getElementById('voltage').value,text:document.getElementById('textfield').value, ring:ring,id:1}
         const options = {
             method:'POST',
             headers:{
