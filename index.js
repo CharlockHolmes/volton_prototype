@@ -70,7 +70,7 @@ app.post("/api", (request, response) => {
     str2 += temp
     console.log(JSON.stringify(item))
     ////////////////////////////////////////////////////
-    constr = "<br><br>|Serrage|<br>";
+    let constr = "<br><br>|Serrage|<br>";
     ring.connectors.forEach((e) => {
       constr += "== Type: " + e.t + "<br>";
       constr += "---- Angle: " + e.angle + "<br>";
@@ -78,7 +78,7 @@ app.post("/api", (request, response) => {
       constr += "---- Facing: " + (e.Flipped ? "Right " : "Left ") + "<br>";
     });
 
-    holestr = "<br><br>|Trous|<br>";
+    let holestr = "<br><br>|Trous|<br>";
     if (ring.holes!=undefined && ring.holes.length != 0)
       ring.holes.forEach((e) => {
         if(e.id!=undefined){
@@ -108,14 +108,14 @@ app.post("/api", (request, response) => {
           }
         }
       });
-    gapstr = "<br><br>|Gaps|<br>";
+    let gapstr = "<br><br>|Gaps|<br>";
     if (ring.gaps.length != 0)
       ring.gaps.forEach((e) => {
         gapstr += "== Type: " + e.t + "<br>";
         gapstr += "---- Begin: " + e.begin + "<br>";
         gapstr += "---- End: " + e.end + "<br>";
       });
-    termstr = "<br><br>|Terminals|<br>";
+    let termstr = "<br><br>|Terminals|<br>";
     if (ring.terminals.length != 0)
       ring.terminals.forEach((e) => {
         termstr += "== Type: " + e.t + "<br>";
