@@ -1,6 +1,7 @@
-var nodemailer = require("nodemailer");
-const express = require("express");
-const Datastore = require("nedb");
+import express from 'express';
+import nodemailer from 'nodemailer';
+import nedb from 'nedb';
+
 const app = express();
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Starting server at ${port}`));
@@ -35,7 +36,7 @@ var transporter = nodemailer.createTransport({
 //     pass: "NotSafeAtAll6969",
 //   },
 // });
-const database = new Datastore("database.db");
+const database = new nedb("database.db");
 // database.loadDatabase();
 
 app.post("/api", (request, response) => {

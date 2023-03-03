@@ -1,6 +1,6 @@
 class Builder {
   constructor() {
-    if (CAPTCHA_Validate()) {
+    
       console.log('Begin')
       createRenderer();
       createScene();
@@ -19,7 +19,7 @@ class Builder {
         this.componentTable = new ComponentTableManager();
         document.getElementById("loadingbanner").innerHTML = "";
       }, 1000);
-    }
+    
   }
 }
 

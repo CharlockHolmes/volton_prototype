@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "This is the prototype of the heating element display application",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -29,5 +30,6 @@
   },
   "engines": {
     "node": "14.16.1"
-  }
+  },
+  "devDependencies": {}
 }
