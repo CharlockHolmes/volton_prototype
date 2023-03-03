@@ -103,7 +103,7 @@ function preload() {
 }
 function setup() {
   pixelDensity(2);
-  p5canvas = createCanvas(pwidth, pheight+mtop+mbot);
+  p5canvas = createCanvas(pwidth+mleft+mright, pheight+mtop+mbot);
   p5canvas.parent("p5holder");
 
   /* Scrollbar init */
