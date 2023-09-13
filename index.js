@@ -1,6 +1,8 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
 import nedb from 'nedb';
+import { MailtrapClient } from "mailtrap";
+
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -13,7 +15,7 @@ app.use(
   })
 );
 
-
+testmail()
 // var transporter = nodemailer.createTransport({
 //   service: "mail",
 //   auth: {
@@ -23,10 +25,11 @@ app.use(
 // });
 // var transporter = nodemailer.createTransport('smtp://voltonsender%40hotmail.com:NotSafeAtAll6969@smtp-mail.hotmail.com');
 var transporter = nodemailer.createTransport({
-  host: "outlook.office365.com",
+  host: "live.smtp.mailtrap.io",
+  port: 587,
   auth: {
-    user: "voltonsender@hotmail.com",
-    pass: "NotSafeAtAll6969",
+    user: "api",
+    pass: "148a6cc4ce27f4d4645511a19ca1374d"
   }
 });
 // var transporter = nodemailer.createTransport({
@@ -134,7 +137,7 @@ app.post("/api", (request, response) => {
 
 function sendMail(text = "nothing was inserted", clientmail, mailinfo) {
   var mailOptions = {
-    from: "voltonsender@hotmail.com",
+    from: "no-reply@voltondesign.com",
     //to: ["info@volton.com", clientmail],
     to: ["charles.simon1999@hotmail.com", clientmail],
     subject: "Submission Volton Design",
@@ -257,3 +260,31 @@ function sendMail(text = "nothing was inserted", clientmail, mailinfo) {
 // }
 
 // authorize().then(listLabels).catch(console.error);
+// function testmail() {
+//   var transport = nodemailer.createTransport({
+//     host: "live.smtp.mailtrap.io",
+//     port: 587,
+//     auth: {
+//       user: "api",
+//       pass: "148a6cc4ce27f4d4645511a19ca1374d"
+//     }
+//   });
+//   var mailOptions = {
+//     from: "no-reply@voltondesign.com",
+//     //to: ["info@volton.com", clientmail],
+//     to: ["charles.simon1999@hotmail.com"],
+//     subject: "Submission Volton Design",
+//     html:
+//       "<p>" +
+//       "Click on the submission to view the order. Click on the links to review any item designed in the submission" +
+//       "</p> <br><br><div>"+"mailinfo"+'</div>',
+//   };
+//   console.log("something is happening");
+//   transport.sendMail(mailOptions, function (error, info) {
+//     if (error) {
+//       console.log(error);
+//     } else {
+//       console.log("Email sent: " + info.response);
+//     }
+//   });
+// }

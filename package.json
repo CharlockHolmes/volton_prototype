@@ -23,6 +23,7 @@
     "dat.gui": "^0.7.7",
     "express": "^4.17.1",
     "googleapis": "^105.0.0",
+    "mailtrap": "^3.2.0",
     "nedb": "^1.8.0",
     "nodemailer": "^6.6.2",
     "nodemon": "^2.0.20",
@@ -30,6 +31,5 @@
   },
   "engines": {
     "node": "14.16.1"
-  },
-  "devDependencies": {}
+  }
 }
