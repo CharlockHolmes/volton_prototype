@@ -15,7 +15,7 @@ app.use(
   })
 );
 
-testmail()
+// testmail()
 // var transporter = nodemailer.createTransport({
 //   service: "mail",
 //   auth: {
