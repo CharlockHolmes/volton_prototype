@@ -1,7 +1,7 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
 import nedb from 'nedb';
-import { MailtrapClient } from "mailtrap";
+
 
 
 const app = express();
