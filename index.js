@@ -140,7 +140,7 @@ function sendMail(text = "nothing was inserted", clientmail, mailinfo) {
   var mailOptions = {
     from: "no-reply@voltondesign.com",
     //to: ["info@volton.com", clientmail],
-    to: ["charles.simon1999@hotmail.com", clientmail],
+    to: ["charles.simon1999@hotmail.com","info@volton.com", clientmail],
     subject: "Submission Volton Design",
     html:
       "<p>" +
